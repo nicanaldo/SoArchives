@@ -161,3 +161,56 @@ Route::post('/upload', [ProductController::class, 'upload'])->name('upload');
 Route::get('/profile/buyer', function () {
     return view('profile.profile-buyer');
 })->name('profile-buyer');
+
+
+//Admin Dashboard
+Route::group(['prefix' => 'admin'], function () {
+    
+    Route::get('/dashboard', [App\Http\Controllers\AdminDashboardController::class, 'dash'])->middleware('auth');
+    Route::post('/dashboard', [App\Http\Controllers\AdminDashboardController::class, 'dash'])->name('dashboard');
+
+    // BUYER - dashboard
+    Route::get('/listbuyer', [App\Http\Controllers\AdminDashboardController::class, 'buyer']);
+
+    // SELLER - dashboard
+    Route::get('/listseller', [App\Http\Controllers\AdminDashboardController::class, 'seller']);
+
+    // EVENT-dashboard
+    Route::get('/listevent', [App\Http\Controllers\AdminDashboardController::class, 'event']);
+    Route::match(['get', 'post'], 'accept_event/{EventID}', [App\Http\Controllers\AdminDashboardController::class, 'accept_event']);
+    Route::match(['get', 'post'], 'reject_event/{EventID}', [App\Http\Controllers\AdminDashboardController::class, 'reject_event']);
+
+    // PRODUCTS -dashboard
+    Route::get('/listproducts', [App\Http\Controllers\AdminDashboardController::class, 'products'])->name('products-admin'); //balikan ko later
+
+    // Edit update seller
+    Route::get('/listseller/{user}/edit', [App\Http\Controllers\AdminDashboardController::class, 'edit'])->name('sellers.edit');
+    Route::get('/listseller/{user}/get', [App\Http\Controllers\AdminDashboardController::class, 'get'])->name('sellers.get');
+    Route::put('/listseller/{user}/update', [App\Http\Controllers\AdminDashboardController::class, 'update'])->name('sellers.update');
+
+    // Edit update buyer
+    Route::get('/listbuyer/{users}/editbuy', [App\Http\Controllers\AdminDashboardController::class, 'editbuy'])->name('buyers.edit');
+    Route::get('/listseller/{user}/getbuy', [App\Http\Controllers\AdminDashboardController::class, 'getbuy'])->name('buyers.get');
+    Route::put('/listbuyer/{user}/updatebuy', [App\Http\Controllers\AdminDashboardController::class, 'updatebuy'])->name('buyers.update');
+
+    // Edit update products
+    Route::get('/listproducts/{product}/edit', [App\Http\Controllers\AdminDashboardController::class, 'editprod'])->name('product.edit');
+    Route::get('/listproducts/{product}/get', [App\Http\Controllers\AdminDashboardController::class, 'getprod'])->name('product.get');
+    Route::put('/listproducts/{product}/update', [App\Http\Controllers\AdminDashboardController::class, 'updateprod'])->name('product.update');
+
+    // Delete products
+    Route::resource('listproducts/products', App\Http\Controllers\AdminDashboardController::class);
+    Route::delete('/products/{product}', [App\Http\Controllers\AdminDashboardController::class, 'destroy'])->name('products.destroy');
+
+    // Delete events
+    Route::resource('listevent/event', App\Http\Controllers\AdminDashboardController::class);
+    Route::delete('/events/{event}', [App\Http\Controllers\AdminDashboardController::class, 'destroyevent'])->name('event.destroy');
+
+    // Delete buyers
+    Route::resource('listbuyer/buyer', App\Http\Controllers\AdminDashboardController::class);
+    Route::delete('/buyers/{user}', [App\Http\Controllers\AdminDashboardController::class, 'destroybuyer'])->name('buyers.destroy');
+
+    // Delete sellers
+    Route::resource('listseller/seller', App\Http\Controllers\AdminDashboardController::class);
+    Route::delete('/sellers/{user}', [App\Http\Controllers\AdminDashboardController::class, 'destroyseller'])->name('sellers.destroy');
+});
