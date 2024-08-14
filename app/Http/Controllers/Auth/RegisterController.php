@@ -66,8 +66,8 @@ class RegisterController extends Controller
     {
         //Validator for User Table and for all user type
         $validator = Validator::make($data, [
-            'FName' => ['required', 'string', 'max:255'],
-            'LName' => ['required', 'string', 'max:255'],
+            'FName' => ['required', 'string', 'max:100'],
+            'LName' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'regex:/[a-z]/', 'regex:/[0-9]/', 'confirmed'],            
         ]);
