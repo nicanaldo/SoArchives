@@ -4,6 +4,7 @@ use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SellerController;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -100,6 +101,30 @@ Route::get('/buyerevents', [EventController::class, 'showBuyerEvents'])->name('E
 Route::get('/CreateEvents', function () {
     return view('Event.CreateEvents');
 })->name('events.try');
+
+// Visitor Events Route
+Route::get('/visitorevents', [EventController::class, 'showVisitorEvents'])->name('event.VisitorEvents');
+
+//Gallery
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
+Route::post('/gallery/store', [GalleryController::class, 'store'])->name('gallery.store');
+Route::get('/gallery/images/{eventId}', [GalleryController::class, 'showEventImages'])->name('gallery.showEventImages');
+Route::get('/gallery/get-images/{eventId}', [GalleryController::class, 'getEventImages'])->name('gallery.getEventImages');
+Route::get('/gallery/{eventId}/images', [GalleryController::class, 'showImages'])->name('events.images');
+Route::get('/gallery/view', [GalleryController::class, 'view'])->name('gallery.view');
+Route::get('/gallery/event-images/{eventId}', [GalleryController::class, 'showEventImages'])->name('gallery.viewEventImages');
+
+//buyer
+Route::get('/api/events/{eventId}/images', [GalleryController::class, 'getEventImages']);
+Route::get('/galleryBuyer', [GalleryController::class, 'indexGallery'])->name('gallery.indexBuyer');
+Route::get('/gallery-buyer', [GalleryController::class, 'indexGallery'])->name('galleryBuyer');
+
+// Route for main events page
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+// Route for ended events page
+Route::get('/ended-events', [EventController::class, 'endedEvents'])->name('events.ended');
+Route::get('/events/ended', [EventController::class, 'showEndedEvents'])->name('events.ended');
+
 
 //Community Visitor
 Route::get('/community/guess', function () {
