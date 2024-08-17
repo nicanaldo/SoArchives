@@ -12,10 +12,11 @@ class EventController extends Controller
 {
     public function index(Request $request){
 
-        $events = Event::all();
+        // $events = Event::all();
+        $events = Event::with('user')->get(); 
+        $userId = Auth::id(); 
 
         return view ('events', compact('events')); //balikan ko mamaya sa compact
-
     }
 
     public function showBuyerEvents() {
@@ -109,7 +110,7 @@ class EventController extends Controller
         $user = Auth::user();
 
         // Check if the user is a seller (user_type = 2)
-        if ($user->UserTypeID != 2) {
+        if ($user->usertypeID != 2) {
             return back()->withErrors(['error' => 'You are not authorized to create events.']);
         }
 
@@ -122,7 +123,7 @@ class EventController extends Controller
 
         // Assign the user's ID to the event being created
         $createEvent = Event::create([
-            'UserID' => $user->UserID, // Assuming your column name is 'UserID' in the Event table
+            'UserID' => $user->id, // Assuming your column name is 'UserID' in the Event table
             'EventImage' => $imagePath,
             'EventName' => $request->input('EventName'),
             'EventDescription' => $request->input('EventDescription'),
@@ -155,4 +156,41 @@ class EventController extends Controller
                 }
             }
         }
+    
+    public function showGallery()
+    {
+        $events = Event::all();
+
+        return view('event.galleryseller', compact('events'));
+    }
+
+    public function endedEvents()
+    {
+        // Retrieve only ended events
+        $endedEvents = Event::where('Status', 'Ended')->get();
+        
+        // Return the view for ended events
+        return view('event.ended', compact('endedEvents'));
+    }
+    public function showEndedEvents()
+    {
+        $now = Carbon::now();
+        $endedEvents = Event::where('Date', '<', $now->toDateString())
+            ->orWhere(function ($query) use ($now) {
+                $query->where('Date', $now->toDateString())
+                    ->where('EndTime', '<', $now->toTimeString());
+            })
+            ->get();
+
+        return view('event.ended', ['endedEvents' => $endedEvents]);
+    }
+
+    // Display the events created by the User
+    //para sa profile ng seller ito
+    public function showSellerEvents() {
+        $userId = Auth::id(); 
+        $events = Event::where('UserID', $userId)->get(); 
+
+        return view('profile.profile-seller', compact('events')); 
+    }
 }
