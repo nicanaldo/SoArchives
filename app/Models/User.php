@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->UserTypeID === 1; 
     }
 
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'UserID');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
