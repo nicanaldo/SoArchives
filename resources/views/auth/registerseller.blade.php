@@ -279,7 +279,7 @@
                                             <button class="btn button-color btn-lg text-light mt-3" type="submit" name="btnSubmit" value="{{ __('Register') }}">Sign Up</button>
                                         </div>
                                         <p class="mt-3 text-muted text-center">Already have an account? <a href="{{ route('login') }}" class="text-decoration-none">Login</a></p>
-                                        <p class="mt-3 text-muted text-center">Signup as<a href="{{ route('login') }}" class="text-decoration-none">Buyer</a></p>
+                                        <p class="mt-3 text-muted text-center">Signup as<a href="{{ route('register.buyer') }}" class="text-decoration-none">Buyer</a></p>
                                     </div>
 
                                 </div>
