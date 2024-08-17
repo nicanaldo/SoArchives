@@ -85,12 +85,21 @@
                             <!-- Timestamp -->
                             <div class="text-muted mb-1 mt-1">Posted {{ $post->created_at->diffForHumans() }}</div>
                             
-
+                            <!-- Likes -->
                             <div class="d-flex">
-                            <form action="{{ route('community.like', $post->id) }}" method="POST">
-                            @csrf
-                                <button class="custom-button btn btn-sm btn-outline-danger" type="submit"><i class="fas fa-heart"></i> {{ $post->likes_count }}</button>
-                            </form>
+                                <form action="{{ route('community.like', $post->id) }}" method="POST">
+                                    @csrf
+                                    @if ($post->user_has_liked)
+                                        <button class="custom-button btn btn-sm btn-outline-danger" type="submit">
+                                            <i class="fas fa-heart"></i> {{ $post->likes_count }}
+                                        </button>
+                                    @else
+                                        <button class="custom-button btn btn-sm btn-outline-danger" type="submit">
+                                            <i class="fas fa-heart"></i> {{ $post->likes_count }}
+                                        </button>
+                                    @endif
+                                </form>
+                            </div>
 
                             <!-- Comment form -->
                             <details>
