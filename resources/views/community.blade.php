@@ -109,35 +109,13 @@
                     }
                 });
 
-                            </div>
-                            <p>{{ $post->content }}</p>
-                            <div>
-                                <!-- Edit and Delete Post Buttons -->
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editPostModal{{ $post->id }}"><i class="fas fa-edit"></i> Edit Post</button>
-                                <form action="{{ route('community.deletePost', $post) }}" method="POST" style="display: inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Delete Post</button>
-                                </form>
-                            </div>
-                            <!-- Timestamp -->
-                            <div class="text-muted mb-1 mt-1">Posted {{ $post->created_at->diffForHumans() }}</div>
-                            
-                            <!-- Likes -->
-                            <div class="d-flex">
-                                <form action="{{ route('community.like', $post->id) }}" method="POST">
-                                    @csrf
-                                    @if ($post->user_has_liked)
-                                        <button class="custom-button btn btn-sm btn-outline-danger" type="submit">
-                                            <i class="fas fa-heart"></i> {{ $post->likes_count }}
-                                        </button>
-                                    @else
-                                        <button class="custom-button btn btn-sm btn-outline-danger" type="submit">
-                                            <i class="fas fa-heart"></i> {{ $post->likes_count }}
-                                        </button>
-                                    @endif
-                                </form>
-                            </div>
+                // Set hidden input with editor content on form submit
+                document.getElementById('postForm').addEventListener('submit', function(event) {
+                    var content = quill.root.innerHTML;
+                    document.getElementById('hiddenContent').value = content;
+
+                    // Debug: Log the content to ensure it's being set
+                    console.log('Content to be sent:', content);
 
                     // Optionally: Prevent default behavior to test if content is properly set
                     // event.preventDefault();
@@ -375,6 +353,7 @@
         <footer>
             @include('header_and_footer.footer')
         </footer>
+
 
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
