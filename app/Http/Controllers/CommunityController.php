@@ -14,30 +14,43 @@ class CommunityController extends Controller
     {
         $user = Auth::user();
 
-        // $posts = Post::all();
-        // $posts = Post::where('user_id', $user->UserID)->get();  
         $posts = Post::where('visible', true)
-        ->withCount('likes')
-        ->with('comments')
-        ->withCount('likes')
-        ->with('user')
-        ->get();
+                 ->withCount('likes')
+                 ->with('comments')
+                 ->with('user')
+                 ->get()
+                 ->each(function ($post) use ($user) {
+                     $post->user_has_liked = Like::where('post_id', $post->id)
+                                                 ->where('user_id', $user->id)
+                                                 ->exists();
+                 });
 
         return view('community', compact('posts', 'user'));
     }
 
-    public function like(Request $request, Post $post)  
+    public function like(Request $request, Post $post)
     {
-        // Check if the user has already liked the post
         $user = Auth::user();
 
-        // Create a new like
-        $like = new Like();
-        $like->post_id = $post->id;
-        $like->user_id = $user->id; // Associate the comment with the authenticated user
-        $like->save();
+        // Check if the user has already liked the post
+        $existingLike = Like::where('post_id', $post->id)
+                            ->where('user_id', $user->id)
+                            ->first();
 
-        return redirect()->back()->with('message', 'Like recorded successfully.');
+        if ($existingLike) {
+            // Unlike it if the user already liked the post
+            $existingLike->delete();
+            $message = 'Like removed successfully.';
+        } else {
+            // Like the post
+            $like = new Like();
+            $like->post_id = $post->id;
+            $like->user_id = $user->id;
+            $like->save();
+            $message = 'Like recorded successfully.';
+        }
+
+        return redirect()->back()->with('message', $message);
     }
 
     public function comment(Request $request, Post $post)
