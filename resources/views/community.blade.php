@@ -109,7 +109,6 @@
                     }
                 });
 
-<<<<<<< HEAD
                             </div>
                             <p>{{ $post->content }}</p>
                             <div>
@@ -139,15 +138,6 @@
                                     @endif
                                 </form>
                             </div>
-=======
-                // Set hidden input with editor content on form submit
-                document.getElementById('postForm').addEventListener('submit', function(event) {
-                    var content = quill.root.innerHTML;
-                    document.getElementById('hiddenContent').value = content;
-
-                    // Debug: Log the content to ensure it's being set
-                    console.log('Content to be sent:', content);
->>>>>>> 6f5efb430c1e7b5fa6b1a403a3d17f6939a1f247
 
                     // Optionally: Prevent default behavior to test if content is properly set
                     // event.preventDefault();
