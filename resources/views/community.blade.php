@@ -38,13 +38,22 @@
 
             {{-- Posting --}}
             <div class="actions d-flex justify-content-between mb-2">
-                <button id="postButton" class="btn btn-primary w-20" data-bs-toggle="modal" data-bs-target="#postModal">
+                <button id="postButton" class="btn btn-primary">
                     + New Post
                 </button>
-                <button class="btn btn-outline-secondary ms-2" id="filterButton">
-                    <i class="fas fa-filter"></i> Filter Topics
-                </button>
+                <div class="d-flex align-items-center ms-auto">
+
+                    {{-- Search bar --}}
+                    <input type="text" class="form-control me-2 input-group rounded-pill overflow-hidden"
+                        id="searchBar" placeholder="Search..." style="width: 200px;">
+
+                    {{-- Filter topics --}}
+                    <button class="btn btn-outline-secondary">
+                        <i class="fas fa-filter"></i> Filter Topics
+                    </button>
+                </div>
             </div>
+
 
             {{-- New Post Modal --}}
             <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
@@ -59,68 +68,150 @@
                             <form id="postForm" method="POST" action="{{ route('community.storePost') }}">
                                 @csrf
 
-                                {{-- Title Input Field --}}
-                                {{-- <div class="mb-3">
-                                        <label for="title" class="form-label">Title</label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter the post title" required>
-                                    </div> --}}
-
-
-                                {{-- Rich Text Editor: hindi pa nagrereflect sa post --}}
+                                {{-- Rich Text Editor --}}
                                 <div class="mb-3">
                                     <label for="content" class="form-label"></label>
                                     <div id="quillEditor" style="height: 300px;"></div>
                                     <input type="hidden" name="content" id="hiddenContent">
                                 </div>
 
-
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-primary">Post</button>
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
                                 </div>
-
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Include Quill -->
             <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
             <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
             <script>
-                // Initialize Quill editor
-                var quill = new Quill('#quillEditor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            [{
-                                'header': [1, 2, false]
-                            }],
-                            ['bold', 'italic', 'underline'],
-                            [{
-                                'list': 'ordered'
-                            }, {
-                                'list': 'bullet'
-                            }],
-                            ['clean'] // remove formatting button
-                        ]
+                var quillCreate; // Global variable for creating new posts
+                var quillEditInstances = {}; // Object to keep track of Quill instances for editing
+
+                // Initialize Quill editor for creating new post
+                document.addEventListener("DOMContentLoaded", function() {
+                    quillCreate = new Quill('#quillEditor', {
+                        theme: 'snow',
+                        modules: {
+                            toolbar: [
+                                [{
+                                    'header': [1, 2, false]
+                                }],
+                                ['bold', 'italic', 'underline'],
+                                [{
+                                    'list': 'ordered'
+                                }, {
+                                    'list': 'bullet'
+                                }],
+                                ['clean'] // remove formatting button
+                            ]
+                        }
+                    });
+
+                    // Set hidden input with editor content on form submit for creating new post
+                    document.getElementById('postForm').addEventListener('submit', function(event) {
+                        var content = quillCreate.root.innerHTML;
+                        document.getElementById('hiddenContent').value = content;
+
+                        // Debug: Log the content to ensure it's being set
+                        console.log('Content to be sent:', content);
+                    });
+                });
+
+                // Function to initialize Quill editor for editing post
+                function initializeQuillEditor(postId) {
+                    var editorContainer = document.getElementById('quillEditorEdit' + postId);
+                    if (editorContainer) {
+                        // Destroy existing Quill instance if it exists
+                        if (quillEditInstances[postId]) {
+                            quillEditInstances[postId].destroy();
+                        }
+
+                        // Create new Quill editor instance
+                        quillEditInstances[postId] = new Quill(editorContainer, {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{
+                                        'header': [1, 2, false]
+                                    }],
+                                    ['bold', 'italic', 'underline'],
+                                    [{
+                                        'list': 'ordered'
+                                    }, {
+                                        'list': 'bullet'
+                                    }],
+                                    ['clean'] // remove formatting button
+                                ]
+                            }
+                        });
+
+                        // Set initial content for edit modal
+                        var content = document.getElementById('postContent' + postId).value;
+                        quillEditInstances[postId].root.innerHTML = content;
+
+                        // Set hidden input with editor content on form submit for editing post
+                        document.getElementById('editPostForm' + postId).addEventListener('submit', function(event) {
+                            var editContent = quillEditInstances[postId].root.innerHTML;
+                            document.getElementById('hiddenEditContent' + postId).value = editContent;
+
+                            // Debug: Log the content to ensure it's being set
+                            console.log('Edited content to be sent:', editContent);
+                        });
                     }
-                });
+                }
 
-                // Set hidden input with editor content on form submit
-                document.getElementById('postForm').addEventListener('submit', function(event) {
-                    var content = quill.root.innerHTML;
-                    document.getElementById('hiddenContent').value = content;
+                // Function to initialize Quill editor for editing comment
+                function initializeQuillCommentEditor(commentId) {
+                    var editorContainer = document.getElementById('quillCommentEditorEdit' + commentId);
+                    if (editorContainer) {
+                        // Destroy existing Quill instance if it exists
+                        if (quillCommentEditInstances[commentId]) {
+                            quillCommentEditInstances[commentId].destroy();
+                        }
 
-                    // Debug: Log the content to ensure it's being set
-                    console.log('Content to be sent:', content);
+                        // Create new Quill editor instance
+                        quillCommentEditInstances[commentId] = new Quill(editorContainer, {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{
+                                        'header': [1, 2, false]
+                                    }],
+                                    ['bold', 'italic', 'underline'],
+                                    [{
+                                        'list': 'ordered'
+                                    }, {
+                                        'list': 'bullet'
+                                    }],
+                                    ['clean'] // remove formatting button
+                                ]
+                            }
+                        });
 
-                    // Optionally: Prevent default behavior to test if content is properly set
-                    // event.preventDefault();
-                });
+                        // Set initial content for edit modal
+                        var content = document.getElementById('commentContent' + commentId).value;
+                        quillCommentEditInstances[commentId].root.innerHTML = content;
+
+                        // Set hidden input with editor content on form submit for editing comment
+                        document.getElementById('editCommentForm' + commentId).addEventListener('submit', function(event) {
+                            var editContent = quillCommentEditInstances[commentId].root.innerHTML;
+                            document.getElementById('hiddenEditCommentContent' + commentId).value = editContent;
+
+                            // Debug: Log the content to ensure it's being set
+                            console.log('Edited comment content to be sent:', editContent);
+                        });
+                    }
+                }
             </script>
+
+
 
             <!-- Display Posts -->
             <div class="mt-4">
@@ -164,8 +255,6 @@
                                             <i class="fas fa-thumbs-up"></i> {{ $post->likes_count }}
                                         </button>
                                     </form>
-
-
 
 
                                     {{-- Comment Button --}}
@@ -216,7 +305,8 @@
 
                                                     <!-- User Info -->
                                                     <div class="d-flex flex-column">
-                                                        <h6 class="mb-0">{{ $comment->user->fname }} {{ $comment->user->lname }}</h6>
+                                                        <h6 class="mb-0">{{ $comment->user->fname }}
+                                                            {{ $comment->user->lname }}</h6>
                                                         <span
                                                             class="text-muted small">{{ $comment->created_at->diffForHumans() }}</span>
                                                     </div>
@@ -229,7 +319,8 @@
                                                                 data-bs-target="#editCommentModal{{ $comment->id }}">
                                                                 <i class="fas fa-edit"></i>
                                                             </button>
-                                                            <form action="{{ route('community.deleteComment', $comment) }}"
+                                                            <form
+                                                                action="{{ route('community.deleteComment', $comment) }}"
                                                                 method="POST" style="display: inline-block;">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -240,13 +331,11 @@
                                                             </form>
                                                         @endif
                                                     </div>
-                                                    
-                                                    
-                                                    
-                                                </div>
 
-                                                <p class="mt-3 ms-5 mb-5">{{ $comment->content }}</p>
+                                                </div>
+                                                <p class="mt-3 ms-5 mb-2">{{ $comment->content }}</p>
                                             </div>
+
 
                                             <!-- Edit Comment Modal -->
                                             <div class="modal fade" id="editCommentModal{{ $comment->id }}"
@@ -269,7 +358,7 @@
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <div class="form-group">
-                                                                    <textarea class="form-control mb-3" id="commentContent{{ $comment->id }}" name="content" rows="15" required>{{ $comment->content }}</textarea>
+                                                                    <textarea class="form-control mb-3" id="commentContent{{ $comment->id }}" name="content" rows="5" required>{{ $comment->content }}</textarea>
                                                                 </div>
                                                                 <button type="submit" class="btn btn-primary">Save
                                                                     Changes</button>
@@ -284,12 +373,16 @@
                                         @endforelse
                                     </div>
 
+                                    {{-- Show more: Hindi pa to nagana, UI lang --}}
+                                    <a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span>Show More</a>
+
                                 </div>
 
-                                <!-- Edit Post Modal -->
+
+                                {{-- Edit Post Modal --}}
                                 <div class="modal fade" id="editPostModal{{ $post->id }}" tabindex="-1"
                                     aria-labelledby="editPostModalLabel{{ $post->id }}" aria-hidden="true">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="editPostModalLabel{{ $post->id }}">
@@ -298,15 +391,23 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form method="POST"
-                                                    action="{{ route('community.updatePost', $post) }}">
+                                                <form id="editPostForm{{ $post->id }}" method="POST"
+                                                    action="{{ route('community.updatePost', $post->id) }}">
                                                     @csrf
                                                     @method('PUT')
+                                                    {{-- Rich Text Editor for Edit --}}
                                                     <div class="mb-3">
-                                                        <textarea class="form-control" id="postContent{{ $post->id }}" name="content" rows="15">{{ $post->content }}</textarea>
+                                                        <label for="content" class="form-label"></label>
+                                                        <div id="quillEditorEdit{{ $post->id }}"
+                                                            style="height: 300px;"></div>
+                                                        <input type="hidden" name="content"
+                                                            id="hiddenEditContent{{ $post->id }}">
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Save
-                                                        Changes</button>
+                                                    <div class="text-end">
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -314,12 +415,22 @@
                                 </div>
 
 
+                                <!-- Hidden input field to store post content for edit modal -->
+                                <input type="hidden" id="postContent{{ $post->id }}"
+                                    value="{!! $post->content !!}">
+                                <script>
+                                    // Initialize Quill editor for this specific post when the modal is shown
+                                    document.getElementById('editPostModal{{ $post->id }}').addEventListener('shown.bs.modal', function() {
+                                        initializeQuillEditor({{ $post->id }});
+                                    });
+                                </script>
+
+
 
                                 {{-- Wala pang topics, ui lang to --}}
-
-
                                 <!-- Topic Tags and Edit/Delete Post Buttons -->
-                                <div class="d-flex justify-content-end align-items-start position-absolute top-0 end-0 p-3">
+                                <div
+                                    class="d-flex justify-content-end align-items-start position-absolute top-0 end-0 p-3">
                                     <div>
                                         @if ($post->tags && $post->tags->count() > 0)
                                             @foreach ($post->tags as $tag)
@@ -331,11 +442,13 @@
                                     </div>
                                     <div class="ms-2">
                                         @if (auth()->check() && auth()->id() == $post->user_id)
-                                            <button class="btn btn-sm btn-outline-primary border-0" data-bs-toggle="modal"
+                                            <button class="btn btn-sm btn-outline-primary border-0"
+                                                data-bs-toggle="modal"
                                                 data-bs-target="#editPostModal{{ $post->id }}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <form action="{{ route('community.deletePost', $post) }}" method="POST" style="display: inline-block;">
+                                            <form action="{{ route('community.deletePost', $post) }}" method="POST"
+                                                style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-danger border-0">
@@ -343,7 +456,7 @@
                                                 </button>
                                             </form>
                                         @endif
-                                    </div>                                
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -351,12 +464,66 @@
                 @endforeach
             </div>
 
+            {{-- Pagination --}}
+            <div class="card border-0 pe-4">
+                <nav aria-label="..." class="mt-3">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Back to top button -->
+            <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+
+            <script>
+                //Get the button
+                let mybutton = document.getElementById("btn-back-to-top");
+
+                // When the user scrolls down 20px from the top of the document, show the button
+                window.onscroll = function() {
+                    scrollFunction();
+                };
+
+                function scrollFunction() {
+                    if (
+                        document.body.scrollTop > 20 ||
+                        document.documentElement.scrollTop > 20
+                    ) {
+                        mybutton.style.display = "block";
+                    } else {
+                        mybutton.style.display = "none";
+                    }
+                }
+                // When the user clicks on the button, scroll to the top of the document
+                mybutton.addEventListener("click", backToTop);
+
+                function backToTop() {
+                    document.body.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
+                }
+            </script>
+
         </div>
+
+
+
 
         <footer>
             @include('header_and_footer.footer')
         </footer>
-
 
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
