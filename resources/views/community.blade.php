@@ -16,6 +16,11 @@
 
     {{-- CSS file under Public Folder --}}
     <link rel="stylesheet" href="{{ asset('css/community.css') }}" />
+
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </head>
 
 <body>
@@ -38,7 +43,7 @@
 
             {{-- Posting --}}
             <div class="actions d-flex justify-content-between mb-2">
-                <button id="postButton" class="btn btn-primary">
+                <button id="postButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal">
                     + New Post
                 </button>
                 <div class="d-flex align-items-center ms-auto">
@@ -319,18 +324,20 @@
                                                                 data-bs-target="#editCommentModal{{ $comment->id }}">
                                                                 <i class="fas fa-edit"></i>
                                                             </button>
-                                                            <form
+                                                            <form id="deleteCommentForm{{ $comment->id }}"
                                                                 action="{{ route('community.deleteComment', $comment) }}"
                                                                 method="POST" style="display: inline-block;">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="btn btn-sm btn-outline-danger border-0">
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-outline-danger border-0"
+                                                                    onclick="confirmDelete(event, 'deleteCommentForm{{ $comment->id }}')">
                                                                     <i class="fas fa-trash"></i>
                                                                 </button>
                                                             </form>
                                                         @endif
                                                     </div>
+
 
                                                 </div>
                                                 <p class="mt-3 ms-5 mb-2">{{ $comment->content }}</p>
@@ -374,7 +381,8 @@
                                     </div>
 
                                     {{-- Show more: Hindi pa to nagana, UI lang --}}
-                                    <a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span>Show More</a>
+                                    <a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span
+                                            class="glyphicon glyphicon-refresh"></span>Show More</a>
 
                                 </div>
 
@@ -447,11 +455,13 @@
                                                 data-bs-target="#editPostModal{{ $post->id }}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <form action="{{ route('community.deletePost', $post) }}" method="POST"
+                                            <form id="deletePostForm{{ $post->id }}"
+                                                action="{{ route('community.deletePost', $post) }}" method="POST"
                                                 style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                                <button type="button" class="btn btn-sm btn-outline-danger border-0"
+                                                    onclick="confirmDelete(event, 'deletePostForm{{ $post->id }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -464,7 +474,31 @@
                 @endforeach
             </div>
 
-            {{-- Pagination --}}
+
+            {{-- JS: Deletion confirmation --}}
+            <script>
+                function confirmDelete(event, formId) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d11a2a',
+                        cancelButtonColor: '#6e7681',
+                        confirmButtonText: 'Delete',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById(formId).submit(); // Submit the form if confirmed
+                        }
+                    });
+                }
+            </script>
+
+
+            {{-- UI: Pagination --}}
             <div class="card border-0 pe-4">
                 <nav aria-label="..." class="mt-3">
                     <ul class="pagination justify-content-end">
@@ -483,11 +517,15 @@
                 </nav>
             </div>
 
-            <!-- Back to top button -->
+
+            {{-- UI: Back to top button --}}
             <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top">
                 <i class="fas fa-arrow-up"></i>
             </button>
 
+
+
+            {{-- JS: Back to top button --}}
             <script>
                 //Get the button
                 let mybutton = document.getElementById("btn-back-to-top");
@@ -517,7 +555,6 @@
             </script>
 
         </div>
-
 
 
 
