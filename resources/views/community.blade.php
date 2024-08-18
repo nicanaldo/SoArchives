@@ -216,30 +216,33 @@
 
                                                     <!-- User Info -->
                                                     <div class="d-flex flex-column">
-                                                        <h6 class="mb-0">{{ Auth::user()->fname }}
-                                                            {{ Auth::user()->lname }}</h6>
+                                                        <h6 class="mb-0">{{ $comment->user->fname }} {{ $comment->user->lname }}</h6>
                                                         <span
                                                             class="text-muted small">{{ $comment->created_at->diffForHumans() }}</span>
                                                     </div>
 
                                                     <!-- Edit and Delete Comment Buttons -->
                                                     <div class="ms-auto">
-                                                        <button class="btn btn-sm btn-outline-primary border-0"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#editCommentModal{{ $comment->id }}">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <form
-                                                            action="{{ route('community.deleteComment', $comment) }}"
-                                                            method="POST" style="display: inline-block;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="btn btn-sm btn-outline-danger border-0">
-                                                                <i class="fas fa-trash"></i>
+                                                        @if (auth()->check() && auth()->id() == $comment->user_id)
+                                                            <button class="btn btn-sm btn-outline-primary border-0"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editCommentModal{{ $comment->id }}">
+                                                                <i class="fas fa-edit"></i>
                                                             </button>
-                                                        </form>
+                                                            <form action="{{ route('community.deleteComment', $comment) }}"
+                                                                method="POST" style="display: inline-block;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-outline-danger border-0">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     </div>
+                                                    
+                                                    
+                                                    
                                                 </div>
 
                                                 <p class="mt-3 ms-5 mb-5">{{ $comment->content }}</p>
@@ -316,8 +319,7 @@
 
 
                                 <!-- Topic Tags and Edit/Delete Post Buttons -->
-                                <div
-                                    class="d-flex justify-content-end align-items-start position-absolute top-0 end-0 p-3">
+                                <div class="d-flex justify-content-end align-items-start position-absolute top-0 end-0 p-3">
                                     <div>
                                         @if ($post->tags && $post->tags->count() > 0)
                                             @foreach ($post->tags as $tag)
@@ -328,19 +330,20 @@
                                         @endif
                                     </div>
                                     <div class="ms-2">
-                                        <button class="btn btn-sm btn-outline-primary border-0" data-bs-toggle="modal"
-                                            data-bs-target="#editPostModal{{ $post->id }}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <form action="{{ route('community.deletePost', $post) }}" method="POST"
-                                            style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger border-0">
-                                                <i class="fas fa-trash"></i>
+                                        @if (auth()->check() && auth()->id() == $post->user_id)
+                                            <button class="btn btn-sm btn-outline-primary border-0" data-bs-toggle="modal"
+                                                data-bs-target="#editPostModal{{ $post->id }}">
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                        </form>
-                                    </div>
+                                            <form action="{{ route('community.deletePost', $post) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>                                
                                 </div>
                             </div>
                         </div>
