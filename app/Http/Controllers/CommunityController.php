@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Flair;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ class CommunityController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        $flairs = Flair::all();
 
         $posts = Post::where('visible', true)
                  ->withCount('likes')
@@ -25,7 +28,7 @@ class CommunityController extends Controller
                                                  ->exists();
                  });
 
-        return view('community', compact('posts', 'user'));
+        return view('community', compact('posts', 'user', 'flairs'));
     }
 
     public function like(Request $request, Post $post)
