@@ -38,7 +38,7 @@
 
             {{-- Posting --}}
             <div class="actions d-flex justify-content-between mb-2">
-                <button id="postButton" class="btn btn-primary">
+                <button id="postButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal">
                     + New Post
                 </button>
                 <div class="d-flex align-items-center ms-auto">
@@ -48,9 +48,17 @@
                         id="searchBar" placeholder="Search..." style="width: 200px;">
 
                     {{-- Filter topics --}}
-                    <button class="btn btn-outline-secondary">
-                        <i class="fas fa-filter"></i> Filter Topics
-                    </button>
+                    <div class="dropdown">           
+                        <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filter
+                        </a>
+                    
+                        <ul class="dropdown-menu">
+                            @foreach($flairs as $flair)
+                                <li><a class="dropdown-item" href="#">{{ $flair->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -225,8 +233,12 @@
                                     <img src="{{ asset('images/def.png') }}" alt="Profile Image"
                                         class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                     <div class="d-flex flex-column">
-                                        <h6 class="card-title mb-0">{{ $post->user->fname }} {{ $post->user->lname }}
-                                        </h6>
+                                        @if($post->user->usertypeID == '3')
+                                            <a href="{{ route('profile-buyer') }}" class="card-title mb-0">{{ $post->user->fname }} {{ $post->user->lname }}</a>
+                                        @elseif($post->user->usertypeID == '2')
+                                            <a href="{{ route('seller.profile', $post->user->id) }}" class="card-title mb-0">{{ $post->user->fname }} {{ $post->user->lname }}</a>
+                                        @endif
+
                                         <span class="text-muted small">{{ $post->created_at->diffForHumans() }}</span>
                                     </div>
                                 </div>
