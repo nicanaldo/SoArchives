@@ -1,13 +1,31 @@
 * {
-    font-family: 'Poppins';
+    font-family: 'Helvetica';
 }
 
 .btn-primary {
-    --bs-btn-bg: #145DA0 !important;
-    --bs-btn-border-color: #145DA0 !important;
-    --bs-btn-hover-bg: #186dbe !important;
-    --bs-btn-hover-border-color: #186dbe !important;
+    background-color: #145DA0 !important; /* Ensure background color is applied */
+    box-shadow: 0 4px 15px rgba(20, 93, 160, 0.2) !important; /* Shadow color matches background */
+    backdrop-filter: blur(10px) !important; /* Glassy blur effect */    border: none !important;
+    padding: 6px 20px !important;
 }
+
+.btn-primary:hover {
+    box-shadow: 0 5px 20px rgba(12, 35, 56, 0.3) !important; /* Enhanced shadow on hover */
+
+}
+
+.btn-secondary {
+    background-color: #6C757D !important; /* Secondary color applied */
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2) !important; /* Shadow color matches secondary color */
+    backdrop-filter: blur(10px) !important; /* Glassy blur effect */
+    border: none !important;
+    padding: 6px 20px !important;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268 !important; /* Slightly darker shade on hover */
+}
+
 
 
 .actions {
@@ -32,10 +50,7 @@
 }
 
 
-.btn-primary:hover {
-    background-color: #1a6ebd;
-    border: #1a6ebd;
-}
+
 
 
 #postInput {
@@ -115,4 +130,109 @@ h4 {
         height: 150px;
         /* Adjust height for extra-small screens */
     }
+}
+
+
+/* Back to top button */
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(20, 93, 160, 0.4); /* Adjust shadow size and opacity as needed */
+  }
+
+
+
+  /* comment hover */
+.comment-container {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Ensure the container takes up full width */
+    padding: 10px; /* Add padding for spacing inside the container */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.comment-container:hover {
+    background-color: #f6f6f6; /* Light background color on hover */
+    border-radius: 8px; /* Rounded corners for the hover effect */
+}
+
+/* pagination */
+.pagination .active>.page-link,
+.page-link.active {
+    z-index: 3;
+    color: #fff;
+    background-color: #145DA0;
+    border-color: #145DA0;
+}
+
+.pagination {
+    color: #343434;
+}
+
+.pagination .page-link,
+.page-link.active {
+    z-index: 3;
+    color: #343434;
+}
+
+
+/* border */
+
+
+/* border */
+.thick-border {
+    border: 10px solid rgb(255, 0, 0); /* Adjust the thickness as needed */
+    background: linear-gradient(135deg, #FFC107, #ff8325); /* Gradient colors */
+}
+
+
+/* pro */
+.pro-badge {
+    background: linear-gradient(45deg, #ff8325, #FFC107);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a .pro-badge {
+    text-decoration: none;
+}
+
+
+/* friendly reminder */
+.alert-message
+{
+    margin: 20px 0;
+    padding: 20px;
+    border-left: 3px solid #eee;
+}
+.alert-message h4
+{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.alert-message p:last-child
+{
+    margin-bottom: 0;
+}
+
+.alert-message code
+{
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.alert-message-warning
+{
+    background-color: #fcf8f2;
+    border-color: #f0ad4e;
+}
+
+.invalid-feedback {
+    display: none;
 }
