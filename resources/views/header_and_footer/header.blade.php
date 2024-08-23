@@ -118,10 +118,10 @@
                             @elseif(Auth::user()->usertypeID == 3)
                                 <li><a class="dropdown-item" href="{{ route('profile-buyer') }}">Profile</a></li>
                             @endif
-
+{{-- 
                             <li><a class="dropdown-item" href="{{ route('edit-profile') }}"
                                     onclick="event.preventDefault(); document.getElementById('edit-profile).submit();">Edit
-                                    Profile</a></li>
+                                    Profile</a></li> --}}
 
                             <li><a class="dropdown-item" href="{{ route('chatify') }}">Inbox</a></li>
                             <li><a class="dropdown-item" href="{{ route('logout') }}"

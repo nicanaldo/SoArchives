@@ -24,7 +24,7 @@
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js'></script>
 
     <!--Style CSS -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/logReg.css') }}">
 
     <style>
         /* Hide the spinner for number input */
@@ -121,7 +121,7 @@
             <div class="row gy-4 align-items-center">
                 <div class="col-12 col-md-6 col-xl-6">
                     <div class="d-flex justify-content-center text-light">
-                        <div class="col-12 col-xl-9">
+                        <div class="col-12 col-xl-9 bg-transparent">
                             <img class="img-fluid rounded" loading="lazy" src="{{asset('images/sellerLogo.png')}}" width="300" height="100" alt="BootstrapBrain Logo">
                             <hr class="border-primary-subtle mb-4">
                             <p class="lead mb-5">Soarchives is the premier platform dedicated to spotlighting the exceptional talent of artisans and craftsmen from Adamson University.</p>
@@ -279,7 +279,7 @@
                                             <button class="btn button-color btn-lg text-light mt-3" type="submit" name="btnSubmit" value="{{ __('Register') }}">Sign Up</button>
                                         </div>
                                         <p class="mt-3 text-muted text-center">Already have an account? <a href="{{ route('login') }}" class="text-decoration-none">Login</a></p>
-                                        <p class="mt-3 text-muted text-center">Signup as<a href="{{ route('register.buyer') }}" class="text-decoration-none">Buyer</a></p>
+                                        <p class="mt-3 text-muted text-center">Signup as<a href="{{ route('register.buyer') }}" class="text-decoration-none"> Buyer</a></p>
                                     </div>
 
                                 </div>

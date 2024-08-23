@@ -36,7 +36,7 @@
         <div class="container-fluid custom-shadow-profile">
             <div class="container cover">
                 <div class="header__wrapper d-flex justify-content-center position-relative">
-                    <img id="coverImage" src="{{ asset('images/finalcover.png') }}" alt="Cover Photo"
+                    <img id="coverImage" src="{{ asset('images/finalCover.png') }}" alt="Cover Photo"
                         class="cover-photo" />
                     <div class="upload-overlay d-flex flex-column align-items-center">
                         <input type="file" id="coverUpload" accept="image/*" style="display: none;" />

@@ -235,7 +235,7 @@
                             <div class="card-body">
                                 <!-- Profile Image and Name -->
                                 <div class="d-flex align-items-center mb-3">
-                                    <img src="{{ asset('images/def.png') }}" alt="Profile Image"
+                                    <img src="{{ asset('images/defuser.png') }}" alt="Profile Image"
                                         class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                     <div class="d-flex flex-column">
                                         @if($post->user->usertypeID == '3')
@@ -316,7 +316,7 @@
                                                     </div>
 
                                                     <!-- Profile Image -->
-                                                    <img src="{{ asset('images/def.png') }}" alt="Profile Image"
+                                                    <img src="{{ asset('images/defuser.png') }}" alt="Profile Image"
                                                         class="rounded-circle me-2"
                                                         style="width: 40px; height: 40px;">
 

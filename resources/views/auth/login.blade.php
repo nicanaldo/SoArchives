@@ -15,7 +15,7 @@
 
     <title>Login as Seller | SOARchives</title>
     <link rel="shortcut icon" href="{{ asset('images/tab-logo.ico') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/logReg.css') }}">
 
     <style>
         /* Button for eye */
@@ -42,8 +42,8 @@
             <div class="row gy-4 align-items-center">
                 <div class="col-12 col-md-6 col-xl-7">
                     <div class="d-flex justify-content-center text-light">
-                        <div class="col-12 col-xl-9">
-                            <img class="img-fluid rounded" loading="lazy" src="{{ asset('images/sellerLogo.png') }}" width="300" height="100" alt="BootstrapBrain Logo">
+                        <div class="col-12 col-xl-9 bg-transparent">
+                            <img class="img-fluid rounded" loading="lazy" src="{{ asset('images/SoarchivesLogo.png') }}" width="300" height="100" alt="BootstrapBrain Logo">
                             <p></p>
                             <hr class="border-primary-subtle mb-4">
                             <p class="lead mb-5">Soarchives is the premier platform dedicated to spotlighting the exceptional talent of artisans and craftsmen from Adamson University.</p>
@@ -68,9 +68,9 @@
                                     <!-- Email Address -->
                                     <div class="col-12">
                                         <label for="validationEmail" class="form-label">Email address</label>
-                                        <input type="email" class="form-control p-2" id="validationEmail" name="email" placeholder="example@adamson.edu.ph" required>
+                                        <input type="email" class="form-control p-2" id="validationEmail" name="email" placeholder="Enter your email address" required>
                                         <div class="invalid-feedback">
-                                            Please provide a valid Adamson email address.
+                                            Please provide a valid email address.
                                         </div>
                                     </div>
 
@@ -78,7 +78,7 @@
                                     <div class="col-12 position-relative">
                                         <label for="floatingInput" class="form-label">Password</label>
                                         <div class="input-group">
-                                            <input type="password" style="border-width: 1px 0 1px 1px;" class="form-control pe-5" id="floatingInput" name="password" placeholder="********" required>
+                                            <input type="password" style="border-width: 1px 0 1px 1px;" class="form-control pe-5" id="floatingInput" name="password" placeholder="Enter your password" required>
                                             <button class="btn btn-outline-secondary btn-eye" type="button" id="togglePasswordCreate">
                                                 <i class="fa fa-eye-slash"></i>
                                             </button>
