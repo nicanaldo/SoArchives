@@ -1,0 +1,64 @@
+* {
+    font-family: 'Helvetica';
+    font-size: 14px;
+}
+
+/* OTP Verification Section Styles */
+.otp-verification-section {
+    padding: 3rem 0;
+}
+
+.otp-verification-card {
+    border-radius: 10px;
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.1); /* Adjust values for a balanced shadow */}
+
+.otp-verification-card .card-body {
+    padding: 2rem;
+}
+
+.text-title {
+    color: #145DA0;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: #145DA0 !important; /* Ensure background color is applied */
+    box-shadow: 0 4px 15px rgba(20, 93, 160, 0.2) !important; /* Shadow color matches background */
+    backdrop-filter: blur(10px) !important; /* Glassy blur effect */    border: none !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 5px 20px rgba(20, 93, 160, 0.3) !important; /* Enhanced shadow on hover */
+}
+
+.text-center a {
+    color: #145DA0;
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}
+
+
+.navbar-logo {
+    height: 40px; /* Adjust based on your desired size */
+    width: auto; /* Maintain aspect ratio */
+}
+
+.form-control{
+
+}
+
+/* Hide the spinner for number input */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
