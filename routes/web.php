@@ -35,6 +35,14 @@ Route::get('/login/password-request', function () {
     return view('auth.step2resetpasscode');
 })->name('password.request');
 
+Route::get('/login/admin', function () {
+    return view('auth.adminlogin');
+})->name('adminlogin');
+
+Route::post('/login/admin', function () {
+    return view('auth.adminlogin');
+})->name('adminlogin1');
+
 //Register 
 Route::get('/register/terms&conditions', function () {
     return view('auth.terms&conditions');
