@@ -10,8 +10,8 @@ class ArtisanController extends Controller
 {
     public function index() {
 
-        // Fetch all users with UserTypeID 2 (sellers)
-        $profiles = User::where('UserTypeID', 2)->get();
+        // Fetch all users with usertypeID 2 (sellers)
+        $profiles = User::where('usertypeID', 2)->get();
 
         $tags = Tag::all();
 
@@ -25,7 +25,7 @@ class ArtisanController extends Controller
 
         $search = $request->search;
 
-        $profiles = User::where('UserTypeID', 2)
+        $profiles = User::where('usertypeID', 2)
             ->where(function ($query) use ($search) {
                 $query->where('fname', 'like', "%$search%")
                     ->orWhere('lname', 'like', "%$search%");

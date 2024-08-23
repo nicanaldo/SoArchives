@@ -10,7 +10,7 @@ class SellerController extends Controller
 {
     public function show(User $user) //pag show to ng profile ng seller sa end ng buyer
     {
-        $products = Product::where('UserID', $user->UserID)->get();
+        $products = Product::where('UserID', $user->id)->get();
         return view('profile.seller', compact('user', 'products'));
     }
 }
