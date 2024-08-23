@@ -21,6 +21,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+
 </head>
 
 <body>
@@ -53,17 +58,9 @@
                         id="searchBar" placeholder="Search..." style="width: 200px;">
 
                     {{-- Filter topics --}}
-                    <div class="dropdown">           
-                        <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Filter
-                        </a>
-                    
-                        <ul class="dropdown-menu">
-                            @foreach($flairs as $flair)
-                                <li><a class="dropdown-item" href="#">{{ $flair->name }}</a></li>
-                            @endforeach
-                        </ul>
-                    </div>
+                    <button class="btn btn-outline-secondary">
+                        <i class="fas fa-filter"></i> Filter Topics
+                    </button>
                 </div>
             </div>
 
@@ -82,10 +79,37 @@
                                 @csrf
 
                                 {{-- Rich Text Editor --}}
+                                <div class="mb-3 position-relative">
+                                    <label for="content" class="form-label">Post Content</label>
+                                    <div id="quillEditor" style="height: 150px;"></div>
+                                    <input type="hidden" name="content" id="hiddenContent" required>
+                                    <div class="invalid-feedback">
+                                        Please provide content for the post topic.
+                                    </div>
+                                </div>
+
+                                {{-- FLAIR --}}
                                 <div class="mb-3">
-                                    <label for="content" class="form-label"></label>
-                                    <div id="quillEditor" style="height: 300px;"></div>
-                                    <input type="hidden" name="content" id="hiddenContent">
+                                    <label for="tags" class="form-label">Post Topic</label>
+                                    <select class="form-select" id="tags" name="tags"
+                                        aria-label="Default select example" required>
+                                        <option value="" selected disabled>Select a topic</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select at least one tag.
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="alert-message alert-message-warning">
+                                        <h5>
+                                            &#x1F9D0;  Friendly Reminder</h4>
+                                        <p>
+                                            Please follow our community guidelines when posting. Be respectful, stay on topic, and avoid spam. <strong>Violations</strong> may result in content removal or account suspension. Ensure your content aligns with our rules to maintain a positive environment.</p>
+                                    </div>
                                 </div>
 
                                 <div class="text-end">
@@ -238,14 +262,24 @@
                                     <img src="{{ asset('images/defuser.png') }}" alt="Profile Image"
                                         class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                     <div class="d-flex flex-column">
-                                        @if($post->user->usertypeID == '3')
-                                            <a href="{{ route('profile-buyer') }}" class="card-title mb-0">{{ $post->user->fname }} {{ $post->user->lname }}</a>
+                                        @if ($post->user->usertypeID == '3')
+                                            <a href="{{ route('profile-buyer') }}"
+                                                class="card-title mb-0 d-flex align-items-center text-decoration-none">
+                                                {{ $post->user->fname }} {{ $post->user->lname }}
+                                            </a>
                                         @elseif($post->user->usertypeID == '2')
-                                            <a href="{{ route('seller.profile', $post->user->id) }}" class="card-title mb-0">{{ $post->user->fname }} {{ $post->user->lname }}</a>
+                                            <a href="{{ route('seller.profile', $post->user->id) }}"
+                                                class="card-title mb-0 d-flex align-items-center text-decoration-none">
+                                                {{ $post->user->fname }} {{ $post->user->lname }}
+                                                <span class="badge pro-badge ms-2"><i class="fas fa-crown"></i>
+                                                    PRO</span>
+                                            </a>
                                         @endif
 
                                         <span class="text-muted small">{{ $post->created_at->diffForHumans() }}</span>
                                     </div>
+
+
                                 </div>
 
                                 <!-- Post Title -->
@@ -275,7 +309,8 @@
 
 
                                     {{-- Comment Button --}}
-                                    <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="collapse"
+                                    <button class="btn btn-sm btn-outline-secondary border-0"
+                                        data-bs-toggle="collapse"
                                         data-bs-target="#commentsSection{{ $post->id }}">
                                         <i class="fas fa-comment"></i>
                                         <span class="comment-count">{{ $post->comments->count() }}</span>
