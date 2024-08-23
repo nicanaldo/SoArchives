@@ -1,0 +1,152 @@
+/* Seller Forms */
+
+* {
+    font-family: 'Helvetica';
+    font-size: 14px;
+}
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+}
+
+/* Background Color */
+.bg-bg {
+    background: linear-gradient(to right, #145DA0, #40a3ff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.col-12 .col-xl-9 {
+    background-color: #145DA0;
+}
+
+.button-color {
+    background-color: #145DA0;
+}
+
+.text-color,
+a, h2 {
+    color: #145DA0;
+}
+
+.btn:hover {
+    background-color: #2970b7;
+}
+
+.form-control:focus,
+.form-control:active {
+    outline: none;
+    border-color: #145DA0;
+    box-shadow: none !important;
+}
+
+
+.form-check-input:checked {
+    background-color: #145DA0;
+    border-color: #145DA0;
+}
+
+label, label a{
+    color: #212427;
+    font-size: small;
+}
+
+label a{
+    color: #145DA0;
+}
+
+
+/* login card */
+.card{
+    border-radius: 1rem;
+}
+
+
+/* End of Seller Forms */
+
+/* Seller Terms and Conditions */
+
+.bg-terms-nav{
+    background-color: #145DA0;
+}
+
+/* End of Seller Terms and Conditions */
+
+
+/* Seller Forgot Password */
+
+.forgot-password-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #145DA0;
+}
+
+.forgot-password-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.forgot-password-card .card-body {
+    padding: 2rem;
+}
+
+/* End of Seller Forgot Password */
+
+
+/* Reset Password */
+
+.reset-success-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #145DA0; /* Change this to your desired background color */
+}
+
+.reset-success-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reset-success-card .card-body {
+    padding: 2rem;
+}
+
+/* Reset Code Password */
+
+.reset-password-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #145DA0; /* Change this to your desired background color */
+}
+
+.reset-password-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reset-password-card .card-body {
+    padding: 2rem;
+}
+
+.code-input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0 5px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+/* End */
+
