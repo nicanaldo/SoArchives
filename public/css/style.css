@@ -287,7 +287,7 @@
 
   .card-img-top {
   width: 100%;
-  height: 300px; /* Set a fixed height for the images */
+  height: 200px; /* Set a fixed height for the images */
   object-fit: cover; /* Maintain aspect ratio and cover the container */
   }
 
@@ -705,6 +705,8 @@
     justify-content: center;
 }
 
+
+
 /* Overflow hidden */
 .overflow-hidden {
     overflow: hidden !important;
@@ -733,6 +735,12 @@
     }
 }
 
+@media (max-width: 600px) {
+    li:hover {
+      background-color: rgb(247, 247, 247);
+      padding-right: 100%;
+    }
+  }
 
 
 
@@ -928,7 +936,6 @@
     background: linear-gradient(135deg, #ffca86, #ff9100); /* Adjust colors and angle as needed */
     color: white; /* Ensure text color contrasts with the gradient */
     border: none; /* Optional: Remove border if needed */
-    padding: 0.5rem 1rem; /* Adjust padding to suit your design */
     border-radius: 0.25rem; /* Adjust border radius if needed */
 }
 
@@ -962,4 +969,47 @@
     background: linear-gradient(to right, #ff923e, #FFC107);
     color: white; /* Text color on hover */
 }
+
+
+/* pro */
+.pro-badge {
+    background: linear-gradient(45deg, #ff8325, #FFC107);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a .pro-badge {
+    text-decoration: none;
+}
+
+
+
+
+.alert-message
+{
+    margin: 20px 0;
+    padding: 20px;
+    border-left: 3px solid #eee;
+}
+.alert-message h4
+{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.alert-message p:last-child
+{
+    margin-bottom: 0;
+}
+
+.alert-message code
+{
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+
 
