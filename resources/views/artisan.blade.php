@@ -15,12 +15,14 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {{-- CSS file under Public Folder --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/artisan.css') }}" />
 
     {{-- To make the toggle in the navbar work --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 
 </head>
 
@@ -69,6 +71,8 @@
 
                 </form>
             </div>
+
+
         </div>
     </div>
 
@@ -100,24 +104,29 @@
                                 <!-- Profile pic -->
                                 <div class="container d-flex justify-content-center align-items-center">
                                     <div class="img__container">
-                                        <img src="{{ asset('images/defuser.png') }}" alt="..."
-                                            class="border-white thick-border"/>
-                                        <span></span>
+                                        <img src="{{ asset('images/defuser.png') }}" alt="Profile Picture"
+                                            class="border-white thick-border" />
+                                        <span class="badge pro-badge fs-10 text-center"><i class="fas fa-crown"></i>
+                                            PRO</span>
                                     </div>
                                 </div>
 
+
                                 <div class="card-body">
-                                    <h5 class="card-title text-center"
+                                    <h5 class="card-title text-center fw-bold"
                                         style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
                                         {{ $seller->fname }} {{ $seller->lname }}
+
                                     </h5>
+
+
                                     <p class="card-text text-muted text-center"
                                         style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                        <a href="#" class="btn btn-danger btn-lg p-1 disabled"
+                                        <a href="#" class="btn btn-primary btn-lg p-1 disabled"
                                             style="font-size: small;" role="button" aria-disabled="true">Fiber Arts</a>
                                         <a href="#" class="btn btn-primary btn-lg p-1 disabled"
                                             style="font-size: small;" role="button" aria-disabled="true">Home Decor</a>
-                                        <a href="#" class="btn btn-success btn-lg p-1 disabled"
+                                        <a href="#" class="btn btn-primary btn-lg p-1 disabled"
                                             style="font-size: small;" role="button" aria-disabled="true">Yarn
                                             Crafts</a>
                                     </p>
@@ -132,129 +141,28 @@
             </div>
 
 
-
-            {{-- <div class="col-lg-3 col-md-6 mb-4">
-                <a href="{{ route('products.index')}}" class="card-link" style="text-decoration: none;">
-                    @php
-                        $sellers = \App\Models\User::where('UserTypeID', '=', '2')->get(); // Assuming '2' is the user type for sellers
-                    @endphp
-
-                    @foreach ($sellers as $seller)
-                        <div class="card">
-                            <!-- Cover photo -->
-                            <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                            <!-- Profile pic -->
-                            <div class="container d-flex justify-content-center align-items-center">
-                                <div class="img__container">
-                                    <img src="{{ asset('images/nica.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                                    <span></span>
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">{{ $seller->FName }} {{ $seller->LName }}</h5>
-                                <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                            </div>
-                        </div>
-                    @endforeach
-
-                </a>
-        </div> --}}
-
-            {{-- <div class="col-lg-3 col-md-6 mb-4">
-                <a href="{{ route('products.index')}}" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/nica.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-                <a href="#" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
 
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/kylie.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-                <a href="#" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/3.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/kylie.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-                <a href="#" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/kylie.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
-        </div> --}}
+        {{-- UI: Pagination --}}
+        <nav aria-label="..." class="mt-3">
+            <ul class="pagination justify-content-end">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item" aria-current="page">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
 
 
-
-        </div>
     </div>
-
 
 
 
@@ -267,8 +175,6 @@
     <!-- Categories JS Toggle -->
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-
 
 </body>
 
