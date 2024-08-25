@@ -22,6 +22,14 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X4ubT2s5C/yyce6ytH4K6zPYUO4+3i7mGGjN5F/X+R47S6p13Xrx5Hh4Z7+" crossorigin="anonymous">
+    <!-- MDB CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/mdbootstrap@5.0.0/dist/css/mdb.min.css" rel="stylesheet">
+    <!-- FontAwesome CSS (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 
 
@@ -50,8 +58,10 @@
 
         {{-- Tags --}}
         <div class="name text-center">
-            <h2 class="card-title text-center mb-3 p-4" style="color:#343434;">{{ $user->fname }}
-                {{ $user->lname }} </h2>
+            <h2 class="card-title text-center mb-3 p-4" style="color:#343434;">
+                {{ $user->fname }} {{ $user->lname }}
+                <span class="badge pro-badge ms-2 fs-5"><i class="fas fa-crown"></i> PRO</span>
+            </h2>
             <div class="pb-5">
                 <button type="button" class="btn btn-lg btn-primary btn-rounded border-0 me-1"
                     style="background: linear-gradient(45deg, #6a11cb, #2575fc);" data-mdb-ripple-init><i
@@ -60,9 +70,83 @@
                         class="fas fa-message"></i> Message</button>
                 {{-- <button type="button" class="btn btn-warning btn-rounded text-white me-2" data-mdb-ripple-init><i
                         class="fas fa-star"></i> </button> --}}
-                <button type="button" class="btn btn-lg btn-danger btn-rounded me-1" data-mdb-ripple-init><i
-                        class="fas fa-exclamation-circle"></i> </button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-lg btn-danger btn-rounded me-1" data-bs-toggle="modal"
+                    data-bs-target="#reportModal">
+                    <i class="fas fa-exclamation-circle"></i>
+                </button>
 
+                <!-- Report Modal -->
+                <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reportModalLabel">Report User</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                <form id="reportForm" novalidate>
+                                    <div class="mb-3">
+                                        <h6 class="text-start">Reason for reporting</h6>
+                                        <select class="form-select" id="reportReason" required>
+                                            <option value="" disabled selected>Select a reason</option>
+                                            <option value="spam">Spam or Fake Content</option>
+                                            <option value="harassment">Harassment or Abusive Behavior</option>
+                                            <option value="hate-speech">Hate Speech or Discrimination</option>
+                                            <option value="misinformation">Misinformation or Fake News</option>
+                                            <option value="violence">Violence or Threats</option>
+                                        </select>
+                                        <div class="invalid-feedback text-start">
+                                            Please select a reason for reporting
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <h6 class="text-start">Additional details (optional)</h6>
+                                        <textarea class="form-control" id="reportDetails" rows="2"></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                            <h5 class="alert-heading text-start">
+                                                &#x1F6A8; Report Reminder
+                                            </h5>
+                                            <p class="text-start">
+                                                Please provide a valid reason when reporting a user. Ensure you are not
+                                                making false claims or reporting out of spite. Use the report function
+                                                responsibly to help us maintain a respectful community.
+                                            </p>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-secondary me-2"
+                                            id="discardButton">Discard</button>
+                                        <button type="submit" class="btn btn-danger">Submit Report</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bootstrap JS -->
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+                    integrity="sha384-oBqDVmMz4fnFO9yp0TO/kx1EBc0g2L0z9e6D36kkA1OwhwB25NO3d2MCm8fLEd2F" crossorigin="anonymous">
+                </script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+                    integrity="sha384-pprnP5s9N9tB9P8t1gV4Rtb/x5V2x5OoF2QW+Lnw+Ob+RfU1lFqU1Kqln5KH+cU2" crossorigin="anonymous">
+                </script>
+                <!-- MDB JS -->
+                <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@5.0.0/dist/js/mdb.min.js"></script>
 
             </div>
 
@@ -152,10 +236,6 @@
 
                             <div class="row">
                                 <div class="col-md-6 mt-5">
-                                    {{-- <button type="button" class="btn btn-warning btn-add-buttons" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Add new product</button> --}}
-                                    {{-- <button type="button" class="btn btn-primary btn-add-buttons" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">Create an event</button> --}}
                                 </div>
 
                                 {{-- Search bar --}}
@@ -177,7 +257,13 @@
 
                             <!-- Product Cards -->
                             <div class="row justify-content-left" style="margin-top: 3rem;">
-                                @foreach ($products as $product)
+                                @foreach ($products->reverse() as $product)
+                                    @php
+                                        // Assuming 'created_at' is the date the product was uploaded
+                                        $isNew = \Carbon\Carbon::parse($product->created_at)->greaterThanOrEqualTo(
+                                            \Carbon\Carbon::now()->subDay(),
+                                        );
+                                    @endphp
                                     <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                                         <div class="card" data-bs-toggle="modal"
                                             data-bs-target="#productModal{{ $product->ProductID }}">
@@ -191,33 +277,33 @@
                                                                 class="d-block w-100 card-img-top"
                                                                 alt="Product Image">
                                                         </div>
-
-                                                        {{-- <button
-                                            class="carousel-control-prev @if (count(explode(',', $product->ProductImage)) <= 1) d-none @endif"
-                                            type="button" data-bs-target="#carouselProduct{{ $product->ProductID }}"
-                                            data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button
-                                            class="carousel-control-next @if (count(explode(',', $product->ProductImage)) <= 1) d-none @endif"
-                                            type="button" data-bs-target="#carouselProduct{{ $product->ProductID }}"
-                                            data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button> --}}
                                                     @endforeach
                                                 </div>
                                             </div>
                                             <div class="card-body">
                                                 <h5 class="card-title"
                                                     style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize;">
-                                                    {{ $product->ProductName }}</h5>
+                                                    @if ($isNew)
+                                                        <span class="badge badge-gradient me-1">NEW!</span>
+                                                    @endif
+                                                    {{ $product->ProductName }}
+                                                </h5>
                                                 <p class="card-text text-muted"
                                                     style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                     {{ $product->ProductDescription }}</p>
                                                 {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal{{ $product->ProductID }}">View Details</button> --}}
-                                                <p class="card-text text-muted">₱ {{ $product->Price }}</p>
+                                                <p class="card-text text-muted">
+                                                    Price:
+                                                    @if ($product->old_price && $product->old_price != $product->Price)
+                                                        <span
+                                                            style="text-decoration: line-through; color: {{ $product->Price > $product->old_price ? 'green' : 'red' }};">
+                                                            ₱ {{ $product->old_price }}
+                                                        </span>
+                                                    @endif
+                                                    <span>
+                                                        ₱ {{ $product->Price }}
+                                                    </span>
+                                                </p>
                                                 <div class="text-muted small text-end align-self-end">
                                                     <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i>
                                                         18</span>
@@ -228,22 +314,32 @@
                                         </div>
                                     </div>
 
-
-
                                     {{-- View Details Modal --}}
                                     <div class="modal fade" id="productModal{{ $product->ProductID }}"
                                         tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <p class="card-text text-muted mb-0 d-flex align-items-center">
-                                                        <img src="{{ asset('images/janica.png') }}" alt="User Image"
-                                                            class="user-image ms-2 me-2">
-                                                        {{ $user->fname }} {{ $user->lname }}
+                                                <div class="modal-header flex-column flex-md-row">
+                                                    <div class="d-flex align-items-center mb-2 mb-md-0">
+                                                        <img src="{{ asset('images/defuser.png') }}" alt="User Image"
+                                                            class="user-image me-2">
+                                                        <p class="card-text text-muted mb-0">
+                                                            {{ $user->fname }} {{ $user->lname }} •
+                                                        </p>
+                                                    </div>
+                                                    <p
+                                                        class="card-text text-muted mb-0 ms-0 ms-md-2 d-flex align-items-center">
+                                                        @if ($product->created_at->diffInHours() < 24)
+                                                            Posted {{ $product->created_at->diffForHumans() }}
+                                                        @else
+                                                            Posted on
+                                                            {{ $product->created_at->format('g:iA • m/d/Y') }}
+                                                        @endif
                                                     </p>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                    <button type="button" class="btn-close ms-auto mt-2 mt-md-0"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
+
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <!-- Left column -->
@@ -264,24 +360,6 @@
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
-                                                                {{-- <button
-                                                    class="carousel-control-prev @if (count(explode(',', $product->ProductImage)) <= 1) d-none @endif"
-                                                    type="button"
-                                                    data-bs-target="#carouselProductModal{{ $product->ProductID }}"
-                                                    data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon"
-                                                        aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Previous</span>
-                                                </button>
-                                                <button
-                                                    class="carousel-control-next @if (count(explode(',', $product->ProductImage)) <= 1) d-none @endif"
-                                                    type="button"
-                                                    data-bs-target="#carouselProductModal{{ $product->ProductID }}"
-                                                    data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon"
-                                                        aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Next</span>
-                                                </button> --}}
                                                             </div>
 
                                                             <!-- Thumbnails -->
@@ -320,21 +398,40 @@
                                                                 {{ $product->ProductName }}</h2>
                                                             <p class="card-text text-muted">
                                                                 {{ $product->ProductDescription }}</p>
-                                                            <p class="card-text text-muted">Price: ₱
-                                                                {{ $product->Price }}</p>
+                                                            <p class="card-text text-muted">
+                                                                Price:
+                                                                @if ($product->old_price && $product->old_price != $product->Price)
+                                                                    <span
+                                                                        style="text-decoration: line-through; color: {{ $product->Price > $product->old_price ? 'green' : 'red' }};">
+                                                                        ₱ {{ $product->old_price }}
+                                                                    </span>
+                                                                @endif
+                                                                <span>
+                                                                    ₱ {{ $product->Price }}
+                                                                </span>
+                                                            </p>
                                                             <p class="card-text text-muted">Quantity:
                                                                 {{ $product->Quantity }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer d-flex justify-content-end align-items-end">
-                                                    <button type="button"
-                                                        class="btn btn-lg btn-outline-danger border-0 heart-button">
-                                                        <i class="fas fa-heart"></i> 18
-                                                    </button>
+                                                <div
+                                                    class="modal-footer d-flex justify-content-between align-items-end">
+                                                    <p
+                                                        class="card-text text-muted mb-0 d-flex align-items-start ms-2 mb-2">
+                                                        @if ($product->updated_at->diffInHours() < 24)
+                                                            Updated {{ $product->updated_at->diffForHumans() }}
+                                                        @else
+                                                            Updated on {{ $product->updated_at->format('g:iA m/d/Y') }}
+                                                        @endif
+                                                    </p>
+                                                    <div>
+                                                        <button type="button"
+                                                            class="btn btn-lg btn-outline-danger border-0 heart-button">
+                                                            <i class="fas fa-heart"></i> 18
+                                                        </button>
+                                                    </div>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -388,10 +485,6 @@
 
                             <div class="row">
                                 <div class="col-md-6 mt-5">
-                                    <button type="button" class="btn btn-warning btn-add-buttons"
-                                        data-bs-toggle="modal" data-bs-target="#">Create an event</button>
-                                    {{-- <button type="button" class="btn btn-primary btn-add-buttons" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">Create an event</button> --}}
                                 </div>
 
                                 {{-- Search bar --}}
@@ -424,21 +517,12 @@
                     </div>
                 </div>
 
-
-
                 <div class="container custom-shadow mt-5">
 
                     {{-- <h1 class="text-start pt-3">My Events</h1> --}}
                     {{-- padisplay dito yung mga created events ng user na to --}}
 
                 </div>
-
-
-
-
-
-
-
 
                 <div class="container">
                     <div class="feedbacks mt-5">
@@ -481,10 +565,8 @@
     </button>
 
 
-
-    {{-- JS: Back to top button --}}
     <script>
-        //Get the button
+        //Back to top button
         let mybutton = document.getElementById("btn-back-to-top");
 
         // When the user scrolls down 20px from the top of the document, show the button
@@ -509,6 +591,67 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+
+
+        // Report button validation
+        (function() {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('#reportForm');
+
+            // Detect if form has been changed
+            var formChanged = false;
+            var reportReason = document.getElementById('reportReason');
+            var reportDetails = document.getElementById('reportDetails');
+
+            // Mark form as changed if input is detected
+            reportReason.addEventListener('change', function() {
+                formChanged = true;
+            });
+
+            reportDetails.addEventListener('input', function() {
+                formChanged = true;
+            });
+
+            // Handle form validation and submission
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+            // Handle discard button click
+            var discardButton = document.getElementById('discardButton');
+            discardButton.addEventListener('click', function(event) {
+                if (formChanged) {
+                    var confirmDiscard = confirm("You have unsaved changes. Are you sure you want to discard?");
+                    if (!confirmDiscard) {
+                        event.preventDefault();
+                    } else {
+                        // Reset form fields
+                        var form = document.querySelector('#reportForm');
+                        form.reset();
+                        form.classList.remove('was-validated');
+                        formChanged = false;
+
+                        // Close modal if confirmed
+                        var modal = bootstrap.Modal.getInstance(document.querySelector('.modal'));
+                        modal.hide();
+                    }
+                } else {
+                    // Close modal directly if no changes
+                    var modal = bootstrap.Modal.getInstance(document.querySelector('.modal'));
+                    modal.hide();
+                }
+            });
+
+        })();
     </script>
 
 
