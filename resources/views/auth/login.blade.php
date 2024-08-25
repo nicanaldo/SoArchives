@@ -94,7 +94,9 @@
                                             <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe" {{ old('rememberMe') ? 'checked' : '' }}>
                                             <label class="form-check-label text-muted" for="rememberMe">Remember Me</label>
                                         </div>
-                                        <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot Password?</a>
+                                        @if (Route::has('password.request'))
+                                            <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot Password?</a>
+                                        @endif
                                     </div>
 
                                     <div class="col-12">
