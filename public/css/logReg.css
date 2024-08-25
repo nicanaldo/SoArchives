@@ -1,7 +1,5 @@
-/* Seller Forms */
-
 * {
-    font-family: 'Helvetica';
+    font-family: "Helvetica";
     font-size: 14px;
 }
 
@@ -13,25 +11,25 @@ html {
 
 /* Background Color */
 .bg-bg {
-    background: linear-gradient(to right, #145DA0, #40a3ff);
+    background: linear-gradient(to right, #145da0, #40a3ff);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
 .col-12 .col-xl-9 {
-    background-color: #145DA0;
+    background-color: #145da0;
 }
 
 .button-color {
-    background-color: #145DA0;
+    background-color: #145da0;
 }
 
 .text-color,
-a, h2 {
-    color: #145DA0;
+a,
+h2 {
+    color: #145da0;
 }
 
 .btn:hover {
@@ -41,51 +39,38 @@ a, h2 {
 .form-control:focus,
 .form-control:active {
     outline: none;
-    border-color: #145DA0;
+    border-color: #145da0;
     box-shadow: none !important;
 }
 
-
 .form-check-input:checked {
-    background-color: #145DA0;
-    border-color: #145DA0;
+    background-color: #145da0;
+    border-color: #145da0;
 }
 
-label, label a{
-    color: #212427;
-    font-size: small;
+label,
+label a {
+    color: #515456;
+    font-size: 12px;
 }
 
-label a{
-    color: #145DA0;
+label a {
+    color: #145da0;
 }
-
 
 /* login card */
-.card{
+.card {
     border-radius: 1rem;
 }
 
-
-/* End of Seller Forms */
-
-/* Seller Terms and Conditions */
-
-.bg-terms-nav{
-    background-color: #145DA0;
-}
-
-/* End of Seller Terms and Conditions */
-
-
-/* Seller Forgot Password */
+/* Forgot Password */
 
 .forgot-password-section {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #145DA0;
+    background-color: #145da0;
 }
 
 .forgot-password-card {
@@ -97,8 +82,7 @@ label a{
     padding: 2rem;
 }
 
-/* End of Seller Forgot Password */
-
+/* End of Forgot Password */
 
 /* Reset Password */
 
@@ -107,7 +91,7 @@ label a{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #145DA0; /* Change this to your desired background color */
+    background-color: #145da0; /* Change this to your desired background color */
 }
 
 .reset-success-card {
@@ -126,7 +110,7 @@ label a{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #145DA0; /* Change this to your desired background color */
+    background-color: #145da0; /* Change this to your desired background color */
 }
 
 .reset-password-card {
@@ -150,3 +134,86 @@ label a{
 
 /* End */
 
+/* Hide the spinner for number input */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+/* password strength meter*/
+.password-meter {
+    display: flex;
+    height: 5px;
+    margin-top: 10px;
+}
+
+.meter-section {
+    flex: 1;
+    background-color: #ddd;
+}
+
+.weak {
+    background-color: #ff4d4d;
+}
+
+.medium {
+    background-color: #ffd633;
+}
+
+.strong {
+    background-color: #00b300;
+}
+
+.very-strong {
+    background-color: #009900;
+}
+
+.password-meter {
+    display: none;
+    /* Hide by default */
+}
+
+#passwordHelp {
+    display: none;
+    /* Hide by default */
+}
+
+/* Confirm Password */
+
+#passwordMatchMessage {
+    color: green;
+    /* Green color for matching passwords */
+}
+
+#passwordNoMatchMessage {
+    color: red;
+    /* Red color for non-matching passwords */
+}
+
+.form-control.is-valid,
+.was-validated .form-control:valid {
+    border: 1px solid #ced4da;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: none;
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Button for eye */
+.btn-outline-secondary {
+    border-width: 1px 1px 1px 0;
+    border-color: #ced4da;
+    box-shadow: none;
+    background-color: none !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: none !important;
+}
