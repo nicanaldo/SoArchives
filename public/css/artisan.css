@@ -1,0 +1,331 @@
+*{
+    font-family: 'Helvetica';
+    font-size: 14px;
+  }
+
+  #about h2 {
+    color: #145da0;
+  }
+
+  #banner h1{
+    color: #FEFEFE;
+    font-weight: 700;
+    text-align: center;
+    margin: auto;
+  }
+
+  .banner {
+      background-size: cover;
+      /* Ensures the image covers the entire element */
+      background-position: center;
+      /* Centers the image */
+      background-repeat: no-repeat;
+      /* Prevents image repetition */
+      width: 100%;
+      height: 400px;
+      /* Default height for larger screens */
+      position: relative;
+      z-index: -1;
+  }
+
+  @media (max-width: 1200px) {
+      .banner {
+          height: 300px;
+          /* Adjust height for medium screens */
+      }
+  }
+
+  @media (max-width: 768px) {
+      .banner {
+          height: 200px;
+          /* Adjust height for smaller screens */
+      }
+  }
+
+  @media (max-width: 576px) {
+      .banner {
+          height: 150px;
+          /* Adjust height for extra-small screens */
+      }
+  }
+
+  .p-5 {
+    padding: 15rem !important;
+  }
+
+
+  @media (min-width: 1024px) {
+    h1{
+        font-size: 2rem;
+        text-align: left;
+    }
+  }
+
+  @media (min-width: 500px){
+    h1{
+        font-size: 3rem;
+        text-align: center;
+    }
+
+  }
+
+
+
+/* Overflow hidden */
+.overflow-hidden {
+    overflow: hidden !important;
+}
+
+/* Responsive adjustments */
+
+/* Smaller screens: Increase padding and adjust text size */
+@media (max-width: 576px) {
+    .user-profile-tab .nav-item .nav-link {
+        font-size: 1.2rem; /* Adjust font size */
+    }
+}
+
+/* Medium screens: Adjust text size and padding */
+@media (min-width: 576px) and (max-width: 768px) {
+    .user-profile-tab .nav-item .nav-link {
+        font-size: 1.5rem; /* Adjust font size */
+    }
+}
+
+/* Larger screens: Default styles */
+@media (min-width: 768px) {
+    .user-profile-tab .nav-item .nav-link {
+        font-size: 1.75rem; /* Adjust font size */
+    }
+}
+
+@media (max-width: 600px) {
+    li:hover {
+      background-color: rgb(247, 247, 247);
+      padding-right: 100%;
+    }
+  }
+
+
+
+  /* Cover Photo */
+  .container .cover {
+      position: relative;
+      width: 100%; /* Adjust as needed */
+      height: 300px; /* Fixed height for container */
+      overflow: hidden; /* Ensure the image fits within the container */
+      background-color: #f0f0f0; /* Optional: background color if image fails to load */
+  }
+
+  .header__wrapper {
+      width: 100%;
+      height: 100%; /* Full height of the container */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .header__wrapper img {
+      width: 100%; /* Full width of the container */
+      height: 400px; /* Full height of the container */
+      object-fit: cover; /* Cover the container while maintaining aspect ratio */
+      border-radius: 0 0 10px 10px;
+      z-index: -1;
+  }
+
+
+/* cover and pp */
+/* Back to top button */
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(20, 93, 160, 0.4); /* Adjust shadow size and opacity as needed */
+  }
+
+
+/* cover */
+.cover-photo {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    position: relative; /* Ensure the cover photo is positioned relatively */
+    z-index: 1; /* Make sure it's above the overlay */
+}
+
+.header__wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2; /* Ensure the overlay is above the background but behind the profile picture */
+}
+
+.upload-overlay button {
+    cursor: pointer;
+}
+
+.header__wrapper:hover .upload-overlay {
+    opacity: 1;
+}
+
+/* Profile Picture */
+.profile-picture {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    margin-top: 0; /* Remove negative margin */
+}
+
+/* Profile Picture Upload Overlay */
+.profile-upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2; /* Ensure overlay is above the profile picture */
+}
+
+.img__container:hover .profile-upload-overlay {
+    opacity: 1;
+}
+
+.profile-upload-overlay button {
+    cursor: pointer;
+    z-index: 3; /* Ensure buttons are clickable */
+}
+
+/* Profile Picture Container */
+.img__container {
+    position: relative;
+    z-index: 3; /* Ensure it's above the cover photo and overlay */
+    width: 150px; /* Adjust the width of the container */
+    height: 150px; /* Adjust the height of the container */
+    border-radius: 50%; /* Ensure the container is circular */
+    overflow: hidden; /* Hide anything outside the circular container */
+    margin-top: -75px; /* Adjust based on your layout */
+    margin-left: 10px; /* Adjust as needed */
+    display: flex; /* Center the badge */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Badge Styling */
+.pro-badge {
+    position: absolute;
+    bottom: 0; /* Aign badge to the bottom of the profile picture */
+    left: 50%; /* Center badge horizontally relative to the container */
+    transform: translateX(-50%); /* Center the badge */
+    background-color: #f8f9fa; /* Background color */
+    color: #007bff; /* Badge text color */
+    padding: 5px 20px; /* Padding around the badge text */
+    border-radius: 20px !important; /* Rounded corners */
+    font-size: 12px; /* Font size */
+    z-index: 12; /* Ensure it's above other content */
+    margin-bottom: 10px;
+}
+
+
+
+/* border */
+.thick-border {
+    border: 7px solid white; /* Adjust the thickness as needed */
+    background: linear-gradient(135deg, #FFC107, #ff8325); /* Gradient colors */
+    display: block;
+    width: 150px; /* Original size of the image */
+    height: 150px; /* Original size of the image */
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: white; /* Background color for the inner border */
+    padding: 10px; /* Adjust this if you want an inner border effect */
+    box-sizing: border-box; /* Ensures padding is included in the element's total size */
+    z-index: -1;
+}
+
+
+/* border */
+.thick-border-buyer {
+    border: 5px solid white; /* Adjust the thickness as needed */
+    display: block;
+    width: 250px; /* Original size of the image */
+    height: 250px; /* Original size of the image */
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: white; /* Background color for the inner border */
+    padding: 10px; /* Adjust this if you want an inner border effect */
+    box-sizing: border-box; /* Ensures padding is included in the element's total size */
+}
+
+/* btn add */
+  .btn-add-buttons {
+    background: linear-gradient(to right, #FFC107, #ff923e);
+    border: none; /* Remove default border */
+    color: white; /* Ensure the text is readable */
+}
+
+.btn-add-buttons:hover {
+    background: linear-gradient(to right, #ff923e, #FFC107);
+    color: white; /* Text color on hover */
+}
+
+
+/* pro */
+.pro-badge {
+    background: linear-gradient(45deg, #ff8325, #FFC107);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a .pro-badge {
+    text-decoration: none;
+}
+
+
+/* pagination */
+.pagination .active>.page-link,
+.page-link.active {
+    z-index: 3 !important;
+    color: #fff !important;
+    background-color: #145DA0 !important;
+    border-color: #145DA0 !important;
+}
+
+.pagination {
+    color: #343434 !important;
+}
+
+.pagination .page-link,
+.page-link.active {
+    z-index: 3 !important;
+    color: #343434 !important;
+}
