@@ -31,9 +31,9 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-Route::get('/login/password-request', function () {
-    return view('auth.step2resetpasscode');
-})->name('password.request');
+// Route::get('/login/password-request', function () {
+//     return view('auth.passwords.reset');
+// })->name('password.request');
 
 Route::get('/login/admin', function () {
     return view('auth.adminlogin');
