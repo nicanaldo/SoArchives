@@ -54,16 +54,17 @@
                 <div class="d-flex align-items-center ms-auto">
 
                     {{-- Search bar --}}
-                    <form action="{{ route('community.search') }}" method="POST">
+                    <form action="{{ route('community.index') }}" method="GET">
                         @csrf
                         <input type="search" class="form-control me-2 input-group rounded-pill overflow-hidden" name="search" id="searchBar" placeholder="Search..." style="width: 200px;" value="{{ isset($search) ? $search : '' }}">
                     </form>
+                    
                     {{-- Filter topics --}}
                     <div class="dropdown">
                         <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Filter Topics
                         </a>
-                     
+
                         <ul class="dropdown-menu">
                             @foreach($flairs as $flair)
                                 <li>
@@ -75,7 +76,6 @@
                             @endforeach
                         </ul>
                     </div>
-                    
                     
                 </div>
             </div>
