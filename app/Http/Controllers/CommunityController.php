@@ -6,29 +6,56 @@ use App\Models\Comment;
 use App\Models\Flair;
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommunityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
         $flairs = Flair::all();
 
-        $posts = Post::where('visible', true)
-                 ->withCount('likes')
-                 ->with('comments')
-                 ->with('user')
-                 ->get()
-                 ->each(function ($post) use ($user) {
-                     $post->user_has_liked = Like::where('post_id', $post->id)
-                                                 ->where('user_id', $user->id)
-                                                 ->exists();
-                 });
+        $flairsopt = Flair::pluck('name', 'FlairsID')->toArray();
 
-        return view('community', compact('posts', 'user', 'flairs'));
+        // Get the selected flair from the request
+        $selectedFlair = $request->query('flair');
+
+        // Filter posts by selected flair if a flair is selected
+        $postsQuery = Post::where('visible', true)
+                            ->withCount('likes')
+                            ->with('comments')
+                            ->with('user');
+
+        if ($selectedFlair) {
+        $postsQuery->where('flairs', $selectedFlair);
+        }
+
+        $posts = $postsQuery->get()->each(function ($post) use ($user) {
+        $post->user_has_liked = Like::where('post_id', $post->id)
+                                    ->where('user_id', $user->id)
+                                    ->exists();
+        });
+
+        return view('community', compact('posts', 'user', 'flairs', 'flairsopt', 'selectedFlair'));
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+
+        $posts = Post::where('content', 'like', "%{$search}%")
+                     ->orWhere('flairs', 'like', "%{$search}%")
+                     ->get();
+
+        $flairs = Flair::all();
+
+        $flairsopt = Flair::pluck('name', 'FlairsID')->toArray();
+
+        return view('community', compact('posts', 'search', 'flairs', 'flairsopt'));
+
     }
 
     public function like(Request $request, Post $post)
@@ -83,6 +110,7 @@ class CommunityController extends Controller
 
         $request->validate([
             'content' => 'required|string',
+            'flairs' => 'required|string',
         ]);
 
         $user = Auth::user(); // Get the authenticated user
@@ -90,6 +118,7 @@ class CommunityController extends Controller
         $post = new Post();
         $post->content = $request->input('content');
         $post->user_id = $user->id; // Associate the post with the authenticated user
+        $post->flairs = $request->input('flairs'); // Save the selected flair
         $post->deleted_at = now();
         $post->save();
 
