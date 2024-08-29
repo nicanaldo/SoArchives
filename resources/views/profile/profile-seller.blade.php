@@ -149,8 +149,36 @@
                         <!-- Content for the left side -->
                         <div class="col-12 text-center d-flex justify-content-start">
 
-                            <button type="button" class="btn btn-outline-secondary btn-rounded mb-3 ms-4 mt-3 "
-                                data-mdb-ripple-init><i class="fas fa-edit"></i> Edit Tags</button>
+                           <div class="dropdown">
+                                <button type="button"
+                                    class="btn btn-outline-secondary btn-rounded mb-3 ms-4 mt-3 dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-edit"></i> Edit Tags
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <input type="checkbox" name="tags[]" value="Handmade Jewelry"
+                                                class="form-check-input me-2">
+                                            Handmade Jewelry
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <input type="checkbox" name="tags[]" value="Mixed Media Art"
+                                                class="form-check-input me-2">
+                                            Mixed Media Art
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <input type="checkbox" name="tags[]" value="Yarn Crafts"
+                                                class="form-check-input me-2">
+                                            Yarn Crafts
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
 
                         </div>
 
