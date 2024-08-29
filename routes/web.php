@@ -143,6 +143,8 @@ Route::get('/community/guess', function () {
 Route::group(['prefix'=> 'community'], function(){
 
     Route::get('/', [CommunityController::class, 'index'])->name('community.index');
+
+    Route::post('/search', [CommunityController::class, 'search'])->name('community.search');
     
     Route::post('/posts', [CommunityController::class, 'storePost'])->name('community.storePost');
     
