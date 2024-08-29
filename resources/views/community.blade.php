@@ -54,13 +54,29 @@
                 <div class="d-flex align-items-center ms-auto">
 
                     {{-- Search bar --}}
-                    <input type="text" class="form-control me-2 input-group rounded-pill overflow-hidden"
-                        id="searchBar" placeholder="Search..." style="width: 200px;">
-
+                    <form action="{{ route('community.search') }}" method="POST">
+                        @csrf
+                        <input type="search" class="form-control me-2 input-group rounded-pill overflow-hidden" name="search" id="searchBar" placeholder="Search..." style="width: 200px;" value="{{ isset($search) ? $search : '' }}">
+                    </form>
                     {{-- Filter topics --}}
-                    <button class="btn btn-outline-secondary">
-                        <i class="fas fa-filter"></i> Filter Topics
-                    </button>
+                    <div class="dropdown">
+                        <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filter Topics
+                        </a>
+                     
+                        <ul class="dropdown-menu">
+                            @foreach($flairs as $flair)
+                                <li>
+                                    <a class="dropdown-item {{ $selectedFlair == $flair->name ? 'active' : '' }}" 
+                                       href="{{ route('community.index', ['flair' => $selectedFlair == $flair->name ? null : $flair->name]) }}">
+                                       {{ $flair->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    
+                    
                 </div>
             </div>
 
@@ -90,13 +106,12 @@
 
                                 {{-- FLAIR --}}
                                 <div class="mb-3">
-                                    <label for="tags" class="form-label">Post Topic</label>
-                                    <select class="form-select" id="tags" name="tags"
-                                        aria-label="Default select example" required>
+                                    <label for="flairs" class="form-label">Post Topic</label>
+                                    <select class="form-select" id="tags" name="flairs" aria-label="Default select example" required>
                                         <option value="" selected disabled>Select a topic</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        @foreach ($flairsopt as $FlairsID => $name)
+                                            <option value="{{ $name }}">{{ $name }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select at least one tag.
@@ -487,10 +502,8 @@
                                 <div
                                     class="d-flex justify-content-end align-items-start position-absolute top-0 end-0 p-3">
                                     <div>
-                                        @if ($post->tags && $post->tags->count() > 0)
-                                            @foreach ($post->tags as $tag)
-                                                <span class="badge bg-secondary">{{ $tag->name }}</span>
-                                            @endforeach
+                                        @if ($post->flairs) 
+                                                <span class="badge bg-secondary">{{ $post->flairs }}</span>
                                         @else
                                             <span class="badge bg-light text-dark p-2 fw-normal">Topic Tag</span>
                                         @endif
