@@ -168,6 +168,17 @@ Route::group(['prefix'=> 'community'], function(){
 
 //Seller 
 
+
+//Seller Profile Photo and Cover Photo
+Route::post('seller/cover-photo', [SellerController::class, 'updateCoverPhoto'])->name('seller.cover-photo');
+Route::post('seller/profile-photo/delete', [SellerController::class, 'deleteProfilePhoto'])->name('seller.profile-photo.delete');
+Route::post('seller/profile-photo', [SellerController::class, 'updateProfilePhoto'])->name('seller.profile-photo');
+Route::post('seller/cover-photo/delete', [SellerController::class, 'deleteCoverPhoto'])->name('seller.cover-photo.delete');
+
+
+// Route to handle calculating total price
+Route::post('/profile/seller/order', [SellerController::class, 'calculateTotalPrice'])->name('products.calculateTotalPrice');
+
 // Route to show the seller profile
 Route::get('/profile/seller/{user}', [SellerController::class, 'show'])->name('seller.profile');
 
