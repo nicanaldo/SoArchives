@@ -15,47 +15,37 @@ class CommunityController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-
         $flairs = Flair::all();
-
         $flairsopt = Flair::pluck('name', 'FlairsID')->toArray();
-
-        // Get the selected flair from the request
         $selectedFlair = $request->query('flair');
+        $search = $request->input('search');
 
-        // Filter posts by selected flair if a flair is selected
+        // Base query
         $postsQuery = Post::where('visible', true)
                             ->withCount('likes')
                             ->with('comments')
                             ->with('user');
 
+        // Filter by flair if selected
         if ($selectedFlair) {
-        $postsQuery->where('flairs', $selectedFlair);
+            $postsQuery->where('flairs', $selectedFlair);
+        }
+
+        // Search function
+        if ($search) {
+            $postsQuery->where(function($query) use ($search) {
+                $query->where('content', 'like', "%{$search}%")
+                    ->orWhere('flairs', 'like', "%{$search}%");
+            });
         }
 
         $posts = $postsQuery->get()->each(function ($post) use ($user) {
-        $post->user_has_liked = Like::where('post_id', $post->id)
-                                    ->where('user_id', $user->id)
-                                    ->exists();
+            $post->user_has_liked = Like::where('post_id', $post->id)
+                                        ->where('user_id', $user->id)
+                                        ->exists();
         });
 
-        return view('community', compact('posts', 'user', 'flairs', 'flairsopt', 'selectedFlair'));
-    }
-
-    public function search(Request $request)
-    {
-        $search = $request->search;
-
-        $posts = Post::where('content', 'like', "%{$search}%")
-                     ->orWhere('flairs', 'like', "%{$search}%")
-                     ->get();
-
-        $flairs = Flair::all();
-
-        $flairsopt = Flair::pluck('name', 'FlairsID')->toArray();
-
-        return view('community', compact('posts', 'search', 'flairs', 'flairsopt'));
-
+        return view('community', compact('posts', 'user', 'flairs', 'flairsopt', 'selectedFlair', 'search'));
     }
 
     public function like(Request $request, Post $post)
