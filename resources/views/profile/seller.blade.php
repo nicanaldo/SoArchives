@@ -524,35 +524,114 @@
 
                 </div>
 
+
+                                                            {{-- Feedbacks --}}
                 <div class="container">
                     <div class="feedbacks mt-5">
                         <h2 style="color: #145DA0;">Feedbacks</h2>
                     </div>
                 </div>
 
-                <div class="container custom-shadow mt-5 p-3">
-                    <div class="row">
-                        <div class="col-12">
-                            <br>
-                            <p>I appreciate the creativity and originality you bring to your projects. Your unique style
-                                sets your
-                                work apart and makes it memorable.</p>
-                            <p class="text-muted">- Jane Dela Guzman </p>
+                <div class="container custom-shadow">
+                    <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- First Feedback Item -->
+                            <div class="carousel-item active">
+                                <div class="container custom-shadow p-3">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <!-- Star Rating -->
+                                            <div class="mb-2">
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star-half-alt" style="color: #ffc107; font-size: 20px;"></i>
+                                            </div>
+                                            <!-- Feedback Content -->
+                                            <p class="mb-1">I appreciate the creativity and originality you bring to your projects. Your unique style sets your work apart and makes it memorable.</p>
+                                            <!-- User and Timestamp -->
+                                            <p class="text-muted mb-0">- Jane Dela Guzman</p>
+                                            <p class="text-muted small">Posted on: August 25, 2024</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Feedback Item -->
+                            <div class="carousel-item">
+                                <div class="container custom-shadow p-3">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <!-- Star Rating -->
+                                            <div class="mb-2">
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
+                                                <i class="fa fa-star-half-alt" style="color: #ffc107; font-size: 20px;"></i>
+                                            </div>
+                                            <!-- Feedback Content -->
+                                            <p class="mb-1">I'm impressed by the high quality of craftsmanship evident in your creations. The materials you used are top-notch, and the finished product exceeded my expectations.</p>
+                                            <!-- User and Timestamp -->
+                                            <p class="text-muted mb-0">- Anonymous</p>
+                                            <p class="text-muted small">Posted on: August 20, 2024</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add more feedback items here as needed -->
                         </div>
+
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="container custom-shadow mt-5 p-3 mb-5">
-                    <div class="row">
-                        <div class="col-12">
-                            <br>
-                            <p>I'm impressed by the high quality of craftsmanship evident in your creations. The
-                                materials you used
-                                are top-notch, and the finished product exceeded my expectations.</p>
-                            <p class="text-muted">- Juan Dela Cruz </p>
+                <!-- Feedback Form -->
+                <div class="container custom-shadow mt-5 p-4">
+                    <h3 style="color: #145DA0;">Write Your Feedback</h3>
+                    <form action="/submit-feedback" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="d-flex">
+                                <i class="fa fa-star" style="color: #ffc107; font-size: 24px;"></i>
+                                <i class="fa fa-star" style="color: #ffc107; font-size: 24px;"></i>
+                                <i class="fa fa-star" style="color: #ffc107; font-size: 24px;"></i>
+                                <i class="fa fa-star" style="color: #ffc107; font-size: 24px;"></i>
+                                <i class="fa fa-star-half-alt" style="color: #ffc107; font-size: 24px;"></i>
+                            </div>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="feedbackText" class="form-label">Your Feedback</label>
+                            <textarea id="feedbackText" name="feedback" class="form-control" rows="4" required></textarea>
+                            <div class="col-12 mt-3">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <h5 class="alert-heading text-start">
+                                        &#x1F4DD; Feedback Reminder
+                                    </h5>
+                                    <p class="text-start">
+                                        Please ensure your feedback is constructive and respectful. Honest and thoughtful feedback helps us improve our products and services. Avoid using inappropriate language or personal attacks. Thank you for contributing to our community!
+                                    </p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning text-white" style="padding: 10px 20px; font-size: 16px;">
+                            <i class="fa fa-paper-plane" style="margin-right: 8px;"></i> Submit Feedback
+                        </button>
+                    </form>
                 </div>
+
+                
 
             </div>
 
