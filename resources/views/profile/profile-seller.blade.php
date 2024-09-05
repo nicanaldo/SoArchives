@@ -149,47 +149,39 @@
                         <!-- Content for the left side -->
                         <div class="col-12 text-center d-flex justify-content-start">
 
-                           <div class="dropdown">
-                                <button type="button"
-                                    class="btn btn-outline-secondary btn-rounded mb-3 ms-4 mt-3 dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-edit"></i> Edit Tags
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <input type="checkbox" name="tags[]" value="Handmade Jewelry"
-                                                class="form-check-input me-2">
-                                            Handmade Jewelry
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <input type="checkbox" name="tags[]" value="Mixed Media Art"
-                                                class="form-check-input me-2">
-                                            Mixed Media Art
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <input type="checkbox" name="tags[]" value="Yarn Crafts"
-                                                class="form-check-input me-2">
-                                            Yarn Crafts
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <form action="{{ route('seller.storeTags') }}" method="POST">
+                                @csrf
+                                <div class="dropdown">
+                                    <button type="button"
+                                        class="btn btn-outline-secondary btn-rounded mb-3 ms-4 mt-3 dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-edit"></i> Edit Tags
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @foreach($tags as $tag)
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <input type="checkbox" name="tags[]" value="{{ $tag->name }}"
+                                                        class="form-check-input me-2">
+                                                    {{ $tag->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Tags</button>
+                            </form>
+                            
+                            
 
                         </div>
 
                         <div class="d-flex flex-wrap justify-content-center">
-                            <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>Handmade
-                                Jewelry</button>
-                            <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>Mixed Media
-                                Art</button>
-                            <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>Yarn
-                                Crafts</button>
+                            @foreach($selectedTags as $tag)
+                                <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>{{ $tag }}</button>
+                            @endforeach
                         </div>
+                        
                     </div>
                 </div>
 
