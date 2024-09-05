@@ -168,7 +168,7 @@
                         </span>
                     </div>
                     <div class="text-muted small text-center align-self-center m-2">
-                        <h2>24</h2>
+                        <h2>{{ $feedbackCount }}</h2>
                         <span class=" d-sm-inline-block">
                             <h5>Feedbacks</h5>
                         </span>
@@ -179,12 +179,9 @@
                     </div>
 
                     <div class="d-flex flex-wrap justify-content-center">
-                        <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>Handmade
-                            Jewelry</button>
-                        <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>Mixed Media
-                            Art</button>
-                        <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>Yarn
-                            Crafts</button>
+                        @foreach($selectedTags as $tag)
+                            <button type="button" class="btn btn-sm btn-primary mb-2 me-2" disabled>{{ $tag }}</button>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -525,7 +522,7 @@
                 </div>
 
 
-                                                            {{-- Feedbacks --}}
+                {{-- Feedbacks --}}
                 <div class="container">
                     <div class="feedbacks mt-5">
                         <h2 style="color: #145DA0;">Feedbacks</h2>
@@ -535,53 +532,39 @@
                 <div class="container custom-shadow">
                     <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
                         <div class="carousel-inner">
-                            <!-- First Feedback Item -->
-                            <div class="carousel-item active">
-                                <div class="container custom-shadow p-3">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <!-- Star Rating -->
-                                            <div class="mb-2">
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star-half-alt" style="color: #ffc107; font-size: 20px;"></i>
+                            @if($feedbacks->isEmpty())
+                                <div class="carousel-item active">
+                                    <div class="container custom-shadow p-3">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <p class="mb-1">No feedbacks available yet.</p>
                                             </div>
-                                            <!-- Feedback Content -->
-                                            <p class="mb-1">I appreciate the creativity and originality you bring to your projects. Your unique style sets your work apart and makes it memorable.</p>
-                                            <!-- User and Timestamp -->
-                                            <p class="text-muted mb-0">- Jane Dela Guzman</p>
-                                            <p class="text-muted small">Posted on: August 25, 2024</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Second Feedback Item -->
-                            <div class="carousel-item">
-                                <div class="container custom-shadow p-3">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <!-- Star Rating -->
-                                            <div class="mb-2">
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star" style="color: #ffc107; font-size: 20px;"></i>
-                                                <i class="fa fa-star-half-alt" style="color: #ffc107; font-size: 20px;"></i>
+                            @else
+                                @foreach ($feedbacks as $key => $feedback)
+                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                        <div class="container custom-shadow p-3">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <!-- Star Rating -->
+                                                    <div class="mb-2">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}" style="color: #ffc107; font-size: 20px;"></i>
+                                                        @endfor
+                                                    </div>
+                                                    <!-- Feedback Content -->
+                                                    <p class="mb-1">{{ $feedback->feedback }}</p>
+                                                    <!-- User and Timestamp -->
+                                                    <p class="text-muted mb-0">- {{ $feedback->user->name ?? 'Anonymous' }}</p>
+                                                    <p class="text-muted small">Posted on: {{ $feedback->created_at->format('F d, Y') }}</p>
+                                                </div>
                                             </div>
-                                            <!-- Feedback Content -->
-                                            <p class="mb-1">I'm impressed by the high quality of craftsmanship evident in your creations. The materials you used are top-notch, and the finished product exceeded my expectations.</p>
-                                            <!-- User and Timestamp -->
-                                            <p class="text-muted mb-0">- Anonymous</p>
-                                            <p class="text-muted small">Posted on: August 20, 2024</p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- Add more feedback items here as needed -->
+                                @endforeach
+                            @endif
                         </div>
 
                         <!-- Carousel Controls -->
@@ -596,8 +579,9 @@
                     </div>
                 </div>
 
+
                 <!-- Feedback Form -->
-                <div class="container custom-shadow mt-5 p-4">
+                {{-- <div class="container custom-shadow mt-5 p-4">
                     <h3 style="color: #145DA0;">Write Your Feedback</h3>
                     <form action="/submit-feedback" method="post">
                         <div class="mb-3">
@@ -629,9 +613,109 @@
                             <i class="fa fa-paper-plane" style="margin-right: 8px;"></i> Submit Feedback
                         </button>
                     </form>
+                </div> --}}
+
+                <!-- Feedback Form -->
+                {{-- <div class="container custom-shadow mt-5 p-4"> --}}
+                    {{-- <h3 style="color: #145DA0;">Write Your Feedback</h3>
+                    <form action="{{ route('ratings.store') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="feedback_id" value="">
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="d-flex">
+                                <div class="rating">
+                                    <input type="radio" id="star5" name="rating" value="5" />
+                                    <label for="star5"><i class="fa fa-star" style="color: #ddd; font-size: 24px;"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4" />
+                                    <label for="star4"><i class="fa fa-star" style="color: #ddd; font-size: 24px;"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3" />
+                                    <label for="star3"><i class="fa fa-star" style="color: #ddd; font-size: 24px;"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2" />
+                                    <label for="star2"><i class="fa fa-star" style="color: #ddd; font-size: 24px;"></i></label>
+                                    <input type="radio" id="star1" name="rating" value="1" />
+                                    <label for="star1"><i class="fa fa-star" style="color: #ddd; font-size: 24px;"></i></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedbackText" class="form-label">Your Feedback</label>
+                            <textarea id="feedbackText" name="comment" class="form-control" rows="4" required></textarea>
+                            <div class="col-12 mt-3">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <h5 class="alert-heading text-start">
+                                        &#x1F4DD; Feedback Reminder
+                                    </h5>
+                                    <p class="text-start">
+                                        Please ensure your feedback is constructive and respectful. Honest and thoughtful feedback helps us improve our products and services. Avoid using inappropriate language or personal attacks. Thank you for contributing to our community!
+                                    </p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning text-white" style="padding: 10px 20px; font-size: 16px;">
+                            <i class="fa fa-paper-plane" style="margin-right: 8px;"></i> Submit Feedback
+                        </button>
+                    </form>
+                    <div class="ratings-list mt-5">
+                        @foreach($feedback->ratings as $rating)
+                            <div class="rating-item">
+                                <p>Rating: {{ $rating->rating }} / 5</p>
+                                <p>Comment: {{ $rating->comment }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div> --}}
+
+                <!-- Feedback Form -->
+                <div class="container custom-shadow mt-5 p-4">
+                    <h3 style="color: #145DA0;">Write Your Feedback</h3>
+                    <form action="{{ route('ratings.store') }}" method="post">
+                        @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        {{-- <input type="hidden" name="userID" value="{{ auth()->id() }}"> <!-- Add this line --> --}}
+                        {{-- <input type="hidden" name="sellerID" value="{{$seller->id }}"> <!-- Add this line, assuming $sellerID is defined --> --}}
+                        <input type="hidden" name="sellerID" value="{{ $sellerID }}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="d-flex">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fa fa-star rating-star" data-rating="{{ $i }}" style="color: #ccc; font-size: 24px;"></i>
+                                @endfor
+                                <input type="hidden" name="rating" id="rating" value="0">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedbackText" class="form-label">Your Feedback</label>
+                            <textarea id="feedbackText" name="feedback" class="form-control" rows="4" required></textarea>
+                            <div class="col-12 mt-3">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <h5 class="alert-heading text-start">
+                                        &#x1F4DD; Feedback Reminder
+                                    </h5>
+                                    <p class="text-start">
+                                        Please ensure your feedback is constructive and respectful. Honest and thoughtful feedback helps us improve our products and services. Avoid using inappropriate language or personal attacks. Thank you for contributing to our community!
+                                    </p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning text-white" style="padding: 10px 20px; font-size: 16px;">               
+                            <i class="fa fa-paper-plane" style="margin-right: 8px;"></i> Submit Feedback               
+                        </button>
+                    </form>
                 </div>
 
-                
 
             </div>
 
@@ -645,6 +729,19 @@
 
 
     <script>
+        // Star
+        $('.rating-star').on('click', function() {
+            var rating = $(this).data('rating');
+            $('#rating').val(rating);
+            $('.rating-star').each(function() {
+                if ($(this).data('rating') <= rating) {
+                    $(this).css('color', '#ffc107');
+                } else {
+                    $(this).css('color', '#ccc');
+                }
+            });
+        });
+
         //Back to top button
         let mybutton = document.getElementById("btn-back-to-top");
 
