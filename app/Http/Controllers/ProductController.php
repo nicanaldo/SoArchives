@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Seller;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -16,8 +20,18 @@ class ProductController extends Controller
         // Fetch only the products posted by the authenticated seller
         $products = Product::where('UserID', $user->id)->get();  //eto nadagdag
 
+        $tags = Tag::all();
+
+        $seller = Seller::where('UserID_Fk', auth()->user()->id)->first();
+
+        // Option 1: If using a pivot table
+        $selectedTags = $seller->tags()->pluck('name')->toArray();
+
+        // Option 2: If using a comma-separated string in the Tags column
+        // $selectedTags = explode(',', $seller->Tags);
+
         // Pass the products data to the view
-        return view('profile.profile-seller', compact('products', 'user'));
+        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags'));
     }
 
     public function create() {
@@ -176,4 +190,31 @@ class ProductController extends Controller
 
         return view('profile.profile-seller', compact('products', 'search', 'user'));
     }
+
+    public function storeTags(Request $request)
+    {
+        // Validate the input (if necessary)
+        $request->validate([
+            'tags' => 'required|array',
+        ]);
+
+        // Assuming you have the seller's ID stored in the session or passed as a hidden input
+        $seller = Seller::where('UserID_Fk', auth()->user()->id)->first();
+
+        // Clear existing tags
+        DB::table('seller_tag')->where('SellerID', $seller->SellerID)->delete();
+
+        // Insert new tags
+        foreach ($request->input('tags') as $tagName) {
+            $tag = Tag::where('name', $tagName)->first();
+            DB::table('seller_tag')->insert([
+                'SellerID' => $seller->SellerID,
+                'TagsID' => $tag->TagsID,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Tags updated successfully!');
+    }
+
 }
+
