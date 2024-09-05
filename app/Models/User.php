@@ -47,6 +47,12 @@ class User extends Authenticatable
         return $this->UserTypeID === 1; 
     }
 
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+
     public function events()
     {
         return $this->hasMany(Event::class, 'UserID');
