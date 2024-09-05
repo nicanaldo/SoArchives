@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GalleryController;
@@ -85,19 +86,14 @@ Route::post('/artisan', [ArtisanController::class, 'search'])->name('search');
 
 //Events
 Route::group(['prefix'=> 'create_event'], function(){
-
     Route::get('/events', [EventController::class, 'index'])->name('events');
-
     Route::get('/events/form', function () {
         return view('Event.CreateEvents');
     })->name('create.event.form');
 
     Route::post('/events/submit', [EventController::class, 'create'])->name('create.event.submit');
-
     Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
-
     Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
-
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
 });
@@ -143,13 +139,9 @@ Route::get('/community/guess', function () {
 Route::group(['prefix'=> 'community'], function(){
 
     Route::get('/', [CommunityController::class, 'index'])->name('community.index');
-    
     Route::post('/posts', [CommunityController::class, 'storePost'])->name('community.storePost');
-    
     Route::get('/data', [CommunityController::class, 'PostData']);
-    
     Route::post('/posts/{post}/comment', [CommunityController::class, 'comment'])->name('community.comment');
-    
     Route::post('/community/{post}/like', [CommunityController::class, 'like'])->name('community.like');
     
     // Editing and deleting posts
@@ -166,22 +158,20 @@ Route::group(['prefix'=> 'community'], function(){
 
 //Seller 
 
-
 //Seller Profile Photo and Cover Photo
 Route::post('seller/cover-photo', [SellerController::class, 'updateCoverPhoto'])->name('seller.cover-photo');
 Route::post('seller/profile-photo/delete', [SellerController::class, 'deleteProfilePhoto'])->name('seller.profile-photo.delete');
 Route::post('seller/profile-photo', [SellerController::class, 'updateProfilePhoto'])->name('seller.profile-photo');
 Route::post('seller/cover-photo/delete', [SellerController::class, 'deleteCoverPhoto'])->name('seller.cover-photo.delete');
 
-
-// Route to handle calculating total price
-Route::post('/profile/seller/order', [SellerController::class, 'calculateTotalPrice'])->name('products.calculateTotalPrice');
+// Tags
+Route::post('profile/seller/store-tags', [ProductController::class, 'storeTags'])->name('seller.storeTags');
 
 // Route to show the seller profile
 Route::get('/profile/seller/{user}', [SellerController::class, 'show'])->name('seller.profile');
 
-// Route to handle calculating total price
-Route::post('/profile/seller/order', [SellerController::class, 'calculateTotalPrice'])->name('products.calculateTotalPrice');
+// Feedback Form
+Route::post('/profile/seller/ratings', [SellerController::class,'submitRating'])->name('ratings.store');
 
 //Seller Add Product
 // Route::get('/profile/seller', [ProductController::class, 'index'])->name('products.index'); //recheck later baka hindi tama route
@@ -202,9 +192,8 @@ Route::delete('/products/{product}', [ProductController::class, 'destroy'])->nam
 Route::post('/upload', [ProductController::class, 'upload'])->name('upload');
 
 //Buyer
-Route::get('/profile/buyer', function () {
-    return view('profile.profile-buyer');
-})->name('profile-buyer');
+// Route to show the buyer profile
+Route::get('/profile/buyer', [BuyerController::class, 'show'])->name('profile-buyer');
 
 
 //Admin Dashboard
