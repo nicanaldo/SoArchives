@@ -111,9 +111,8 @@
 
             {{-- Tags --}}
             <div class="name text-center">
-                <h2 class="card-title text-center mb-3 p-4" style="color:#343434;"> {{ auth()->user()->fname }}
-                    {{ auth()->user()->lname }} </h2>
-
+                <h2 class="card-title text-center mb-3 p-4" style="color:#343434;"> {{ $user->fname }} {{ $user->lname }}
+                </h2>
                 <div class="pb-5">
 
                     <button type="button" class="btn btn-outline-success btn-rounded me-1" data-mdb-ripple-init><i
