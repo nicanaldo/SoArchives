@@ -47,12 +47,9 @@
             </h1>
             <div class="search-container" style=" display: flex; justify-content: center;">
 
-                {{-- sa action gumana --}}
-                <form class="d-flex mb-10" style="width: 60%;" method="post" action="/artisan">
+                <form class="d-flex mb-10" style="width: 60%;" method="get" action="{{ route('artisan') }}">
                     @csrf
-                    <input class="form-control me-1 search-input" type="search" name="search"
-                        placeholder="Search for artisans..." aria-label="Search"
-                        value="{{ isset($search) ? $search : '' }}">
+                    <input class="form-control me-1 search-input" type="search" name="search" placeholder="Search for artisans..." aria-label="Search" value="{{ isset($search) ? $search : '' }}">
 
                     <!-- Categories -->
                     <div class="dropdown">
@@ -63,7 +60,12 @@
 
                         <ul class="dropdown-menu">
                             @foreach ($tags as $tag)
-                                <li><a class="dropdown-item" href="#">{{ $tag->name }}</a></li>
+                                <li>
+                                    <a class="dropdown-item {{ $selectedTags == $tag->name ? 'active' : '' }}" 
+                                        href="{{ route('artisan', ['tag' => $selectedTags == $tag->name ? null : $tag->name]) }}">
+                                         {{ $tag->name }}
+                                     </a>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
@@ -94,7 +96,7 @@
             <div class="row">
                 @foreach ($profiles as $seller)
                     <div class="col-lg-3 col-md-6 mb-4">
-                        <a href="{{ route('seller.profile', ['user' => $seller->id]) }}" class="card-link"
+                        <a href="{{ route('seller.profile', ['slug' => $seller->slug]) }}" class="card-link"
                             style="text-decoration: none;">
                             <div class="card">
                                 <!-- Cover photo -->
@@ -120,15 +122,15 @@
                                     </h5>
 
 
+                                    <!-- Display tags associated with the seller -->
                                     <p class="card-text text-muted text-center"
                                         style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                        <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                            style="font-size: small;" role="button" aria-disabled="true">Fiber Arts</a>
-                                        <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                            style="font-size: small;" role="button" aria-disabled="true">Home Decor</a>
-                                        <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                            style="font-size: small;" role="button" aria-disabled="true">Yarn
-                                            Crafts</a>
+                                        @if(isset($sellersWithTags[$seller->id]))
+                                            @foreach($sellersWithTags[$seller->id] as $tag)
+                                                <a href="#" class="btn btn-primary btn-lg p-1 disabled"
+                                                style="font-size: small;" role="button" aria-disabled="true">{{ $tag }}</a>
+                                            @endforeach
+                                        @endif
                                     </p>
                                 </div>
                             </div>
