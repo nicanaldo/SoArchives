@@ -278,17 +278,20 @@
                                         class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                     <div class="d-flex flex-column">
                                         @if ($post->user->usertypeID == '3')
-                                            <a href="{{ route('profile-buyer') }}"
+                                            <a href="{{ route('profile-buyer', ['slug' => $post->user->slug]) }}"
                                                 class="card-title mb-0 d-flex align-items-center text-decoration-none">
                                                 {{ $post->user->fname }} {{ $post->user->lname }}
                                             </a>
                                         @elseif($post->user->usertypeID == '2')
-                                            <a href="{{ route('seller.profile', $post->user->id) }}"
-                                                class="card-title mb-0 d-flex align-items-center text-decoration-none">
-                                                {{ $post->user->fname }} {{ $post->user->lname }}
-                                                <span class="badge pro-badge ms-2"><i class="fas fa-crown"></i>
-                                                    PRO</span>
-                                            </a>
+                                            @if($post->user->slug)
+                                                <a href="{{ route('seller.profile', ['slug' => $post->user->slug]) }}"
+                                                    class="card-title mb-0 d-flex align-items-center text-decoration-none">
+                                                    {{ $post->user->fname }} {{ $post->user->lname }}
+                                                    <span class="badge pro-badge ms-2"><i class="fas fa-crown"></i> PRO</span>
+                                                </a>
+                                            @else
+                                                <span>Profile unavailable</span>
+                                            @endif
                                         @endif
 
                                         <span class="text-muted small">{{ $post->created_at->diffForHumans() }}</span>
