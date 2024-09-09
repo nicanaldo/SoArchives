@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SellerController extends Controller
 {
-    public function show(User $user) //pag show to ng profile ng seller sa end ng buyer
+    public function show($slug) //sgowing of seller profile to any user
     {
+        // Fetch the user based on the slug
+        $user = User::where('slug', $slug)->firstOrFail();
+
         // Fetch the products associated with the seller
         $products = Product::where('UserID', $user->id)->get();
 

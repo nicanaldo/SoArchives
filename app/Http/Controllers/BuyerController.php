@@ -8,11 +8,10 @@ use Illuminate\Http\Request;
 
 class BuyerController extends Controller
 {
-    public function show(User $user) //pag show to ng profile ng seller sa end ng buyer
+    public function show($slug) //showing of buyer's profile to any user
     {
-        // Fetch the seller's information using the user's ID
-        $seller = Buyer::where('UserID_Fk', $user->id)->first();
+        $user = User::where('slug', $slug)->firstOrFail();
         
-        return view('profile.profile-buyer', compact('seller'));
+        return view('profile.profile-buyer', compact('user'));
     }
 }
