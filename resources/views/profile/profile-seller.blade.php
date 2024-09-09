@@ -141,7 +141,7 @@
                             </span>
                         </div>
                         <div class="text-muted small text-center align-self-center m-2">
-                            <h2>24</h2>
+                            <h2>{{ $feedbackCount }}</h2>
                             <span class=" d-sm-inline-block">
                                 <h5>Feedbacks</h5>
                             </span>
@@ -167,9 +167,11 @@
                                                 </a>
                                             </li>
                                         @endforeach
+                                        <button type="submit" class="btn btn-primary">Save Tags</button>
                                     </ul>
+                                    
                                 </div>
-                                <button type="submit" class="btn btn-primary">Save Tags</button>
+                                
                             </form>
                             
                             
@@ -833,27 +835,53 @@
                         </div>
                     </div>
 
-                    <div class="container custom-shadow mt-5 p-3">
-                        <div class="row">
-                            <div class="col-12">
-                                <br>
-                                <p>I appreciate the creativity and originality you bring to your projects. Your unique
-                                    style sets your
-                                    work apart and makes it memorable.</p>
-                                <p class="text-muted">- Jane Dela Guzman </p>
+                    <div class="container custom-shadow">
+                        <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @if($feedbacks->isEmpty())
+                                    <div class="carousel-item active">
+                                        <div class="container custom-shadow p-3">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <p class="mb-1">No feedbacks available yet.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    @foreach ($feedbacks as $key => $feedback)
+                                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                            <div class="container custom-shadow p-3">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <!-- Star Rating -->
+                                                        <div class="mb-2">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}" style="color: #ffc107; font-size: 20px;"></i>
+                                                            @endfor
+                                                        </div>
+                                                        <!-- Feedback Content -->
+                                                        <p class="mb-1">{{ $feedback->feedback }}</p>
+                                                        <!-- User and Timestamp -->
+                                                        <p class="text-muted mb-0">- {{ $feedback->user->name ?? 'Anonymous' }}</p>
+                                                        <p class="text-muted small">Posted on: {{ $feedback->created_at->format('F d, Y') }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="container custom-shadow mt-5 p-3 mb-5">
-                        <div class="row">
-                            <div class="col-12">
-                                <br>
-                                <p>I'm impressed by the high quality of craftsmanship evident in your creations. The
-                                    materials you used
-                                    are top-notch, and the finished product exceeded my expectations.</p>
-                                <p class="text-muted">- Juan Dela Cruz </p>
-                            </div>
+    
+                            <!-- Carousel Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
                     </div>
                 </div>
