@@ -219,7 +219,7 @@
                     data-aos-delay="300">
                     <div class="icon-box">
                         <div class="icon"><i class="fas fa-hand-sparkles" style="color: #FFC107;"></i></div>
-                        <h4>Commed Artisans</h4>
+                        <h4>Commend Artisans</h4>
                         <p>Show appreciation by our commend feature! Leave positive feedback and support their growth.</p>
                     </div>
                 </div>
