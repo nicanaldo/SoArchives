@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feedback;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\Tag;
@@ -30,8 +31,14 @@ class ProductController extends Controller
         // Option 2: If using a comma-separated string in the Tags column
         // $selectedTags = explode(',', $seller->Tags);
 
+        // Fetch feedbacks related to the seller
+        $feedbacks = Feedback::where('sellerID', $seller->SellerID)->get();
+
+        // Get the count of feedbacks
+        $feedbackCount = $feedbacks->count();
+
         // Pass the products data to the view
-        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags'));
+        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags', 'feedbacks', 'feedbackCount'));
     }
 
     public function create() {
