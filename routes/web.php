@@ -81,7 +81,7 @@ Route::get('/about', function () {
 
 //Route artisan with search
 Route::get('/artisan', [ArtisanController::class, 'index'])->name('artisan');
-Route::post('/artisan', [ArtisanController::class, 'search'])->name('search');
+// Route::post('/artisan', [ArtisanController::class, 'search'])->name('search');
 
 
 //Events
@@ -153,7 +153,7 @@ Route::group(['prefix'=> 'community'], function(){
     Route::get('/comments/{comment}/edit', [CommunityController::class, 'editComment'])->name('community.editComment');
     Route::put('/comments/{comment}', [CommunityController::class, 'updateComment'])->name('community.updateComment');
     Route::delete('/comments/{comment}', [CommunityController::class, 'deleteComment'])->name('community.deleteComment');
-    });
+});
 
 
 //Seller 
@@ -168,7 +168,7 @@ Route::post('seller/cover-photo/delete', [SellerController::class, 'deleteCoverP
 Route::post('profile/seller/store-tags', [ProductController::class, 'storeTags'])->name('seller.storeTags');
 
 // Route to show the seller profile
-Route::get('/profile/seller/{user}', [SellerController::class, 'show'])->name('seller.profile');
+Route::get('/seller/{slug}', [SellerController::class, 'show'])->name('seller.profile');
 
 // Feedback Form
 Route::post('/profile/seller/ratings', [SellerController::class,'submitRating'])->name('ratings.store');
@@ -193,7 +193,7 @@ Route::post('/upload', [ProductController::class, 'upload'])->name('upload');
 
 //Buyer
 // Route to show the buyer profile
-Route::get('/profile/buyer', [BuyerController::class, 'show'])->name('profile-buyer');
+Route::get('/buyer/{slug}', [BuyerController::class, 'show'])->name('profile-buyer');
 
 
 //Admin Dashboard
