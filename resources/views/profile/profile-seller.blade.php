@@ -268,7 +268,7 @@
                                     <button type="button"
                                         class="btn btn-outline-secondary btn-rounded mb-3 ms-4 mt-3 dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-edit"></i> Edit Tags
+                                        <i class="fas fa-edit"></i> Add / Remove Tags
                                     </button>
                                     <ul class="dropdown-menu">
                                         @foreach($tags as $tag)
@@ -1278,7 +1278,7 @@
 
 
 
-
+                    {{-- Feedback --}}
                     <div class="container">
                         <div class="feedbacks mt-5">
                             <h2 style="color: #145DA0;">Feedbacks</h2>
