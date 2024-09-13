@@ -950,8 +950,566 @@
                             </div>
                         </div>
 
+ {{-- Events Section --}}
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show" id="pills-events" role="tabpanel"
+                                    aria-labelledby="pills-events-tab" tabindex="0" data-bs-backdrop="static"
+                                    data-bs-keyboard="false">
 
+<<<<<<< HEAD
                         {{-- Events --}}
+=======
+                                    <div class="row">
+                                        <div class="col-md-6 mt-5">
+                                            <button type="button" class="btn btn-warning btn-add-buttons text-white"
+                                                data-bs-toggle="modal" data-bs-target="#eventModal">Create an
+                                                event</button>
+                                            {{-- <button type="button" class="btn btn-primary btn-add-buttons" data-bs-toggle="modal"
+                                         data-bs-target="#exampleModal">Create an event</button> --}}
+                                        </div>
+
+                                        <!-- Create Event Modal -->
+                                        <div class="modal fade" id="eventModal" tabindex="-1"
+                                            aria-labelledby="eventModalLabel" aria-hidden="true"
+                                            data-bs-backdrop="static" data-bs-keyboard="false">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="eventModalLabel">Create an Event
+                                                        </h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="eventForm" method="POST"
+                                                            action="{{ route('create.event.submit') }}"
+                                                            enctype="multipart/form-data" novalidate>
+                                                            @csrf
+                                                            <div class="mb-3">
+                                                                <label for="image" class="form-label">Upload Event
+                                                                    Banner</label>
+                                                                <input type="file" class="form-control"
+                                                                    id="EventImage" name="EventImage"
+                                                                    accept="image/*" required>
+                                                                <div class="invalid-feedback">Please upload a banner
+                                                                    for the event.</div>
+                                                                <p class="text-muted">Accepted image formats: .jpeg,
+                                                                    .jpg, .png, with a maximum size of 2MB per image.
+                                                                    <br>Recommended image size: 1905px x 600px
+                                                                </p>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="EventName" class="form-label">Event
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="EventName" name="EventName"
+                                                                    placeholder="Event Name" required>
+                                                                <div class="invalid-feedback">Please provide the event
+                                                                    name.</div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="Description"
+                                                                    class="form-label">Description</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="Description" name="EventDescription"
+                                                                    placeholder="Event Description" required>
+                                                                <div class="invalid-feedback">Please provide a
+                                                                    description for the event.</div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label for="datetime" class="form-label">Event
+                                                                        Date</label>
+                                                                    <input style="margin-bottom:10px;" type="date"
+                                                                        class="form-control" id="Date"
+                                                                        name="Date" required
+                                                                        min="<?php echo date('Y-m-d'); ?>">
+                                                                    <div class="invalid-feedback">Please provide the
+                                                                        event date.</div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label for="start-time" class="form-label">Start
+                                                                        Time</label>
+                                                                    <input type="time" class="form-control"
+                                                                        id="StartTime" name="StartTime" required>
+                                                                    <div class="invalid-feedback">Please provide the
+                                                                        start time.</div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label for="end-time" class="form-label">End
+                                                                        Time</label>
+                                                                    <input type="time" class="form-control"
+                                                                        id="EndTime" name="EndTime" required>
+                                                                    <div class="invalid-feedback">Please provide the
+                                                                        end time.</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <label for="location"
+                                                                        class="form-label">Location</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="Location" name="Location" required
+                                                                        placeholder="Location">
+                                                                    <div class="invalid-feedback">Please provide the
+                                                                        event location.</div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="link" class="form-label">Link for
+                                                                        Registration</label>
+                                                                    <input type="url" class="form-control"
+                                                                        id="Link" name="Link" required
+                                                                        placeholder="Link">
+                                                                    <div class="invalid-feedback">Please provide a link
+                                                                        for registration.</div>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                                                <button type="submit"
+                                                                    class="btn btn-primary me-md-2">Create</button>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const form = document.getElementById('eventForm');
+
+                                                form.addEventListener('submit', function(event) {
+                                                    if (!form.checkValidity()) {
+                                                        event.preventDefault();
+                                                        form.classList.add('was-validated');
+                                                    }
+                                                });
+                                            });
+                                        </script>
+
+
+
+                                        {{-- Search bar --}}
+                                        <div class="col-md-6 mt-5">
+                                            <form method="post" action="{{ route('products-search') }}">
+                                                <div class="input-group rounded-pill overflow-hidden">
+                                                    @csrf
+                                                    <input type="search" name="search"
+                                                        class="form-control border-0" placeholder="Search events"
+                                                        aria-label="Search"
+                                                        value="{{ isset($search) ? $search : '' }}">
+                                                    <button class="btn border-0 bg-white" type="submit">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    {{-- Events Content --}}
+                                    <div class="events-section mt-5">
+                                        <div class="row">
+                                            @forelse ($events as $event)
+                                                @php
+                                                    $isEnded =
+                                                        \Carbon\Carbon::parse($event->Date)->isPast() ||
+                                                        $event->Status === 'Ended';
+                                                @endphp
+                                                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+                                                    <!-- Display event details -->
+                                                    <div class="card position-relative {{ $isEnded ? 'ended-event' : '' }}"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#eventModal{{ $event->EventID }}">
+                                                        @if ($isEnded)
+                                                            <div class="badge ended-badge bg-danger position-absolute">
+                                                                Ended
+                                                            </div>
+                                                        @endif
+                                                        <img src="{{ $event->EventImage ? asset('storage/' . $event->EventImage) : 'default-image.jpg' }}"
+                                                            class="card-img-top" alt="{{ $event->EventName }}">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{ $event->EventName }}</h5>
+                                                            <p class="card-text text-muted truncate-description-card">
+                                                                {{ $event->EventDescription }}
+                                                            </p>
+                                                            <strong>Status:</strong>
+                                                            @if ($event->Status == 'Approved')
+                                                                <span class="badge bg-success">Approved</span>
+                                                            @elseif($event->Status == 'Rejected')
+                                                                <span class="badge bg-danger">Rejected</span>
+                                                            @else
+                                                                <span class="badge bg-warning">Pending</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @empty
+                                                <div class="col-12 text-center mt-5">
+                                                    <p class="text-muted">No events created yet. Start by creating your
+                                                        first event!</p>
+                                                </div>
+                                            @endforelse
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal for View Details -->
+                                    @foreach ($events as $event)
+                                        <div class="modal fade dynamic-modal" id="eventModal{{ $event->EventID }}"
+                                            tabindex="-1" aria-labelledby="eventModalLabel{{ $event->EventID }}"
+                                            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <!-- Full Image on Top with Overlay for Edit/Delete Menu -->
+                                                    <div class="modal-body p-0 position-relative">
+                                                        <img src="{{ asset('storage/' . $event->EventImage) }}"
+                                                            class="img-fluid w-100" alt="Event Image"
+                                                            style="object-fit: cover; height: 200px;">
+
+
+
+                                                        <!-- Edit/Delete Menu Overlay -->
+                                                        @if (Auth::id() == $event->UserID)
+                                                            @php
+                                                                $eventDate = \Carbon\Carbon::parse($event->Date);
+                                                                $currentDate = \Carbon\Carbon::now();
+                                                            @endphp
+                                                            @if (Auth::id() == $event->UserID)
+                                                                @php
+                                                                    $eventDate = \Carbon\Carbon::parse($event->Date);
+                                                                    $currentDate = \Carbon\Carbon::now();
+                                                                @endphp
+
+                                                                <div class="position-absolute top-0 end-0 p-3">
+                                                                    <div class="dropdown-bar">
+                                                                        <button class="btn btn-option dropdown-bar"
+                                                                            type="button"
+                                                                            id="dropdownMenuButton{{ $event->EventID }}"
+                                                                            data-bs-toggle="dropdown"
+                                                                            aria-expanded="false">
+                                                                            <i class="fas fa-ellipsis-v"></i>
+                                                                        </button>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+
+                                                                        <ul class="dropdown-menu dropdown-menu-end"
+                                                                            aria-labelledby="dropdownMenuButton{{ $event->EventID }}">
+                                                                            @if ($eventDate->isFuture())
+                                                                                <!-- Options for Future Events -->
+                                                                                <li>
+                                                                                    <button
+                                                                                        class="dropdown-item edit-event"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#editEventModal{{ $event->EventID }}">
+                                                                                        <i class="fas fa-edit"></i>
+                                                                                        Edit
+                                                                                    </button>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <!-- Common option for Delete -->
+                                                                            <li>
+                                                                                <button
+                                                                                    class="dropdown-item delete-event"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#confirmDeleteModal{{ $event->EventID }}">
+                                                                                    <i class="fas fa-trash"></i> Delete
+                                                                                </button>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+                                                    <!-- Event Details Below -->
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- Event Date and Time -->
+                                                                <div
+                                                                    class="d-flex justify-content-between align-items-center mb-3">
+                                                                    <!-- Event Date and Time -->
+                                                                    <p class="event-date-time text-muted mb-0">
+                                                                        {{ \Carbon\Carbon::parse($event->Date)->format('l F j, Y') }}
+                                                                        |
+                                                                        {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }}
+                                                                        -
+                                                                        {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
+                                                                    </p>
+
+                                                                    <!-- Link Button -->
+                                                                    @if ($event->Link)
+                                                                        <a href="{{ $event->Link }}"
+                                                                            class="btn btn-primary-link"
+                                                                            target="_blank">
+                                                                            <i class="fas fa-link me-2"></i> Link to
+                                                                            Join
+                                                                        </a>
+                                                                    @endif
+                                                                </div>
+                                                                <!-- Event Name -->
+                                                                <h5 class="modal-title fw-bold mt-3">
+                                                                    {{ $event->EventName }}</h5>
+                                                                <!-- Event Description -->
+                                                                <p class="modal-text mb-3 text-muted">
+                                                                    {{ $event->EventDescription }}</p>
+                                                                <!-- Location with Icon -->
+                                                                <div class="d-flex align-items-center mb-3">
+                                                                    @if ($event->Link)
+                                                                        @php
+                                                                            $statusColor = '';
+                                                                            switch ($event->Status) {
+                                                                                case 'Approved':
+                                                                                    $statusColor = 'btn-success';
+                                                                                    break;
+                                                                                case 'Pending':
+                                                                                    $statusColor = 'btn-warning';
+                                                                                    break;
+                                                                                case 'OnGoing':
+                                                                                    $statusColor = 'btn-info';
+                                                                                    break;
+                                                                                case 'Rejected':
+                                                                                    $statusColor = 'btn-danger';
+                                                                                    break;
+                                                                                case 'Ended':
+                                                                                    $statusColor = 'btn-secondary';
+                                                                                    break;
+                                                                            }
+                                                                        @endphp
+
+                                                                        @if (Auth::id() == $event->UserID)
+                                                                            <button type="button"
+                                                                                class="btn {{ $statusColor }} me-3"
+                                                                                disabled>
+                                                                                {{ $event->Status }}
+                                                                            </button>
+                                                                        @endif
+                                                                    @endif
+
+                                                                    <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}"
+                                                                        class="btn btn-primary" target="_blank">
+                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                        {{ $event->Location }}
+                                                                    </a>
+                                                                </div>
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+
+                                    <!-- Modal for Editing Events -->
+                                    @foreach ($events as $event)
+                                        <div class="modal fade" id="editEventModal{{ $event->EventID }}"
+                                            tabindex="-1"
+                                            aria-labelledby="editEventModalLabel{{ $event->EventID }}"
+                                            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <div style="text-align: center;">
+                                                            <h2 class="form-name fs-5">Edit Event</h2>
+                                                        </div>
+
+                                                        @if ($errors->any())
+                                                            <div class="alert alert-danger">
+                                                                <ul>
+                                                                    @foreach ($errors->all() as $error)
+                                                                        <li>{{ $error }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
+
+                                                        <!-- Event edit form -->
+                                                        <form action="{{ route('events.update', $event->EventID) }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('PUT')
+
+                                                            <!-- Image Upload and Preview -->
+                                                            <div class="mb-3">
+                                                                <label for="eventImage" class="form-label">Event
+                                                                    Image</label>
+                                                                <input type="file" class="form-control"
+                                                                    id="eventImage" name="EImage"
+                                                                    accept="image/png, image/jpeg">
+                                                                <img id="imagePreview" src=""
+                                                                    alt="Image Preview"
+                                                                    style="display:none; margin-top:10px; max-width: 100%;">
+                                                            </div>
+
+                                                            <!-- Event Name -->
+                                                            <div class="mb-3">
+                                                                <label for="eventName" class="form-label">Event
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="eventName" name="EName"
+                                                                    value="{{ $event->EventName }}">
+                                                            </div>
+
+                                                            <!-- Description -->
+                                                            <div class="mb-3">
+                                                                <label for="eventDescription"
+                                                                    class="form-label">Description</label>
+                                                                <input class="form-control" id="eventDescription"
+                                                                    name="EDescription"
+                                                                    value="{{ $event->EventDescription }}">
+                                                            </div>
+
+                                                            <!-- Date, Start Time, and End Time -->
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label for="eventDate"
+                                                                        class="form-label">Date</label>
+                                                                    <input type="date" class="form-control"
+                                                                        id="eventDate" name="EDate"
+                                                                        value="{{ $event->Date }}"
+                                                                        min="<?php echo date('Y-m-d'); ?>">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label for="eventStartTime"
+                                                                        class="form-label">Start Time</label>
+                                                                    <input type="time" class="form-control"
+                                                                        id="eventStartTime" name="EStartTime"
+                                                                        value="{{ $event->StartTime }}">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label for="eventEndTime" class="form-label">End
+                                                                        Time</label>
+                                                                    <input type="time" class="form-control"
+                                                                        id="eventEndTime" name="EEndTime"
+                                                                        value="{{ $event->EndTime }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Location and Link -->
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <label for="eventLocation"
+                                                                        class="form-label">Location</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="eventLocation" name="ELocation"
+                                                                        value="{{ $event->Location }}">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="eventLink"
+                                                                        class="form-label">Link</label>
+                                                                    <input type="url" class="form-control"
+                                                                        id="eventLink" name="ELink"
+                                                                        value="{{ $event->Link }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Submit Button -->
+                                                            <div class="d-flex justify-content-end"
+                                                                style="margin-top: 9px;">
+                                                                <button style="margin-right:9px;" type="submit"
+                                                                    class="btn button-primary">Update</button>
+
+                                                                <!-- Close Button -->
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Image Preview and Validation Script -->
+                                        <script>
+                                            document.getElementById('eventImage').addEventListener('change', function() {
+                                                const file = this.files[0];
+                                                const imagePreview = document.getElementById('imagePreview');
+
+                                                if (file) {
+                                                    const fileType = file['type'];
+                                                    const validImageTypes = ['image/jpeg', 'image/png'];
+
+                                                    // Validate file type
+                                                    if (!validImageTypes.includes(fileType)) {
+                                                        alert('Only JPG and PNG image formats are allowed.');
+                                                        this.value = ''; // Clear the input
+                                                        imagePreview.style.display = 'none'; // Hide the preview
+                                                    } else {
+                                                        // Show preview
+                                                        const reader = new FileReader();
+                                                        reader.onload = function(e) {
+                                                            imagePreview.src = e.target.result;
+                                                            imagePreview.style.display = 'block';
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                } else {
+                                                    imagePreview.style.display = 'none'; // Hide preview if no file selected
+                                                }
+                                            });
+
+                                            // Handle modal close confirmation
+                                            const modal = document.getElementById('editEventModal{{ $event->EventID }}');
+                                            modal.addEventListener('hide.bs.modal', function(event) {
+                                                if (isFormDirty) {
+                                                    event.preventDefault();
+                                                    if (confirm('You have unsaved changes. Are you sure you want to close without saving?')) {
+                                                        isFormDirty = false;
+                                                        // Manually hide the modal
+                                                        $(modal).modal('hide');
+                                                    }
+                                                }
+                                            });
+                                        </script>
+
+
+                                        <!-- Confirmation Modal for Deleting Event -->
+                                        <div class="modal fade" id="confirmDeleteModal{{ $event->EventID }}"
+                                            tabindex="-1"
+                                            aria-labelledby="confirmDeleteModalLabel{{ $event->EventID }}"
+                                            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="confirmDeleteModalLabel{{ $event->EventID }}">Confirm
+                                                            Delete
+                                                        </h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">Are you sure you want to delete this event?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="{{ route('events.destroy', $event->EventID) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                        {{-- Archives --}}
+>>>>>>> c433b01da7d7ea1d015e1f7f746c5ee6e214dc94
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show" id="pills-events" role="tabpanel"
                                 aria-labelledby="pills-events-tab" tabindex="0">
