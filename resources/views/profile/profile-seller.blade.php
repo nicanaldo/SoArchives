@@ -300,6 +300,70 @@
                     </div>
                 </div>
 
+                 <div class="container mt-3 custom shadow p-3">
+                            <h4 class="p-2"> &#128204 Upcoming Events</h4>
+
+                            @php
+                                // Filter the events before the loop to include only Approved and OnGoing events and exclude events where the date has passed
+                                $filteredEvents = $events->filter(function ($event) {
+                                    return in_array($event->Status, ['Approved', 'OnGoing']) &&
+                                        \Carbon\Carbon::parse($event->Date)->isFuture();
+                                });
+                            @endphp
+
+                            @if ($filteredEvents->isEmpty())
+                                @if (!empty($search))
+                                    <h1 class="text-center text-muted">No search results found</h1>
+                                @else
+                                    <h1 class="text-center text-muted">No events yet</h1>
+                                @endif
+                            @else
+                                <!-- Display Events Based on Status -->
+                                @foreach ($filteredEvents as $event)
+                                    @if ($event->Status == 'Approved' || $event->Status == 'Ongoing')
+                                        <div class="col-12 mb-3">
+                                            <div class="event-side">
+                                                <div class="card-body d-flex align-items-center">
+                                                    <!-- Calendar-like Date Display -->
+                                                    <div
+                                                        class="date-card d-flex flex-column align-items-center justify-content-center me-4">
+                                                        <div class="day"
+                                                            style="font-size: 2rem; font-weight: bold;">
+                                                            {{ \Carbon\Carbon::parse($event->Date)->format('j') }}
+                                                        </div>
+                                                        <div class="date-month text-muted me-5 ms-5">
+                                                            {{ \Carbon\Carbon::parse($event->Date)->format('M Y') }}
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Event Details -->
+                                                    <div>
+                                                        <h5 class="card-title m-0">{{ $event->EventName }}</h5>
+                                                        <p class="card-text text-muted m-0 truncate-description">
+                                                            {{ $event->EventDescription }}</p>
+                                                        <p class="modal-text m-0"><i class="far fa-clock"></i>
+                                                            {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }}
+                                                            -
+                                                            {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
+                                                        </p>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <p class="card-text"><i
+                                                                    class="fas fa-map-marker-alt text-primary"></i>
+                                                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}"
+                                                                    class="location-icon" target="_blank">
+                                                                    {{ $event->Location }}
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </div>
+
 
 
 
