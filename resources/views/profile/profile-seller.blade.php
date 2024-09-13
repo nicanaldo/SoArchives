@@ -774,37 +774,374 @@
                         </div>
 
 
-                        {{-- Events --}}
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show" id="pills-events" role="tabpanel"
-                                aria-labelledby="pills-events-tab" tabindex="0">
+{{-- Events --}}
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show" id="pills-events" role="tabpanel"
+        aria-labelledby="pills-events-tab" tabindex="0">
 
-                                <div class="row">
-                                    <div class="col-md-6 mt-5">
-                                        <button type="button" class="btn btn-warning btn-add-buttons"
-                                            data-bs-toggle="modal" data-bs-target="#">Create an event</button>
-                                        {{-- <button type="button" class="btn btn-primary btn-add-buttons" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">Create an event</button> --}}
-                                    </div>
+        <div class="row">
+            <div class="col-md-6 mt-5">
+                <button type="button" class="btn btn-warning btn-add-buttons"
+                    data-bs-toggle="modal" data-bs-target="#eventModal"><i class="fa fa-plus-circle me-2"></i> Create an event</button>
+                {{-- <button type="button" class="btn btn-primary btn-add-buttons" data-bs-toggle="modal"
+                 data-bs-target="#exampleModal">Create an event</button> --}}
+            </div>
 
-                                    {{-- Search bar --}}
-                                    <div class="col-md-6 mt-5">
-                                        <form method="post" action="{{ route('products-search') }}">
-                                            <div class="input-group rounded-pill overflow-hidden">
-                                                @csrf
-                                                <input type="search" name="search" class="form-control border-0"
-                                                    placeholder="Search crafts or products" aria-label="Search"
-                                                    value="{{ isset($search) ? $search : '' }}">
-                                                <button class="btn border-0 bg-white" type="submit">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
+            <!-- Create Event Modal -->
+            <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Create an Event</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <div class="modal-body">
+                            <form id="eventForm" method="POST" action="{{ route('create.event.submit') }}" enctype="multipart/form-data" novalidate>
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Upload Event Banner</label>
+                                    <input type="file" class="form-control" id="EventImage" name="EventImage" accept="image/*" required>
+                                    <div class="invalid-feedback">Please upload a banner for the event.</div>
+                                    <p class="text-muted">Accepted image formats: .jpeg, .jpg, .png, with a maximum size of 2MB per image. <br>Recommended image size: 1905px x 600px</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EventName" class="form-label">Event Name</label>
+                                    <input type="text" class="form-control" id="EventName" name="EventName" placeholder="Event Name" required>
+                                    <div class="invalid-feedback">Please provide the event name.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Description" class="form-label">Description</label>
+                                    <input type="text" class="form-control" id="Description" name="EventDescription" placeholder="Event Description" required >
+                                    <div class="invalid-feedback">Please provide a description for the event.</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="datetime" class="form-label">Event Date</label>
+                                        <input style="margin-bottom:10px;" type="date" class="form-control" id="Date" name="Date" required min="<?php echo date('Y-m-d'); ?>">
+                                        <div class="invalid-feedback">Please provide the event date.</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="start-time" class="form-label">Start Time</label>
+                                        <input type="time" class="form-control" id="StartTime" name="StartTime" required>
+                                        <div class="invalid-feedback">Please provide the start time.</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="end-time" class="form-label">End Time</label>
+                                        <input type="time" class="form-control" id="EndTime" name="EndTime" required>
+                                        <div class="invalid-feedback">Please provide the end time.</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="location" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="Location" name="Location" required placeholder="Location">
+                                        <div class="invalid-feedback">Please provide the event location.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="link" class="form-label">Link for Registration</label>
+                                        <input type="url" class="form-control" id="Link" name="Link" required placeholder="Link">
+                                        <div class="invalid-feedback">Please provide a link for registration.</div>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                    <button type="submit" class="btn btn-primary me-md-2">Create</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('eventForm');
+
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        form.classList.add('was-validated');
+                    }
+                });
+            });
+            </script>
+
+
+
+            {{-- Search bar --}}
+            <div class="col-md-6 mt-5">
+                <form method="post" action="{{ route('products-search') }}">
+                    <div class="input-group rounded-pill overflow-hidden">
+                        @csrf
+                        <input type="search" name="search" class="form-control border-0"
+                            placeholder="Search crafts or products" aria-label="Search"
+                            value="{{ isset($search) ? $search : '' }}">
+                        <button class="btn border-0 bg-white" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Events Content --}}
+     <div class="events-section mt-5">
+        <div class="row">
+            @forelse ($events as $event)
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <!-- Display event details -->
+                    <div class="card" data-bs-toggle="modal" data-bs-target="#eventModal{{ $event->EventID }}">
+                        <img src="{{ $event->EventImage ? asset('storage/' . $event->EventImage) : 'default-image.jpg' }}"
+                            class="card-img-top" alt="{{ $event->EventName }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $event->EventName }}</h5>
+                            <p class="card-text">{{ $event->EventDescription }}</p>
+                            <p class="card-text">Created By: {{ $event->user ? $event->user->fname . ' ' . $event->user->lname : 'Unknown' }}</p>
+                            <strong>Status:</strong> 
+            @if($event->Status == 'Approved')
+                <span class="badge bg-success">Approved</span>
+            @elseif($event->Status == 'Rejected')
+                <span class="badge bg-danger">Rejected</span>
+            @else
+                <span class="badge bg-warning">Pending</span>
+            @endif
+                            <!-- <a href="#" class="btn btn-primary">More details</a> -->
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-12 text-center mt-5">
+                    <p class="text-muted">No events created yet. Start by creating your
+                        first event!</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Modal for View Details -->
+    @foreach($events as $event)
+    <div class="modal fade dynamic-modal" id="eventModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="eventModalLabel{{ $event->EventID }}" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="card-text">Created By: {{ $event->user ? $event->user->fname . ' ' . $event->user->lname : 'Unknown' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7 text-center mb-2">
+                            <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image" style="height: 400px; object-fit: relative;">
+                        </div>
+                        
+                        
+                        <div class="col-md-5">
+                            <h5 class="modal-title">{{ $event->EventName }}</h5>
+                            <p class="modal-text">Description: <br> {{ $event->EventDescription }}</p>
+                            <p class="modal-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
+                            <p class="modal-text">Time:
+                                {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - 
+                                {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="card-text">Location:
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}" class="btn btn-outline-primary" target="_blank">
+                                    <i class="fas fa-map-marker-alt"></i> {{ $event->Location }}
+                                </a></p><br>
+                            </div>                                         
+                            @if($event->Link)
+                            <div class="col-md-12">
+                                @php
+                                    $statusColor = '';
+                                    switch($event->Status) {
+                                        case 'Approved':
+                                            $statusColor = 'btn-success';
+                                            break;
+                                        case 'Pending':
+                                            $statusColor = 'btn-warning';
+                                            break;
+                                        case 'OnGoing':
+                                            $statusColor = 'btn-info';
+                                            break;
+                                        case 'Rejected':
+                                            $statusColor = 'btn-danger';
+                                            break;
+                                        case 'Ended':
+                                            $statusColor = 'btn-secondary';
+                                            break;
+                                    }
+                                @endphp
+
+                                @php
+                                    $now = \Carbon\Carbon::now(); // Define $now here
+                                    $eventEndDate = \Carbon\Carbon::parse($event->Date . ' ' . $event->EndTime);
+                                @endphp
+                                @if ($event->Status === 'Ended' || $now->greaterThan($eventEndDate))
+                                    <div class="card-body">
+                                        <a href="{{ route('gallery.showEventImages', ['eventId' => $event->EventID]) }}" class="btn btn-primary">
+                                            View Gallery
+                                        </a>
+                                    </div>
+                                @endif
+                                <!-- Only the user who created this event can see the status -->
+                                @if(Auth::id() == $event->UserID) 
+                                <!-- Event Status -->
+                                <button type="button" class="btn {{ $statusColor }} mr-2 text-left" disabled>{{ $event->Status }}</button>
+                                @endif
+                                <!-- Link of Form or Meeting -->
+                                <a href="{{ $event->Link }}" class="btn btn-primary" target="_blank"><i class="fas fa-link"></i> Link to Join</a>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                @if(Auth::id() == $event->UserID)
+                @if(Auth::id() == $event->UserID && !in_array($event->Status, ['Ended', 'Rejected']))
+                    <!-- Edit button -->
+                    <button type="button" class="btn btn-primary edit-event" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editEventModal{{ $event->EventID }}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                @else
+                    <!-- Display a disabled button or simply hide it -->
+                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#noteditedEventModal{{ $event->EventID }}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                @endif
+
+                @if($event->Status != 'Approved')
+                    <!-- Delete button -->
+                    <button type="button" class="btn btn-danger delete-event" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $event->EventID }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                @else
+                    <!-- Display a disabled button or simply hide it -->
+                    <button type="button" class="btn btn-secondary" disabled>
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                @endif
+
+                @endif
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+    <!-- Modal for Editing Events -->
+    @foreach($events as $event)
+    <div class="modal fade" id="editEventModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="editEventModalLabel{{ $event->EventID }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                <div style="text-align: center;">
+                    <h1 for="header" class="form-name fs-5">Edit Event</h1>
+                </div>
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    <!-- Event edit form content -->
+                    <form action="{{ route('events.update', $event->EventID) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="eventImage" class="form-label">Event Image</label>
+                            <input type="file" class="form-control" id="eventImage" name="EImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventName" class="form-label">Event Name</label>
+                            <input type="text" class="form-control" id="eventName" name="EName" value="{{ $event->EventName }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Description</label>
+                            <input class="form-control" id="eventDescription" name="EDescription" value="{{ $event->EventDescription }}">
+                        </div>
+                        <div class="row">
+                        <div class="col-md-4">
+                            <label for="eventDate" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="eventDate" name="EDate" value="{{ $event->Date }}" >
+                            <!-- <input type="date" class="form-control" id="Date" name="Date" required min=""> -->
+                        </div>
+                        <div class="col-md-4">
+                            <label for="eventStartTime" class="form-label">Start Time</label>
+                            <input type="time" class="form-control" id="eventStartTime" name="EStartTime" value="{{ $event->StartTime }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="eventEndTime" class="form-label">End Time</label>
+                            <input type="time" class="form-control" id="eventEndTime" name="EEndTime" value="{{ $event->EndTime }}">
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-md-6">
+                            <label for="eventLocation" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="eventLocation" name="ELocation" value="{{ $event->Location }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="eventLink" class="form-label">Link</label>
+                            <input type="url" class="form-control" id="eventLink" name="ELink" value="{{ $event->Link }}">
+                        </div>
+                        </div>
+                        <div style="margin-top: 9px;">
+                        <button style="margin-right:9px;" type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>    
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Editing Events -->
+    <div class="modal fade" id="noteditedEventModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="noteditedEventModal{{ $event->EventID }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                <div style="text-align: center;">
+                    <h1 for="header" class="form-name fs-5">You are not allowed to Edit Event</h1>
+                </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                </div>    
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <!-- Confirmation Modal for Deleting Event -->
+    <div class="modal fade" id="confirmDeleteModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ $event->EventID }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel{{ $event->EventID }}">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Are you sure you want to delete this event?</div>
+                <div class="modal-footer">
+                    <form action="{{ route('events.destroy', $event->EventID) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+</div>
+</div>
 
                         {{-- Archives --}}
                         <div class="tab-content" id="pills-tabContent">
