@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Feedback;
 use App\Models\User;
 use App\Models\Product;
@@ -33,8 +34,13 @@ class SellerController extends Controller
 
         // Get the count of feedbacks
         $feedbackCount = $feedbacks->count();
+
+        //Events
+        $events = Event::where('Status', 'Approved')
+        ->where('UserID', $user->id)
+        ->get();
         
-        return view('profile.seller', compact('user', 'products', 'selectedTags', 'seller', 'sellerID', 'feedbacks', 'feedbackCount'));
+        return view('profile.seller', compact('user', 'products', 'selectedTags', 'seller', 'sellerID', 'feedbacks', 'feedbackCount', 'events'));
     }
 
     public function submitRating(Request $request)
