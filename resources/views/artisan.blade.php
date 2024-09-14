@@ -49,7 +49,9 @@
 
                 <form class="d-flex mb-10" style="width: 60%;" method="get" action="{{ route('artisan') }}">
                     @csrf
-                    <input class="form-control me-1 search-input" type="search" name="search" placeholder="Search for artisans..." aria-label="Search" value="{{ isset($search) ? $search : '' }}">
+                    <input class="form-control me-1 search-input" type="search" name="search"
+                        placeholder="Search for artisans..." aria-label="Search"
+                        value="{{ isset($search) ? $search : '' }}">
 
                     <!-- Categories -->
                     <div class="dropdown">
@@ -61,10 +63,10 @@
                         <ul class="dropdown-menu">
                             @foreach ($tags as $tag)
                                 <li>
-                                    <a class="dropdown-item {{ $selectedTags == $tag->name ? 'active' : '' }}" 
+                                    <a class="dropdown-item {{ $selectedTags == $tag->name ? 'active' : '' }}"
                                         href="{{ route('artisan', ['tag' => $selectedTags == $tag->name ? null : $tag->name]) }}">
-                                         {{ $tag->name }}
-                                     </a>
+                                        {{ $tag->name }}
+                                    </a>
                                 </li>
                             @endforeach
                         </ul>
@@ -81,96 +83,94 @@
 
     <div class="container p-4 custom-shadow mt-5 mb-5  animate__animated animate__slideInUp ">
 
-       {{-- Artisan Card --}}
-                <div class="row justify-content-left" style="margin-top: 10rem;">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <!-- Check if profiles are empty and display a message if true -->
-                    @if (isset($search) && $profiles->isEmpty())
-                        <div class="text-center w-100 pb-2">
-                            <h2> No artisans found matching your search criteria.</h2>
-                        </div>
-                    @else
-                        <div class="row">
-                            @foreach ($profiles as $seller)
-                                <div class="col-lg-3 col-md-6 mb-4">
-                                    <a href="{{ route('seller.profile', ['user' => $seller->id]) }}" class="card-link"
-                                        style="text-decoration: none;">
-                                        <div class="card">
-                                            <!-- Cover photo -->
-                                            <img src="{{ asset($seller->cover_photo ? 'storage/cover_photos/' . $seller->id . '/' . basename($seller->cover_photo) : 'images/finalcover.png') }}"
-                                                class="card-img-top" style="height:200px; object-fit: cover;"
-                                                alt="Cover Photo">
-
-                                            <!-- Profile pic -->
-                                            <div class="container d-flex justify-content-center align-items-center">
-                                                <div class="img__container">
-                                                    <img src="{{ asset($seller->profile_photo ? 'storage/profile_photos/' . $seller->id . '/' . basename($seller->profile_photo) : 'images/defuser.png') }}"
-                                                        alt="Profile Picture" class="border-white thick-border" />
-                                                    <span class="badge pro-badge fs-10 text-center"><i
-                                                            class="fas fa-crown"></i>
-                                                        PRO</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center fw-bold"
-                                                    style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                                    {{ $seller->fname }} {{ $seller->lname }}
-                                                </h5>
-
-                                                {{-- <p class="card-text text-muted text-center"
-                                                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                                <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                                    style="font-size: small;" role="button" aria-disabled="true">Fiber
-                                                    Arts</a>
-                                                <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                                    style="font-size: small;" role="button" aria-disabled="true">Home
-                                                    Decor</a>
-                                                <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                                    style="font-size: small;" role="button" aria-disabled="true">Yarn
-                                                    Crafts</a>
-                                            </p> --}}
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <!-- Input field for user_id -->
-                                    <input type="hidden" name="user_id"
-                                        value="{{ auth()->check() ? auth()->user()->UserID : '' }}">
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
+        {{-- Artisan Card --}}
+        <div class="row justify-content-left" style="margin-top: 10rem;">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
+            @endif
 
+            <!-- Check if profiles are empty and display a message if true -->
+            @if (isset($search) && $profiles->isEmpty())
+                <div class="text-center w-100 pb-2">
+                    <h2> No artisans found matching your search criteria.</h2>
+                </div>
+            @else
+                <div class="row">
+                    @foreach ($profiles as $seller)
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <a href="{{ route('seller.profile', ['slug' => $seller->slug]) }}" class="card-link"
+                                style="text-decoration: none;">
+                                <div class="card">
+                                    <!-- Cover photo -->
+                                    <img src="{{ asset($seller->cover_photo ? 'storage/cover_photos/' . $seller->id . '/' . basename($seller->cover_photo) : 'images/finalcover.png') }}"
+                                        class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
 
+                                    <!-- Profile pic -->
+                                    <div class="container d-flex justify-content-center align-items-center">
+                                        <div class="img__container">
+                                            <img src="{{ asset($seller->profile_photo ? 'storage/profile_photos/' . $seller->id . '/' . basename($seller->profile_photo) : 'images/defuser.png') }}"
+                                                alt="Profile Picture" class="border-white thick-border" />
+                                            <span class="badge pro-badge fs-10 text-center"><i class="fas fa-crown"></i>
+                                                PRO</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center fw-bold"
+                                            style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
+                                            {{ $seller->fname }} {{ $seller->lname }}
+                                        </h5>
+
+                                        {{-- <!-- Display tags associated with the seller -->
+                                                <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
+                                                        @if (isset($sellersWithTags[$seller->id]))
+                                                            @foreach ($sellersWithTags[$seller->id] as $tag)
+                                                                </div>
+                                                            </div>
+                                                            <a href="#" class="btn btn-primary btn-lg p-1 disabled"
+                                                            style="font-size: small;" role="button" aria-disabled="true">{{ $tag }}</a>
+                                                        @endforeach
+                                                    @endif
+                                                </p> --}}
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- Input field for user_id -->
+                            <input type="hidden" name="user_id"
+                                value="{{ auth()->check() ? auth()->user()->UserID : '' }}">
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
 
-        {{-- UI: Pagination --}}
-        <nav aria-label="..." class="mt-3">
-            <ul class="pagination justify-content-end">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item" aria-current="page">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+    </div>
+
+
+    {{-- UI: Pagination --}}
+    <nav aria-label="..." class="mt-3">
+        <ul class="pagination justify-content-end">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item" aria-current="page">
+                <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
 
 
     </div>
