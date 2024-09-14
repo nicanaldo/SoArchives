@@ -12,4 +12,8 @@ class Gallery extends Model
     protected $table = 'galleries'; 
 
     protected $fillable = ['EventID', 'UserID', 'path'];
+
+    protected $primaryKey = 'idgallery';
+
+    protected $foreignKey = ['EventID'];
 }
