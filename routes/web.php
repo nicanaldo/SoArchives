@@ -113,10 +113,13 @@ Route::get('/visitorevents', [EventController::class, 'showVisitorEvents'])->nam
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 Route::post('/gallery/store', [GalleryController::class, 'store'])->name('gallery.store');
 Route::get('/gallery/images/{eventId}', [GalleryController::class, 'showEventImages'])->name('gallery.showEventImages');
+Route::get('/gallerybuyer/images/{eventId}', [GalleryController::class, 'showEventImagesBuyer'])->name('gallery.showEventImagesBuyer');
 Route::get('/gallery/get-images/{eventId}', [GalleryController::class, 'getEventImages'])->name('gallery.getEventImages');
 Route::get('/gallery/{eventId}/images', [GalleryController::class, 'showImages'])->name('events.images');
 Route::get('/gallery/view', [GalleryController::class, 'view'])->name('gallery.view');
 Route::get('/gallery/event-images/{eventId}', [GalleryController::class, 'showEventImages'])->name('gallery.viewEventImages');
+
+Route::delete('/gallery/delete/{idgallery}', [GalleryController::class, 'destroy'])->name('gallery.delete');
 
 //buyer
 Route::get('/api/events/{eventId}/images', [GalleryController::class, 'getEventImages']);
