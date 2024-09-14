@@ -281,35 +281,60 @@
                     </div>
 
 
-                    <div class="container custom-shadow mt-5 p-3">
-                        <div class="row">
-                            <div class="col-12">
-                                <br>
-                                <p>"Thank you for being such a fantastic buyer! Your appreciation for our handicrafts
-                                    truly shines
-                                    through in your thoughtful selection and support. We're thrilled to have connected
-                                    with someone who
-                                    values craftsmanship and creativity as much as we do. Looking forward to serving you
-                                    again soon!"
-                                </p>
-                                <p class="text-muted">- Abbey Santos </p>
-                            </div>
+                      {{-- Feedback --}}
+                      <div class="container">
+                        <div class="feedbacks mt-5">
+                            <h2 style="color: #145DA0;">Feedbacks</h2>
                         </div>
                     </div>
 
-                    <div class="container custom-shadow mt-5 p-3 mb-5">
-                        <div class="row">
-                            <div class="col-12">
-                                <br>
-                                <p>"Working with you has been an absolute pleasure. Your enthusiasm for our handicrafts
-                                    is infectious,
-                                    and it's truly gratifying to see them find a home with someone who appreciates their
-                                    beauty and
-                                    craftsmanship. Thank you for being such a wonderful supporter of our work. We're
-                                    already looking
-                                    forward to our next opportunity to create something special for you!"</p>
-                                <p class="text-muted">- Sooyoung Ha </p>
+                    <div class="container custom-shadow">
+                        <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @if($feedbacks->isEmpty())
+                                    <div class="carousel-item active">
+                                        <div class="container custom-shadow p-3">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <p class="mb-1">No feedbacks available yet.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    @foreach ($feedbacks as $key => $feedback)
+                                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                            <div class="container custom-shadow p-3">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <!-- Star Rating -->
+                                                        <div class="mb-2">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}" style="color: #ffc107; font-size: 20px;"></i>
+                                                            @endfor
+                                                        </div>
+                                                        <!-- Feedback Content -->
+                                                        <p class="mb-1">{{ $feedback->feedback }}</p>
+                                                        <!-- User and Timestamp -->
+                                                        <p class="text-muted mb-0">- {{ $feedback->user->name ?? 'Anonymous' }}</p>
+                                                        <p class="text-muted small">Posted on: {{ $feedback->created_at->format('F d, Y') }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
+    
+                            <!-- Carousel Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
                     </div>
                 </div>
