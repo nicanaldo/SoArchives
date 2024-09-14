@@ -55,11 +55,13 @@
 
   
         <li class="nav-item" style="width: 90px;">
-          <a class="nav-link custom-button" href="{{ route('Event.BuyerEvents')}}">Events</a>
+          <a class="nav-link custom-button" href="{{ route('Event.BuyerEvents')}}">
+          <i class="fa fa-calendar me-2"></i> Events</a>
         </li>
 
         <li class="nav-item" style="width: 90px;">
-          <a class="nav-link custom-button" href="{{ route('galleryBuyer') }}">Gallery</a>
+          <a class="nav-link custom-button" href="{{ route('galleryBuyer') }}">
+          <i class="fa fa-image me-2"></i> Gallery</a>
         </li>
         
       </ul>
