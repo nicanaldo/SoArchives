@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Feedback;
 use App\Models\Product;
 use App\Models\Seller;
@@ -37,8 +38,11 @@ class ProductController extends Controller
         // Get the count of feedbacks
         $feedbackCount = $feedbacks->count();
 
+        //Events
+        $events = Event::where('UserID', $user->id)->get();
+
         // Pass the products data to the view
-        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags', 'feedbacks', 'feedbackCount'));
+        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags', 'feedbacks', 'feedbackCount', 'events'));
     }
 
     public function create() {
