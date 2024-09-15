@@ -12,8 +12,15 @@ use Illuminate\Support\Facades\Auth;
 
 class SellerController extends Controller
 {
+
+    public function __construct()
+    {
+        // Ensure all routes in this controller require the user to be authenticated
+        $this->middleware('auth')->except(['show']);
+    }
     public function show($slug) //sgowing of seller profile to any user
     {
+
         // Fetch the user based on the slug
         $user = User::where('slug', $slug)->firstOrFail();
 
@@ -35,12 +42,24 @@ class SellerController extends Controller
         // Get the count of feedbacks
         $feedbackCount = $feedbacks->count();
 
+        $activeProducts = Product::where('UserID', $user->id)
+            ->where('status', 'active')
+            ->paginate(12); // Paginated result for active products
+
+        $archivedProducts = Product::where('UserID', $user->id)
+            ->where('status', 'archived')
+            ->paginate(12); // Paginated result for archived products
+
+        $trashedProducts = Product::where('UserID', $user->id)
+            ->where('status', 'trash')
+            ->get(); // Non-paginated result for trashed products
+
         //Events
         $events = Event::where('Status', 'Approved')
-        ->where('UserID', $user->id)
-        ->get();
-        
-        return view('profile.seller', compact('user', 'products', 'selectedTags', 'seller', 'sellerID', 'feedbacks', 'feedbackCount', 'events'));
+            ->where('UserID', $user->id)
+            ->get();
+
+        return view('profile.seller', compact('user', 'products', 'selectedTags', 'seller', 'sellerID', 'feedbacks', 'feedbackCount', 'events', 'activeProducts', 'archivedProducts'));
     }
 
     public function submitRating(Request $request)
@@ -65,10 +84,9 @@ class SellerController extends Controller
         $feedback->save();
 
         return redirect()->back()->with('success', 'Feedback submitted successfully!');
-
     }
 
-     public function updateCoverPhoto(Request $request)
+    public function updateCoverPhoto(Request $request)
     {
         $request->validate([
             'cover_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
