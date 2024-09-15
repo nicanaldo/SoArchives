@@ -43,48 +43,54 @@
 
         <div class="container">
 
-            <h1 style="margin-bottom: -3rem; color: #FEFEFE; font-weight: 500;">Artisans are crafting wonders for you!
+            <h1 style="color: #FEFEFE; font-weight: 500;">Artisans are crafting wonders for
+                you!
             </h1>
-            <div class="search-container" style=" display: flex; justify-content: center;">
 
-                <form class="d-flex mb-10" style="width: 60%;" method="get" action="{{ route('artisan') }}">
-                    @csrf
-                    <input class="form-control me-1 search-input" type="search" name="search"
-                        placeholder="Search for artisans..." aria-label="Search"
-                        value="{{ isset($search) ? $search : '' }}">
+            <div class="search-container container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8">
+                        {{-- sa action gumana --}}
+                        <form class="d-flex mb-3" method="post" action="/artisan">
+                            @csrf
+                            <input class="form-control me-1 search-input" type="search" name="search"
+                                placeholder="Search for artisans..." aria-label="Search"
+                                value="{{ isset($search) ? $search : '' }}">
 
-                    <!-- Categories -->
-                    <div class="dropdown">
-                        <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categories
-                        </a>
 
-                        <ul class="dropdown-menu">
-                            @foreach ($tags as $tag)
-                                <li>
-                                    <a class="dropdown-item {{ $selectedTags == $tag->name ? 'active' : '' }}"
-                                        href="{{ route('artisan', ['tag' => $selectedTags == $tag->name ? null : $tag->name]) }}">
-                                        {{ $tag->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
+                            <!-- Categories -->
+                            <div class="dropdown ms-1 z-1">
+                                <a class="btn btn-warning dropdown-toggle" href="#"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Categories
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    @foreach ($tags as $tag)
+                                        <li>
+                                            <a class="dropdown-item {{ $selectedTags == $tag->name ? 'active' : '' }}"
+                                                href="{{ route('artisan', ['tag' => $selectedTags == $tag->name ? null : $tag->name]) }}">
+                                                {{ $tag->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+
+                        </form>
                     </div>
-
-
-                </form>
+                </div>
             </div>
 
-
         </div>
-    </div>
 
 
-    <div class="container p-4 custom-shadow mt-5 mb-5  animate__animated animate__slideInUp ">
+
+    <div class="container artisan-con p-4 custom-shadow mb-5  animate__animated animate__slideInUp ">
 
         {{-- Artisan Card --}}
-        <div class="row justify-content-left" style="margin-top: 10rem;">
+        <div class="row justify-content-left ">
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -116,29 +122,30 @@
                                         <div class="img__container">
                                             <img src="{{ asset($seller->profile_photo ? 'storage/profile_photos/' . $seller->id . '/' . basename($seller->profile_photo) : 'images/defuser.png') }}"
                                                 alt="Profile Picture" class="border-white thick-border" />
-                                            <span class="badge pro-badge fs-10 text-center"><i class="fas fa-crown"></i>
+                                            <span class="badge pro-badge fs-10 text-center"><i class="fas fa-star"></i>
                                                 PRO</span>
                                         </div>
                                     </div>
 
                                     <div class="card-body">
                                         <h5 class="card-title text-center fw-bold"
-                                            style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
+                                            style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                             {{ $seller->fname }} {{ $seller->lname }}
                                         </h5>
 
-                                        {{-- <!-- Display tags associated with the seller -->
-                                                <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                                        @if (isset($sellersWithTags[$seller->id]))
-                                                            @foreach ($sellersWithTags[$seller->id] as $tag)
-                                                                </div>
-                                                            </div>
-                                                            <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                                            style="font-size: small;" role="button" aria-disabled="true">{{ $tag }}</a>
-                                                        @endforeach
-                                                    @endif
-                                                </p> --}}
+                                        <!-- Display tags associated with the seller -->
+                                        <p class="card-text text-muted text-center"
+                                            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            @if (isset($sellersWithTags[$seller->id]))
+                                                @foreach ($sellersWithTags[$seller->id] as $tag)
+                                                    <a href="#" class="btn bg-flairs btn-lg disabled"
+                                                        style="font-size: small;" role="button"
+                                                        aria-disabled="true">{{ $tag }}</a>
+                                                @endforeach
+                                            @endif
+                                        </p>
                                     </div>
+
                                 </div>
                             </a>
 
@@ -152,28 +159,48 @@
         </div>
 
 
+        {{-- UI: Pagination --}}
+        <nav aria-label="Page navigation" class="mt-3">
+            <ul class="pagination justify-content-end">
+                <!-- Previous Page Link -->
+                @if ($profiles->onFirstPage())
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $profiles->previousPageUrl() }}">Previous</a>
+                    </li>
+                @endif
+
+                <!-- Page Number Links -->
+                @foreach ($profiles->links()->elements[0] as $page => $url)
+                    @if ($page == $profiles->currentPage())
+                        <li class="page-item active">
+                            <span class="page-link">{{ $page }}</span>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endif
+                @endforeach
+
+                <!-- Next Page Link -->
+                @if ($profiles->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $profiles->nextPageUrl() }}">Next</a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                @endif
+            </ul>
+        </nav>
     </div>
 
 
-    {{-- UI: Pagination --}}
-    <nav aria-label="..." class="mt-3">
-        <ul class="pagination justify-content-end">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item" aria-current="page">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
-
-
-    </div>
 
 
 
