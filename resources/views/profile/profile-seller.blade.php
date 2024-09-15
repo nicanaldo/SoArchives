@@ -70,8 +70,32 @@
                     </div>
                 </div>
 
+
+
+
+                {{-- Profile Picture --}}
+                <div class="container d-flex justify-content-center align-items-center">
+                    <div class="img__container position-relative thick-border-container">
+                        <img id="profileImage"
+                            src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
+                            alt="Profile Picture" class="thick-border profile-picture" />
+
+                        <!-- Hover Overlay for Uploading a New Profile Picture -->
+                        <div
+                            class="profile-upload-overlay d-flex flex-column align-items-center justify-content-center">
+                            <input type="file" id="profileUpload" accept="image/*" style="display: none;" />
+                            <button type="button" class="btn btn-light" id="profileUploadButton"><i
+                                    class="fas fa-upload"></i> Change</button>
+                            <button type="button" class="btn btn-success mt-2" id="profileSaveButton"
+                                style="display: none;">Save</button>
+                            <button type="button" class="btn btn-danger mt-2" id="profileDeleteButton"> <i
+                                    class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>
+
                 <script>
-                    // Uploading of photo preview and action confirmation
+                    // Cover Photo Upload and Actions
                     let originalCoverImageSrc = document.getElementById('coverImage').src;
 
                     document.getElementById('uploadButton').addEventListener('click', function() {
@@ -91,83 +115,83 @@
                     });
 
                     document.getElementById('saveButton').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to save this cover photo?')) {
-                            const fileInput = document.getElementById('coverUpload');
-                            const formData = new FormData();
-                            formData.append('cover_photo', fileInput.files[0]);
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'Do you want to save this cover photo?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, save it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const fileInput = document.getElementById('coverUpload');
+                                const formData = new FormData();
+                                formData.append('cover_photo', fileInput.files[0]);
 
-                            fetch('{{ route('seller.cover-photo') }}', {
-                                    method: 'POST',
-                                    body: formData,
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                    },
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        originalCoverImageSrc = data.image_path; // Update original image source
-                                        document.getElementById('saveButton').style.display =
-                                            'none'; // Hide save button after saving
-                                        alert('Cover photo saved successfully!');
-                                    } else {
-                                        alert('Failed to save cover photo.');
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
-                        } else {
-                            // Revert to original image if user cancels saving
-                            document.getElementById('coverImage').src = originalCoverImageSrc;
-                            document.getElementById('saveButton').style.display = 'none'; // Hide save button
-                        }
+                                fetch('{{ route('seller.cover-photo') }}', {
+                                        method: 'POST',
+                                        body: formData,
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            originalCoverImageSrc = data.image_path;
+                                            document.getElementById('saveButton').style.display =
+                                            'none'; // Hide save button
+                                            Swal.fire('Success!', 'Cover photo saved successfully!', 'success');
+                                        } else {
+                                            Swal.fire('Error!', 'Failed to save cover photo.', 'error');
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            } else {
+                                // Revert to original image if user cancels saving
+                                document.getElementById('coverImage').src = originalCoverImageSrc;
+                                document.getElementById('saveButton').style.display = 'none'; // Hide save button
+                            }
+                        });
                     });
 
                     document.getElementById('deleteButton').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to delete your cover photo?')) {
-                            fetch('{{ route('seller.cover-photo.delete') }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Content-Type': 'application/json',
-                                    },
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        window.location.reload(); // Refresh the page to show default picture
-                                    } else {
-                                        alert('Failed to delete cover photo.');
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
-                        }
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                fetch('{{ route('seller.cover-photo.delete') }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Content-Type': 'application/json',
+                                        },
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire('Deleted!', 'Your cover photo has been deleted.', 'success')
+                                                .then(() => {
+                                                    window.location
+                                                .reload(); // Reload the page to show default picture
+                                                });
+                                        } else {
+                                            Swal.fire('Error!', 'Failed to delete cover photo.', 'error');
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            }
+                        });
                     });
-                </script>
 
-
-                {{-- Profile Picture --}}
-                <div class="container d-flex justify-content-center align-items-center">
-                    <div class="img__container position-relative thick-border-container">
-                        <img id="profileImage"
-                            src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
-                            alt="Profile Picture" class="thick-border-pro profile-picture" />
-
-                        <!-- Hover Overlay for Uploading a New Profile Picture -->
-                        <div
-                            class="profile-upload-overlay d-flex flex-column align-items-center justify-content-center">
-                            <input type="file" id="profileUpload" accept="image/*" style="display: none;" />
-                            <button type="button" class="btn btn-light" id="profileUploadButton"><i
-                                    class="fas fa-upload"></i> Change</button>
-                            <button type="button" class="btn btn-success mt-2" id="profileSaveButton"
-                                style="display: none;">Save</button>
-                            <button type="button" class="btn btn-danger mt-2" id="profileDeleteButton"> <i
-                                    class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    // Uploading photo preview
+                    // Profile Photo Upload and Actions (similar to above)
                     let originalProfileImageSrc = document.getElementById('profileImage').src;
 
                     document.getElementById('profileUploadButton').addEventListener('click', function() {
@@ -187,57 +211,86 @@
                     });
 
                     document.getElementById('profileSaveButton').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to save this profile picture?')) {
-                            const fileInput = document.getElementById('profileUpload');
-                            const formData = new FormData();
-                            formData.append('profile_photo', fileInput.files[0]);
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'Do you want to save this profile picture?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, save it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const fileInput = document.getElementById('profileUpload');
+                                const formData = new FormData();
+                                formData.append('profile_photo', fileInput.files[0]);
 
-                            fetch('{{ route('seller.profile-photo') }}', {
-                                    method: 'POST',
-                                    body: formData,
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                    },
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        originalProfileImageSrc = data.image_path; // Update original image source
-                                        document.getElementById('profileSaveButton').style.display =
-                                            'none'; // Hide save button after saving
-                                    } else {
-                                        alert('Failed to save profile photo.');
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
-                        } else {
-                            // Revert to original image if user cancels saving
-                            document.getElementById('profileImage').src = originalProfileImageSrc;
-                            document.getElementById('profileSaveButton').style.display = 'none'; // Hide save button
-                        }
+                                fetch('{{ route('seller.profile-photo') }}', {
+                                        method: 'POST',
+                                        body: formData,
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            originalProfileImageSrc = data.image_path;
+                                            document.getElementById('profileSaveButton').style.display =
+                                            'none'; // Hide save button
+                                            Swal.fire('Success!', 'Profile picture saved successfully!', 'success');
+                                        } else {
+                                            Swal.fire('Error!', 'Failed to save profile picture.', 'error');
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            } else {
+                                // Revert to original image if user cancels saving
+                                document.getElementById('profileImage').src = originalProfileImageSrc;
+                                document.getElementById('profileSaveButton').style.display = 'none'; // Hide save button
+                            }
+                        });
                     });
 
                     document.getElementById('profileDeleteButton').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to delete your profile picture?')) {
-                            fetch('{{ route('seller.profile-photo.delete') }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Content-Type': 'application/json',
-                                    },
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        window.location.reload(); // Refresh the page to show default picture
-                                    } else {
-                                        alert('Failed to delete profile photo.');
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
-                        }
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                fetch('{{ route('seller.profile-photo.delete') }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Content-Type': 'application/json',
+                                        },
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire('Deleted!', 'Your profile picture has been deleted.',
+                                                    'success')
+                                                .then(() => {
+                                                    window.location
+                                                .reload(); // Reload the page to show default picture
+                                                });
+                                        } else {
+                                            Swal.fire('Error!', 'Failed to delete profile picture.', 'error');
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            }
+                        });
                     });
                 </script>
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
                 {{-- Tags --}}
@@ -254,14 +307,17 @@
                         {{-- <span class="badge vip-badge ms-2 fs-6 align-middle">
                             <i class="fas fa-crown"></i> VIP
                         </span> --}}
+
                     </h2>
 
 
                     <div class="pb-5">
-                        <button type="button" class="btn button-primary btn-rounded me-1"
-                            data-mdb-ripple-init><i class="fas fa-message"></i> Inbox</button>
+                        <a href="{{ route('chatify') }}" class="btn button-primary btn-rounded me-1"
+                            data-mdb-ripple-init>
+                            <i class="fas fa-message"></i> Inbox
+                        </a>
 
-                            <button type="button" class="btn btn-success btn-rounded me-1" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success btn-rounded me-1" data-bs-toggle="modal"
                             data-bs-target="#reportModal">
                             <i class="fas fa-laptop-medical"></i> Account Health
                         </button>
@@ -274,23 +330,23 @@
 
             <!-- Reports: Account Health Modal -->
             <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reportModalLabel">Report User</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reportModalLabel">Report User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            <h4><i class="fas fa-heart-pulse"></i> Your Account is Healthy!</h4>
+                        </div>
+
                     </div>
-
-
-                    <div class="modal-body">
-                        <h4><i class="fas fa-heart-pulse"></i> Your Account is Healthy!</h4>
-                    </div>
-
                 </div>
             </div>
-        </div>
 
 
             <div class="container mt-1 mb-5 " style="padding: 2rem;">
@@ -327,7 +383,8 @@
                                             @foreach ($tags as $tag)
                                                 <li>
                                                     <a class="dropdown-item" href="#">
-                                                        <input type="checkbox" name="tags[]" value="{{ $tag->name }}"
+                                                        <input type="checkbox" name="tags[]"
+                                                            value="{{ $tag->name }}"
                                                             class="form-check-input me-2">
                                                         {{ $tag->name }}
                                                     </a>
@@ -689,11 +746,11 @@
                                                             <div class="d-flex align-items-center mb-auto">
                                                                 <!-- Price Drop Badge -->
                                                                 <div class="badge-placeholder">
-                                                                @if ($product->Price < $product->old_price)
-                                                                    <span class="badge price-drop-badge me-2">Price
-                                                                        Drop!</span>
-                                                                @endif
-                                                            </div>
+                                                                    @if ($product->Price < $product->old_price)
+                                                                        <span class="badge price-drop-badge me-2">Price
+                                                                            Drop!</span>
+                                                                    @endif
+                                                                </div>
 
                                                                 <!-- Old Price and Current Price -->
                                                                 @if ($product->old_price && $product->old_price != $product->Price)
@@ -736,23 +793,29 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <!-- User Info and Image -->
-                                                            <p class="card-text text-muted mb-0 d-flex align-items-center responsive-text">
+                                                            <p
+                                                                class="card-text text-muted mb-0 d-flex align-items-center responsive-text">
                                                                 <img src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
                                                                     alt="User Image" class="user-image ms-1 me-2">
-                                                                <span class="user-name">{{ $user->fname }} {{ $user->lname }} •</span>
+                                                                <span class="user-name">{{ $user->fname }}
+                                                                    {{ $user->lname }} •</span>
                                                             </p>
 
                                                             <!-- Post Date Info -->
-                                                            <p class="card-text text-muted mb-0 d-flex align-items-center ms-2 responsive-text">
+                                                            <p
+                                                                class="card-text text-muted mb-0 d-flex align-items-center ms-2 responsive-text">
                                                                 @if ($product->created_at->diffInHours() < 24)
-                                                                    <span>Posted {{ $product->created_at->diffForHumans() }}</span>
+                                                                    <span>Posted
+                                                                        {{ $product->created_at->diffForHumans() }}</span>
                                                                 @else
-                                                                    <span>Posted on {{ $product->created_at->format('g:iA • m/d/Y') }}</span>
+                                                                    <span>Posted on
+                                                                        {{ $product->created_at->format('g:iA • m/d/Y') }}</span>
                                                                 @endif
                                                             </p>
 
                                                             <!-- Close Button -->
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
 
 
@@ -1222,7 +1285,8 @@
 
                                     <div class="row">
                                         <div class="col-md-6 mt-5">
-                                            <button type="button" class="btn button-primary btn-add-buttons text-white"
+                                            <button type="button"
+                                                class="btn button-primary btn-add-buttons text-white"
                                                 data-bs-toggle="modal" data-bs-target="#eventModal">Create an
                                                 event</button>
 
@@ -1504,13 +1568,15 @@
 
                                                                     <!-- Link Button -->
                                                                     @if ($event->Link)
-                                                                    <a href="{{ $event->Link }}" class="btn btn-primary-link" target="_blank">
-                                                                        <!-- Icon always visible -->
-                                                                        <i class="fas fa-link"></i>
-                                                                        <!-- Text hidden on small screens, shown on larger screens -->
-                                                                        <span class="d-none d-sm-inline">Link to Join</span>
-                                                                    </a>
-
+                                                                        <a href="{{ $event->Link }}"
+                                                                            class="btn btn-primary-link"
+                                                                            target="_blank">
+                                                                            <!-- Icon always visible -->
+                                                                            <i class="fas fa-link"></i>
+                                                                            <!-- Text hidden on small screens, shown on larger screens -->
+                                                                            <span class="d-none d-sm-inline">Link to
+                                                                                Join</span>
+                                                                        </a>
                                                                     @endif
                                                                 </div>
                                                                 <!-- Event Name -->
@@ -1773,8 +1839,8 @@
 
 
 
-                             <!-- Archived Section Product Cards -->
-                             <div class="tab-content" id="pills-tabContent">
+                            <!-- Archived Section Product Cards -->
+                            <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade show" id="pills-archives" role="tabpanel"
                                     aria-labelledby="pills-archives-tab" tabindex="0">
 
@@ -2230,124 +2296,122 @@
                         </div>
 
 
-                            {{-- Feedback --}}
-                            <div class="container">
-                                <div class="feedbacks mt-5">
-                                    <h2 style="color: #145DA0;">Feedbacks</h2>
-                                </div>
+                        {{-- Feedback --}}
+                        <div class="container">
+                            <div class="feedbacks mt-5">
+                                <h2 style="color: #145DA0;">Feedbacks</h2>
                             </div>
+                        </div>
 
-                            <div class="container custom-shadow">
-                                <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
-                                    <div class="carousel-inner">
-                                        @if ($feedbacks->isEmpty())
-                                            <div class="carousel-item active">
+                        <div class="container custom-shadow">
+                            <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @if ($feedbacks->isEmpty())
+                                        <div class="carousel-item active">
+                                            <div class="container custom-shadow p-3">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <p class="mb-1">No feedbacks available yet.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        @foreach ($feedbacks as $key => $feedback)
+                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                                                 <div class="container custom-shadow p-3">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <p class="mb-1">No feedbacks available yet.</p>
+                                                            <!-- Star Rating -->
+                                                            <div class="mb-2">
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}"
+                                                                        style="color: #ffc107; font-size: 20px;"></i>
+                                                                @endfor
+                                                            </div>
+                                                            <!-- Feedback Content -->
+                                                            <p class="mb-1">{{ $feedback->feedback }}</p>
+                                                            <!-- User and Timestamp -->
+                                                            <p class="text-muted mb-0">-
+                                                                {{ $feedback->user->name ?? 'Anonymous' }}</p>
+                                                            <p class="text-muted small">Posted on:
+                                                                {{ $feedback->created_at->format('F d, Y') }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @else
-                                            @foreach ($feedbacks as $key => $feedback)
-                                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                                    <div class="container custom-shadow p-3">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <!-- Star Rating -->
-                                                                <div class="mb-2">
-                                                                    @for ($i = 1; $i <= 5; $i++)
-                                                                        <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}"
-                                                                            style="color: #ffc107; font-size: 20px;"></i>
-                                                                    @endfor
-                                                                </div>
-                                                                <!-- Feedback Content -->
-                                                                <p class="mb-1">{{ $feedback->feedback }}</p>
-                                                                <!-- User and Timestamp -->
-                                                                <p class="text-muted mb-0">-
-                                                                    {{ $feedback->user->name ?? 'Anonymous' }}</p>
-                                                                <p class="text-muted small">Posted on:
-                                                                    {{ $feedback->created_at->format('F d, Y') }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </div>
-
-                                    <!-- Carousel Controls -->
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#feedbackCarousel" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#feedbackCarousel" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
+                                        @endforeach
+                                    @endif
                                 </div>
+
+                                <!-- Carousel Controls -->
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#feedbackCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#feedbackCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- UI: Back to top button --}}
-                <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top">
-                    <i class="fas fa-arrow-up"></i>
-                </button>
+            {{-- UI: Back to top button --}}
+            <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top">
+                <i class="fas fa-arrow-up"></i>
+            </button>
 
 
 
-                {{-- JS: Back to top button --}}
-                <script>
-                    //Get the button
-                    let mybutton = document.getElementById("btn-back-to-top");
+            {{-- JS: Back to top button --}}
+            <script>
+                //Get the button
+                let mybutton = document.getElementById("btn-back-to-top");
 
-                    // When the user scrolls down 20px from the top of the document, show the button
-                    window.onscroll = function() {
-                        scrollFunction();
-                    };
+                // When the user scrolls down 20px from the top of the document, show the button
+                window.onscroll = function() {
+                    scrollFunction();
+                };
 
-                    function scrollFunction() {
-                        if (
-                            document.body.scrollTop > 20 ||
-                            document.documentElement.scrollTop > 20
-                        ) {
-                            mybutton.style.display = "block";
-                        } else {
-                            mybutton.style.display = "none";
-                        }
+                function scrollFunction() {
+                    if (
+                        document.body.scrollTop > 20 ||
+                        document.documentElement.scrollTop > 20
+                    ) {
+                        mybutton.style.display = "block";
+                    } else {
+                        mybutton.style.display = "none";
                     }
-                    // When the user clicks on the button, scroll to the top of the document
-                    mybutton.addEventListener("click", backToTop);
+                }
+                // When the user clicks on the button, scroll to the top of the document
+                mybutton.addEventListener("click", backToTop);
 
-                    function backToTop() {
-                        document.body.scrollTop = 0;
-                        document.documentElement.scrollTop = 0;
-                    }
-                </script>
+                function backToTop() {
+                    document.body.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
+                }
+            </script>
 
 
-                <footer>
-                    @include('header_and_footer.footer')
-                </footer>
+            <footer>
+                @include('header_and_footer.footer')
+            </footer>
 
-                <!-- multiple upload of image -->
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
-                    rel="stylesheet">
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+            <!-- multiple upload of image -->
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" rel="stylesheet">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-                    rel="stylesheet"
-                    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-                    crossorigin="anonymous">
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-                </script>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                crossorigin="anonymous">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+            </script>
 </body>
 
 </html>
