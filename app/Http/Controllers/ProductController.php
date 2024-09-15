@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Feedback;
 use App\Models\Product;
+use App\Models\ProductLike;
 use App\Models\Seller;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -19,8 +20,22 @@ class ProductController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // Fetch only the products posted by the authenticated seller
-        $products = Product::where('UserID', $user->id)->get();  //eto nadagdag
+         if (!$user) {
+             return redirect()->route('login')->with('message', 'Please log in first.')->with('type', 'error');
+         }
+
+         // Get the authenticated user
+         $user = Auth::user();
+
+         // Check if a user is authenticated
+         if ($user) {
+             // Fetch only the products posted by the authenticated seller
+             $products = Product::where('UserID', $user->id)->get();
+         } else {
+             // Handle the case where no user is authenticated
+             // For example, redirect to a login page or show an error message
+             return redirect()->route('login')->with('error', 'You must be logged in to view this page.');
+         }
 
         $tags = Tag::all();
 
@@ -38,11 +53,20 @@ class ProductController extends Controller
         // Get the count of feedbacks
         $feedbackCount = $feedbacks->count();
 
+         // Fetch paginated products posted by the authenticated seller
+         $activeProducts = Product::where('UserID', $user->id)
+         ->where('status', 'active')
+         ->paginate(12); // Adjust the number per page as needed
+
+     $archivedProducts = Product::where('UserID', $user->id)
+         ->where('status', 'archived')
+         ->paginate(12); // Adjust items per page as needed
+
         //Events
         $events = Event::where('UserID', $user->id)->get();
 
         // Pass the products data to the view
-        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags', 'feedbacks', 'feedbackCount', 'events'));
+        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags', 'feedbacks', 'feedbackCount', 'events', 'activeProducts', 'archivedProducts'));
     }
 
     public function create() {
@@ -225,6 +249,66 @@ class ProductController extends Controller
         }
 
         return redirect()->back()->with('success', 'Tags updated successfully!');
+    }
+
+    public function productlike(Request $request, $productId)
+    {
+
+        $user = Auth::user();
+        $product = Product::findOrFail($productId);
+
+        // Check if the user has already liked the post
+        $existingLike = ProductLike::where('product_id', $productId)
+                                ->where('user_id', $user->id)
+                                ->first();
+
+        if ($existingLike) {
+            // Unlike it if the user already liked the post
+            $existingLike->delete();
+            $message = 'Like removed successfully.';
+        } else {
+            // Like the post
+            $like = new ProductLike();
+            $like->product_id = $productId;
+            $like->user_id = $user->id;
+            $like->save();
+            $message = 'Like recorded successfully.';
+        }
+
+        return redirect()->back()->with('message', $message);
+    }
+
+    public function productlikesindex()
+    {
+        $products = Product::withCount('likes')->get();
+        return view('profile.seller', compact('products'));
+    }
+
+    public function archiveProduct($productId)
+    {
+        $product = Product::find($productId);
+
+        if ($product && $product->UserID == Auth::id()) {
+            $product->status = 'archived';
+            $product->save();
+
+            return redirect()->back()->with('message', 'Product archived successfully.')->with('type', 'success');
+        }
+
+        return redirect()->back()->with('message', 'Error archiving the product.')->with('type', 'error');
+    }
+
+    public function unarchive($productId)
+    {
+        // Find the product by its ID
+        $product = Product::findOrFail($productId);
+
+        // Set the product status to active
+        $product->status = 'active'; // Adjust the status value if needed
+        $product->save();
+
+        // Redirect back to the previous page
+        return redirect()->back()->with('message', 'Product unarchived succesfully!')->with('type', 'success');
     }
 
 }
