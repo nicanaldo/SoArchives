@@ -154,6 +154,19 @@ h4 {
     box-shadow: 0 4px 8px rgba(20, 93, 160, 0.4); /* Adjust shadow size and opacity as needed */
   }
 
+.button-primary{
+    background-color: #145DA0 !important;
+    color: #fbfbfe !important;
+}
+
+
+.button-primary:hover{
+    background-color: #145DA0 !important;
+    color: #fbfbfe !important;
+    transform: translateY(-2px); /* Move button slightly upward */
+    box-shadow: 0 8px 20px rgba(20, 93, 160, 0.2); /* Shadow with the same button color */
+}
+
 
 
   /* comment hover */
