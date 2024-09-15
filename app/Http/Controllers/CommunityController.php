@@ -9,11 +9,23 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session; // Import Session for managing session
 
 class CommunityController extends Controller
 {
     public function index(Request $request)
     {
+
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
         $user = Auth::user();
         $flairs = Flair::all();
         $flairsopt = Flair::pluck('name', 'FlairsID')->toArray();
@@ -39,10 +51,19 @@ class CommunityController extends Controller
             });
         }
 
-        $posts = $postsQuery->get()->each(function ($post) use ($user) {
+
+        // Paginate the posts
+        $posts = Post::where('visible', true)
+            ->withCount('likes')
+            ->with('comments')
+            ->with('user')
+            ->paginate(10); // 10 posts per page
+
+        // Add user_has_liked property to each post
+        $posts->getCollection()->each(function ($post) use ($user) {
             $post->user_has_liked = Like::where('post_id', $post->id)
-                                        ->where('user_id', $user->id)
-                                        ->exists();
+                ->where('user_id', $user->id)
+                ->exists();
         });
 
         return view('community', compact('posts', 'user', 'flairs', 'flairsopt', 'selectedFlair', 'search'));
@@ -78,7 +99,7 @@ class CommunityController extends Controller
         $request->validate([
             'content' => 'required|string',
         ]);
-        
+
         $user = Auth::user(); // Get the authenticated user
 
         $comment = new Comment();
@@ -207,4 +228,50 @@ class CommunityController extends Controller
 
         return redirect()->route('community.index')->with('success', 'Comment deleted successfully');
     }
+
+
+    // Community visitor view (for unauthenticated users)
+    public function visitor(Request $request)
+    {
+        $user = Auth::user(); // Could be null for non-authenticated users
+
+        $flairs = Flair::all();
+        $flairsopt = Flair::pluck('name', 'FlairsID')->toArray();
+        $selectedFlair = $request->query('flair');
+        $search = $request->input('search');
+
+        // Base query
+        $postsQuery = Post::where('visible', true)
+                            ->withCount('likes')
+                            ->with('comments')
+                            ->with('user');
+
+        // Filter by flair if selected
+        if ($selectedFlair) {
+            $postsQuery->where('flairs', $selectedFlair);
+        }
+
+        // Search function
+        if ($search) {
+            $postsQuery->where(function($query) use ($search) {
+                $query->where('content', 'like', "%{$search}%")
+                    ->orWhere('flairs', 'like', "%{$search}%");
+            });
+        }
+
+        // Paginate the posts
+        $posts = $postsQuery->paginate(10); // 10 posts per page
+
+        // Add user_has_liked property to each post if user is logged in
+        if ($user) {
+            $posts->getCollection()->each(function ($post) use ($user) {
+                $post->user_has_liked = Like::where('post_id', $post->id)
+                    ->where('user_id', $user->id)
+                    ->exists();
+            });
+        }
+
+        return view('community-visitor', compact('posts', 'user', 'flairs', 'flairsopt', 'selectedFlair', 'search'));
+    }
+
 }
