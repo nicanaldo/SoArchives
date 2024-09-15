@@ -7,18 +7,14 @@
     <title>Events Gallery</title>
 
     <link href="/bootstrap-5.3.3-dist/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href={{ asset('css/style.css')}}>
 
     <!-- to work the toggle in the navbar -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/regular.min.css"
-        integrity="sha512-KYEnM30Gjf5tMbgsrQJsR0FSpufP9S4EiAYi168MvTjK6E83x3r6PTvLPlXYX350/doBXmTFUEnJr/nCsDovuw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Animate CSS -->
@@ -31,18 +27,15 @@
 </head>
 
 <body>
+
     <header>
         @include('header_and_footer.header')
     </header>
 
-    {{-- @include('header_and_footer.eventsHeader') --}}
 
-
-
-
-    <div class="gallery-title mt-5 p-5">
+    <div class="gallery-title mt-5">
         <h1>A Showcase of Memories: Events Gallery</h1>
-        <p class="text-center gallery-desc mb-5 lh-2">Discover the creativity and craftsmanship of Adamsonian artisans,
+        <p class="gallery-desc mb-5 lh-2">Discover the creativity and craftsmanship of Adamsonian artisans,
             showcased through unforgettable events <br> that celebrate their passion, talent, and unique artistry.</p>
         <ul class="navbar-nav d-inline-flex justify-content-center">
             <li class="nav-item">
@@ -51,9 +44,7 @@
                 </a>
             </li>
         </ul>
-
     </div>
-
 
     <div class="container mt-1 p-3 mb-1">
 
