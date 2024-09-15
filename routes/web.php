@@ -27,10 +27,21 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Login
+// Login route
 Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+    if (Auth::check()) {
+        // User is authenticated, trigger SweetAlert confirmation for logout
+        return view('auth.login')->with('showLogoutConfirm', true);
+    }
+    // User is not logged in, show the login page
+    return view('auth.login')->with('showLogoutConfirm', false);
+})->name('login')->middleware('guest');
+
+// Logout route
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login')->with('message', 'You have been logged out successfully.');
+})->name('logout');
 
 // Route::get('/login/password-request', function () {
 //     return view('auth.passwords.reset');
@@ -44,7 +55,7 @@ Route::post('/login/admin', function () {
     return view('auth.adminlogin');
 })->name('adminlogin1');
 
-//Register 
+//Register
 Route::get('/register/terms&conditions', function () {
     return view('auth.terms&conditions');
 })->name('terms.conditions');
@@ -55,7 +66,7 @@ Route::post('/verifyotp', [App\Http\Controllers\HomeController::class, 'useracti
 
 //Register Users
 Route::group(['middleware' => RedirectIfAuthenticated::class], function () {
-    
+
     Route::get('/register/seller', [RegisterController::class, 'showSellerRegistrationForm'])->name('register.seller');
     Route::post('/register/seller', [RegisterController::class, 'registerSeller'])->name('register.seller.submit');
 
@@ -134,32 +145,34 @@ Route::get('/events/ended', [EventController::class, 'showEndedEvents'])->name('
 
 
 //Community Visitor
-Route::get('/community/guess', function () {
-    return view('community-visitor');
-})->name('community.visitor');
+Route::get('/community/visitor', [CommunityController::class, 'visitor'])->name('community.visitor');
 
 // Community Forum
-Route::group(['prefix'=> 'community'], function(){
+Route::group(['prefix' => 'community'], function () {
+    Route::get('/', [CommunityController::class, 'visitor'])->name('community.index'); // Public route
 
-    Route::get('/', [CommunityController::class, 'index'])->name('community.index');
-    Route::post('/posts', [CommunityController::class, 'storePost'])->name('community.storePost');
-    Route::get('/data', [CommunityController::class, 'PostData']);
-    Route::post('/posts/{post}/comment', [CommunityController::class, 'comment'])->name('community.comment');
-    Route::post('/community/{post}/like', [CommunityController::class, 'like'])->name('community.like');
-    
-    // Editing and deleting posts
-    Route::get('/posts/{post}/edit', [CommunityController::class, 'editPost'])->name('community.editPost');
-    Route::put('/posts/{post}', [CommunityController::class, 'updatePost'])->name('community.updatePost');
-    Route::delete('/posts/{post}', [CommunityController::class, 'deletePost'])->name('community.deletePost');
-    
-    // Editing and deleting comments
-    Route::get('/comments/{comment}/edit', [CommunityController::class, 'editComment'])->name('community.editComment');
-    Route::put('/comments/{comment}', [CommunityController::class, 'updateComment'])->name('community.updateComment');
-    Route::delete('/comments/{comment}', [CommunityController::class, 'deleteComment'])->name('community.deleteComment');
+    // Actions requiring authentication
+    Route::middleware('auth.redirect')->group(function () {
+        Route::post('/posts', [CommunityController::class, 'storePost'])->name('community.storePost');
+        Route::post('/posts/{post}/comment', [CommunityController::class, 'comment'])->name('community.comment');
+        Route::post('/community/{post}/like', [CommunityController::class, 'like'])->name('community.like');
+
+        // Editing and deleting posts
+        Route::get('/posts/{post}/edit', [CommunityController::class, 'editPost'])->name('community.editPost');
+        Route::put('/posts/{post}', [CommunityController::class, 'updatePost'])->name('community.updatePost');
+        Route::delete('/posts/{post}', [CommunityController::class, 'deletePost'])->name('community.deletePost');
+
+        // Editing and deleting comments
+        Route::get('/comments/{comment}/edit', [CommunityController::class, 'editComment'])->name('community.editComment');
+        Route::put('/comments/{comment}', [CommunityController::class, 'updateComment'])->name('community.updateComment');
+        Route::delete('/comments/{comment}', [CommunityController::class, 'deleteComment'])->name('community.deleteComment');
+    });
+
+    Route::get('/data', [CommunityController::class, 'PostData']); // Public route
 });
 
 
-//Seller 
+//Seller
 
 //Seller Profile Photo and Cover Photo
 Route::post('seller/cover-photo', [SellerController::class, 'updateCoverPhoto'])->name('seller.cover-photo');
@@ -180,9 +193,18 @@ Route::post('/profile/seller/ratings', [SellerController::class,'submitRating'])
 // Route::get('/profile/seller', [ProductController::class, 'index'])->name('products.index'); //recheck later baka hindi tama route
 Route::get('/profile/seller', [ProductController::class, 'index'])->name('products-seller.index'); //pinaltan ko dalhin sa admin
 Route::post('/profile/seller', [ProductController::class, 'search'])->name('products-search');
-// Route::get('/basePath', [ProductController::class, 'basePath'])->name('products.index'); 
+// Route::get('/basePath', [ProductController::class, 'basePath'])->name('products.index');
 
-Route::get('/profile/seller/product/create', [ProductController::class, 'create'])->name('products-seller.create'); 
+// Products Archive
+Route::post('/products/archive/{productId}', [ProductController::class, 'archiveProduct'])->name('products.archive');
+Route::post('/products/unarchive/{productId}', [ProductController::class, 'unarchive'])->name('products.unarchive');
+
+// Product Like
+Route::post('/product/{product}/like', [ProductController::class, 'productlike'])->name('product.like');
+
+
+
+Route::get('/profile/seller/product/create', [ProductController::class, 'create'])->name('products-seller.create');
 Route::post('/profile/seller/store', [ProductController::class, 'store'])->name('products-seller.store'); //add item button
 
 Route::get('/profile/seller/{product}/edit', [ProductController::class, 'edit'])->name('products-seller.edit'); //recheck later for edit  , eto ung edit button
@@ -201,7 +223,7 @@ Route::get('/buyer/{slug}', [BuyerController::class, 'show'])->name('profile-buy
 
 //Admin Dashboard
 Route::group(['prefix' => 'admin'], function () {
-    
+
     Route::get('/dashboard', [App\Http\Controllers\AdminDashboardController::class, 'dash'])->middleware('auth');
     Route::post('/dashboard', [App\Http\Controllers\AdminDashboardController::class, 'dash'])->name('dashboard');
 
