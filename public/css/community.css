@@ -1,5 +1,6 @@
 * {
     font-family: 'Helvetica';
+    /* font-size: 14px !important; */
 }
 
 .btn-primary {
@@ -105,7 +106,6 @@ h4 {
     background-repeat: no-repeat;
     /* Prevents image repetition */
     width: 100%;
-    height: 400px;
     /* Default height for larger screens */
     position: relative;
     z-index: -1;
@@ -113,22 +113,33 @@ h4 {
 
 @media (max-width: 1200px) {
     .banner {
-        height: 300px;
+        height: 200px;
         /* Adjust height for medium screens */
     }
 }
 
 @media (max-width: 768px) {
     .banner {
-        height: 200px;
+        height: 300px;
         /* Adjust height for smaller screens */
     }
 }
 
 @media (max-width: 576px) {
     .banner {
-        height: 150px;
+        height: 100px;
+        width: 30rem;
         /* Adjust height for extra-small screens */
+    }
+}
+
+/* new post */
+@media (max-width: 576px) {
+    .btn-responsive .d-none {
+        display: none; /* Hide text on small screens */
+    }
+    .btn-responsive .fa-add {
+        font-size: 1.25rem; /* Adjust icon size if needed */
     }
 }
 
@@ -190,7 +201,7 @@ h4 {
 
 /* pro */
 .pro-badge {
-    background: linear-gradient(45deg, #ff8325, #FFC107);
+    background: linear-gradient(45deg, #474747, #cbcbcb);
     color: white;
     padding: 2px 5px;
     border-radius: 12px;
@@ -204,7 +215,6 @@ a .pro-badge {
 }
 
 
-/* friendly reminder */
 .alert-message
 {
     margin: 20px 0;
@@ -227,6 +237,7 @@ a .pro-badge {
     border-radius: 3px;
 }
 
+
 .alert-message-warning
 {
     background-color: #fcf8f2;
@@ -235,4 +246,135 @@ a .pro-badge {
 
 .invalid-feedback {
     display: none;
+}
+
+/* Page loading */
+#loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+#community-content {
+    visibility: hidden;
+    /* Hide content until fully loaded */
+}
+
+.btn-custom{
+    padding: 0 !important;
+    padding-right: 5px !important;
+}
+/* Remove the background and border when the button is hovered */
+.btn-custom:hover {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+/* Default state: when the button is not liked */
+.btn-outline-secondary:hover .custom-icon {
+    color:  #0066FF ;
+    transform: scale(1.5) !important;
+    transition: transform 0.2s ease-in-out !important;
+}
+
+/* Liked state: when the button is already green */
+.liked .custom-icon {
+    color:  #0066FF ;
+    /* transform: scale(1.5) !important; */
+    transition: transform 0.2s ease-in-out !important;
+}
+
+.liked:hover .custom-icon {
+    color: #6c757d; /* Change back to gray (or another color) */
+    transform: scale(1.5) !important; /* Shrink the icon */
+    transition: transform 0.2s ease-in-out !important;
+}
+
+
+/* TOPIC TAGS */
+.bg-flairs {
+    background-color: #dfdfdf;
+    padding: 8px !important;
+    color: #343434 !important;
+    font-weight: 500 !important;
+}
+
+@media (max-width: 768px) {
+    .bg-flairs {
+        padding: 4px !important; /* Reduce padding */
+        font-size: 12px !important; /* Reduce font size */
+    }
+}
+
+@media (max-width: 576px) {
+    .bg-flairs {
+        padding: 5px !important; /* Further reduce padding for smaller screens */
+        font-size: 10px !important; /* Further reduce font size */
+    }
+}
+
+
+/* BADGE */
+/* Default styles for larger screens */
+.user-name .full-name, .badge.pro-badge {
+    display: inline; /* Show full name and PRO badge on larger screens */
+}
+
+@media (max-width: 576px) {
+    /* On small screens (576px or less), hide the full name and "PRO" text */
+    .user-name .full-name,
+    .badge.pro-badge {
+        display: none;
+    }
+
+    /* Show only the icon */
+    .badge.pro-badge i {
+        display: inline; /* Ensure the icon is displayed */
+        font-size: 20px; /* Adjust icon size if needed */
+    }
+}
+
+
+.btn-warning{
+    background-color: #ffc107 !important;
+    border: none !important;
+}
+
+
+/* BANNER */
+ /* Default banner height for larger screens */
+ .banner-img {
+    object-fit: cover;
+}
+
+.banner-title {
+    font-size: 2.5rem;
+}
+
+/* Media query for tablets (max-width: 768px) */
+@media (max-width: 768px) {
+    .banner-img {
+        height: 300px;
+    }
+
+    .banner-title {
+        font-size: 2rem;
+    }
+}
+
+/* Media query for mobile phones (max-width: 576px) */
+@media (max-width: 576px) {
+    .banner-img {
+        height: 200px;
+    }
+
+    .banner-title {
+        font-size: 1.5rem;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
 }
