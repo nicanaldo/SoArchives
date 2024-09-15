@@ -24,22 +24,27 @@
 
 <body>
 
+
+    <div class="container-fluid rounded-0 z-0">
+        @include('header_and_footer.header')
+    </div>
+
     <section class="bg-bg py-3 py-md-5 py-xl-8 ">
         <div class="container">
             <div class="row gy-4 align-items-center">
                 <div class="col-12 col-md-6 col-xl-6">
                     <div class="d-flex justify-content-center text-light">
                         <div class="col-12 col-xl-9 bg-transparent">
-                            <img class="img-fluid rounded" loading="lazy" src="{{ asset('images/logoBuyer.png') }}"
+                            <img class="img-fluid rounded" loading="lazy" src="{{ asset('images/finallogo.png') }}"
                                 width="300" height="100" alt="Buyer Logo">
                             <hr class="border-primary-subtle mb-4">
-                            <p class="lead mb-5">Welcome to SOARchives, the ultimate platform for discovering and buying
+                            <p class="lead mb-5 text-dark">Welcome to SOARchives, the ultimate platform for discovering and buying
                                 unique handcrafted products from talented artisans.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-xl-6">
-                    <div class="card border-0 rounded-4">
+                    <div class="card shadow border-0 rounded-4">
                         <div class="card-body p-5 p-md-4 p-xl-5">
                             <div class="row">
                                 <div class="col-12">
@@ -88,14 +93,13 @@
                                     <div class="col-lg-6 col-sm-12">
                                         <label for="password-input" class="form-label">Create Password</label>
                                         <div class="input-group">
-                                            <input type="password" name="password" style="border-width: 1px 0 1px 1px;"
+                                            <input type="password" name="password"
                                                 class="form-control" id="password-input" autocomplete="off"
                                                 aria-autocomplete="list" aria-label="Password"
                                                 aria-describedby="passwordHelp" placeholder="Create Password" required>
-                                            <button class="btn btn-outline-secondary btn-eye" type="button"
-                                                id="togglePasswordCreate">
-                                                <i class="fa fa-eye-slash"></i>
-                                            </button>
+                                                <button class="btn-eye" type="button" id="togglePasswordCreate">
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </button>
                                             <div class="invalid-feedback">
                                                 Please create a password.
                                             </div>
@@ -117,15 +121,13 @@
                                         <label for="confirm-password-input" class="form-label">Confirm
                                             Password</label>
                                         <div class="input-group">
-                                            <input type="password" name="password_confirmation"
-                                                style="border-width: 1px 0 1px 1px;" class="form-control"
+                                            <input type="password" name="password_confirmation" class="form-control"
                                                 id="confirm-password-input" autocomplete="off"
                                                 aria-autocomplete="list" aria-label="Confirm Password"
                                                 placeholder="Confirm Password" required>
-                                            <button class="btn btn-outline-secondary" type="button"
-                                                id="togglePasswordConfirm">
-                                                <i class="fa fa-eye-slash"></i>
-                                            </button>
+                                                <button class="btn-eye" type="button" id="togglePasswordCreate">
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </button>
                                             <div class="invalid-feedback">
                                                 Please confirm your password.
                                             </div>
@@ -146,7 +148,7 @@
                                             <input type="checkbox" class="form-check-input" id="termsCheckbox"
                                                 name="termsCheckbox" required>
                                             <label class="form-check-label text-muted" for="termsCheckbox">I agree to
-                                                the <a href="{{ route('terms.conditions') }}" target="_blank">Terms
+                                                the <a href="{{ route('terms.conditions') }}" class="reg-a" target="_blank">Terms
                                                     and
                                                     Conditions</a></label>
                                             <div class="invalid-feedback">
@@ -162,10 +164,10 @@
                                                 name="btnSubmit" value="{{ __('Register') }}">Sign Up</button>
                                         </div>
                                         <p class="mt-3 text-muted text-center">Already a member? <a
-                                                href="{{ route('login') }}" class="text-decoration-none">Login</a></p>
+                                                href="{{ route('login') }}" class="text-decoration-none reg-a">Login</a></p>
                                         <p class="mt-3 text-muted text-center">Signup as a <a
                                                 href="{{ route('register.seller') }}"
-                                                class="text-decoration-none">Seller</a></p>
+                                                class="text-decoration-none reg-a">Seller</a></p>
                                     </div>
                                 </div>
                             </form>
