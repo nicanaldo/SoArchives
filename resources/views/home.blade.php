@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Home | SOARchives</title>
 
@@ -19,287 +19,260 @@
         integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+
 </head>
+
 <body>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show spinner
+            document.getElementById('loading-spinner').classList.remove('d-none');
+
+            // Simulate content loading (e.g., AJAX call)
+            setTimeout(function() {
+                // Hide spinner
+                document.getElementById('loading-spinner').classList.add('d-none');
+                // Show content
+                document.getElementById('homepage-content').style.visibility = 'visible';
+            }, 1000); // Adjust timing as necessary
+        });
+    </script>
+
+
+
+
 
     <!-- Navbar -->
     @include('header_and_footer.header')
 
-    <section id="artisans" class="artisans section-bg mb-5">
-        <div class="container my-4">
-            <div class="row showcase gx-10 justify-content-evenly align-items-center">
-                <div class="col-sm-12 col-md-12 col-lg-6 order-md-1 d-flex flex-column">
-                    <p style="color: #FFC107; font-weight: bold;">ADAMSON UNIVERSITY'S ARTISANS AND CRAFTSMEN</p>
-                    <h1 style="text-align: start; padding-bottom: 0px;padding-top: 0px;font-size: 3.8rem;"
-                        class="">
-                        Discover. Connect. Support. SOARchives: Unveiling Adamsonian's Artistic Talent!
-                    </h1>
-                    <p>
-                        Soarchives is the premier platform dedicated to spotlighting the exceptional talent of artisans
-                        and craftsmen from Adamson University.
-                    </p>
-                    <div class="d-flex d-flex justify-content-center justify-content-lg-start">
-                        <a href="" class="btn-homepage-buttons scrollto fw-normal">How this works?</a>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 order-sm-1">
-                    <img src="images/homepage.png" class="img-fluid mx-auto d-block" alt="Artisans">
-                </div>
-            </div>
-        </div>
-    </section>
+    <div id="homepage-content">
 
-    {{-- Sub Banner --}}
-    <div class="container">
-        <div class="row">
-
-            <div class="col-12 col-md-6 col-lg-4 mt-4 animate__animated animate__slideInUp">
-                <div class="card-sub">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="images/a.png" class="img-fluid rounded-start d-none d-md-block" alt="...">
-                        </div>
-                        <div class="col-md-8 d-flex align-items-center">
-                            <div class="card-body p-3">
-                                <h5 class="card-title">Showcase</h5>
-                                <p class="card-text">Share your handmade creations and receive recognition for your
-                                    craftsmanship.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-lg-4 mt-4 animate__animated animate__slideInUp">
-                <div class="card-sub">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="images/b.png" class="img-fluid rounded-start d-none d-md-block" alt="...">
-                        </div>
-                        <div class="col-md-8 d-flex align-items-center">
-                            <div class="card-body p-3">
-                                <h5 class="card-title">Become a seller</h5>
-                                <p class="card-text">Promote your handcrafted items and drive sales to grow your
-                                    business.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-lg-4 mt-4 animate__animated animate__slideInUp">
-                <div class="card-sub">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="images/c.png" class="img-fluid rounded-start d-none d-md-block" alt="...">
-                        </div>
-                        <div class="col-md-8 d-flex align-items-center">
-                            <div class="card-body p-3">
-                                <h5 class="card-title">Support</h5>
-                                <p class="card-text">Buy artisans' handmade crafts and attend exciting events hosted by
-                                    them. </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-    {{-- Support our Makers --}}
-    <section id="artisans" class="artisans section-bg">
-        <div class="container my-4">
-
-            <div class="row showcase gx-10 justify-content-evenly align-items-center">
-                <div class="col-sm-12 col-md-6 col-lg-5 order-sm-1"> <img src="images/crochet.png"
-                        class="img-fluid mx-auto d-block"></div>
-                <div class="col-sm-12 col-md-6 col-lg-7 order-md-1 d-flex justify-content-center flex-column">
-                    <h2>Support our Makers</h2>
-                    <p>
-                        Showcasing Adamson University's student artisans and craftsmen on a web-based social commerce
-                        site that provides a centralized platform where students can market their handicrafts or
-                        artworks by posting and listing their products on the web portal.
-                    </p>
-
-                    <div class="d-flex justify-content-center justify-content-lg-start">
-                        <a href="" class="btn-homepage-buttons scrollto fw-normal">Discover Artisans</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- End of Support our Makers -->
-
-
-
-
-
-
-
-    <!-- Services -->
-
-    <div class="container my-5 text-center  animate__animated animate__slideInUp">
-        <section id="services" class="services section-bg">
-
-            <div class="container" data-aos="fade-up">
-                <div class="services-title col-12">
-                    <h2>Services</h2>
-                    <p>Discover the diverse range of products and services we provide.</p>
-                    <br>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xl-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="icon-box">
-                        <div class="icon"><i class="fa-solid fa-person-rays" style="color: #FFC107;"></i></div>
-                        <h4>Artisan Profile</h4>
-                        <p>Your online portfolio. Showcase your talent, share your story, and connect with a global
-                            audience.</p>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in"
-                    data-aos-delay="200">
-                    <div class="icon-box">
-                        <div class="icon"><i class="fa-brands fa-rocketchat" style="color: #FFC107;"></i></div>
-                        <h4>Instant Chat</h4>
-                        <p>Instantly chat with Artisans and stay in touch throughout the whole transaction.</p>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in"
-                    data-aos-delay="300">
-                    <div class="icon-box">
-                        <div class="icon"><i class="fa-regular fa-comments" style="color: #FFC107;"></i></div>
-                        <h4>Community Building</h4>
-                        <p>Join our thriving community of like-minded individuals committed to collaboration and
-                            support. </p>
-                    </div>
-                </div>
-
-
-
-                <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-4" data-aos="zoom-in"
-                    data-aos-delay="300">
-                    <div class="icon-box">
-                        <div class="icon"><i class='fa-solid fa-store' style="color: #FFC107;"></i></div>
-
-                        <h4>Artisan Marketplace</h4>
-                        <p>Discover and showcase handmade creations whether you're a buyer looking for handicrafts or a
-                            seller looking to reach a wider audience.</p>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-4" data-aos="zoom-in"
-                    data-aos-delay="300">
-                    <div class="icon-box">
-                        <div class="icon"><i class="fa-regular fa-calendar-check " style="color: #FFC107;"></i>
-                        </div>
-                        <h4 class="d-inline-block">
-                            Event Hosting
-                            <span class="badge pro-badge ms-1 fs-6 align-middle">
-                                <i class="fas fa-crown"></i> PRO
-                            </span>
-                        </h4>
-
-                        <p>Host unforgettable events with our Event Hosting feature. Events will captivate a wider
-                            audience, accessible to all. </p>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-4" data-aos="zoom-in"
-                    data-aos-delay="300">
-                    <div class="icon-box">
-                        <div class="icon"><i class="fas fa-hand-sparkles" style="color: #FFC107;"></i></div>
-                        <h4>Commend Artisans</h4>
-                        <p>Show appreciation by our commend feature! Leave positive feedback and support their growth.</p>
-                    </div>
-                </div>
-
-
-        </section>
-    </div>
-
-
-
-
-
-
-
-
-
-    <!-- Events -->
-
-    <section id="artisans" class="artisans section-bg  animate__animated animate__slideInUp">
-        <div class="container my-4 mb-lg-5">
-            <div class="row showcase gx-10 justify-content-evenly align-items-center">
-                <div class="col-sm-12 col-md-6 col-lg-5 order-sm-1"> <img src="images/event.png"
-                        class="img-fluid mx-auto d-block"></div>
-                <div class="col-sm-12 col-md-6 col-lg-7 order-md-1 d-flex justify-content-center flex-column">
-                    <h2>Join Event</h2>
-                    <p>
-                        Experience our Artisan-hosted events, where you can shop for handmade crafts, attend tutorials,
-                        and join exciting workshops. Whether it's face-to-face booths or online sessions, enrich your
-                        journey with us!
-                    </p>
-
-                    <div class="d-flex justify-content-center justify-content-lg-start">
-                        <a href="" class="btn-homepage-buttons scrollto fw-normal">See Events</a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- End of Events -->
-
-
-
-
-
-
-
-
-    <!-- About Us -->
-
-    <div class="about  animate__animated animate__slideInUp">
-        <section id="about" class=" section-bg">
-            <div class="container">
-                <div class="row col-12 text-left">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <h2>About Us</h2>
-                        <p>
-                            We are a third-year IT college at Adamson University in Manila, Philippines. Our website
-                            aims to showcase talented artisans and help them reach a broader audience.
+        <section id="artisans" class="artisans section-bg mb-5">
+            <div class="container my-4">
+                <div class="row showcase gx-4 gx-lg-10 justify-content-center align-items-center">
+                    <div class="col-12 col-lg-6 d-flex flex-column text-center text-lg-start">
+                        <p class="text-accent fw-bold">ADAMSON UNIVERSITY'S ARTISANS AND CRAFTSMEN</p>
+                        <h1 class="mb-3">
+                            Discover. Connect. Support. SOARchives: Unveiling Adamsonian's Artistic Talent!
+                        </h1>
+                        <p class="lead">
+                            SOARchives is the premier platform dedicated to spotlighting the exceptional talent of artisans
+                            and craftsmen from Adamson University.
                         </p>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-6 ">
-                        <p>Get to know us and our core values. We prioritize transparency, excellence, and innovation,
-                            striving to exceed expectations and foster meaningful connections</p>
-
-                        <div
-                            class="d-flex justify-content-sm-start justify-content-lg-start justify-content-sm-center ">
-                            <a href="/about" class="btn-homepage-buttons scrollto fw-normal">Learn more</a>
-
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <a href="" class="btn-homepage-buttons scrollto fw-normal">How this works?</a>
                         </div>
                     </div>
-
+                    <div class="col-12 col-lg-6 mt-4 mt-lg-0">
+                        <img src={{ asset('images/homepage.png')}} class="img-fluid mx-auto d-block" alt="Artisans">
+                    </div>
                 </div>
             </div>
         </section>
-    </div>
+
+
+
+        {{-- Sub Banner --}}
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12 col-md-6 col-lg-4 mt-4 animate__animated animate__slideInUp">
+                    <div class="card-sub">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="images/a.png" class="img-fluid rounded-start d-none d-md-block"
+                                    alt="...">
+                            </div>
+                            <div class="col-md-8 d-flex align-items-center">
+                                <div class="card-body p-3">
+                                    <h5 class="card-title">Showcase</h5>
+                                    <p class="card-text">Share your handmade creations and receive recognition for your
+                                        craftsmanship.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 mt-4 animate__animated animate__slideInUp">
+                    <div class="card-sub">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="images/b.png" class="img-fluid rounded-start d-none d-md-block"
+                                    alt="...">
+                            </div>
+                            <div class="col-md-8 d-flex align-items-center">
+                                <div class="card-body p-3">
+                                    <h5 class="card-title">Become a seller</h5>
+                                    <p class="card-text">Promote your handcrafted items and drive sales to grow your
+                                        business.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 mt-4 animate__animated animate__slideInUp">
+                    <div class="card-sub">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="images/c.png" class="img-fluid rounded-start d-none d-md-block"
+                                    alt="...">
+                            </div>
+                            <div class="col-md-8 d-flex align-items-center">
+                                <div class="card-body p-3">
+                                    <h5 class="card-title">Support</h5>
+                                    <p class="card-text">Buy artisans' handmade crafts and attend exciting events hosted
+                                        by
+                                        them. </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        {{-- Support our Makers --}}
+        <section id="artisans" class="artisans section-bg">
+            <div class="container my-4">
+
+                <div class="row showcase gx-10 justify-content-evenly align-items-center">
+                    <div class="col-sm-12 col-md-6 col-lg-5 order-sm-1"> <img src="images/crochet.png"
+                            class="img-fluid mx-auto d-block"></div>
+                    <div class="col-sm-12 col-md-6 col-lg-7 order-md-1 d-flex justify-content-center flex-column">
+                        <h2>Support our Makers</h2>
+                        <p>
+                            Showcasing Adamson University's student artisans and craftsmen on a web-based social
+                            commerce
+                            site that provides a centralized platform where students can market their handicrafts or
+                            artworks by posting and listing their products on the web portal.
+                        </p>
+
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <a href={{ route('artisan') }} class="btn-homepage-buttons scrollto fw-normal">Discover Artisans</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- End of Support our Makers -->
+
+
+
+
+
+
+
+        <!-- Services -->
+
+        <div class="container my-5 text-center  animate__animated animate__slideInUp">
+            <section id="services" class="services section-bg">
+
+                <div class="container" data-aos="fade-up">
+                    <div class="services-title col-12">
+                        <h2>Services</h2>
+                        <p>Discover the diverse range of products and services we provide.</p>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="icon-box">
+                            <div class="icon"><i class="fas fa-person-rays" style="color: #FFC107 !important;"></i>
+                            </div>
+                            <h4>Artisan Profile</h4>
+                            <p>Your online portfolio. Showcase your talent, share your story, and connect with a global
+                                audience.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in"
+                        data-aos-delay="200">
+                        <div class="icon-box">
+                            <div class="icon"><i class="fa-brands fa-rocketchat" style="color: #FFC107;"></i></div>
+                            <h4>Instant Chat</h4>
+                            <p>Instantly chat with Artisans and stay in touch throughout the whole transaction.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in"
+                        data-aos-delay="300">
+                        <div class="icon-box">
+                            <div class="icon"><i class="fa-regular fa-comments" style="color: #FFC107;"></i></div>
+                            <h4>Community Building</h4>
+                            <p>Join our thriving community of like-minded individuals committed to collaboration and
+                                support. </p>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-4" data-aos="zoom-in"
+                        data-aos-delay="300">
+                        <div class="icon-box">
+                            <div class="icon"><i class='fa-solid fa-store' style="color: #FFC107;"></i></div>
+
+                            <h4>Artisan Marketplace</h4>
+                            <p>Discover and showcase handmade creations whether you're a buyer looking for handicrafts
+                                or a
+                                seller looking to reach a wider audience.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-4" data-aos="zoom-in"
+                        data-aos-delay="300">
+                        <div class="icon-box">
+                            <div class="icon"><i class="fa-regular fa-calendar-check " style="color: #FFC107;"></i>
+                            </div>
+                            <h4 class="d-inline-block">
+                                Event Hosting
+                                <span class="badge pro-badge ms-1 fs-6 align-middle">
+                                    <i class="fas fa-star"></i> PRO
+                                </span>
+                                <span class="badge vip-badge ms-1 fs-6 align-middle">
+                                    <i class="fas fa-crown"></i> VIP
+                                </span>
+                            </h4>
+
+                            <p>Host unforgettable events with our Event Hosting feature. Events will captivate a wider
+                                audience, accessible to all. </p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 d-flex align-items-stretch mt-4 mt-xl-4" data-aos="zoom-in"
+                        data-aos-delay="300">
+                        <div class="icon-box">
+                            <div class="icon"><i class="fas fa-hand-sparkles" style="color: #FFC107;"></i></div>
+                            <h4>Commend Each Other!</h4>
+                            <p>Show appreciation by our commend feature! Leave positive feedback and support their
+                                growth.
+                            </p>
+                        </div>
+                    </div>
+
+
+            </section>
+        </div>
 
 
 
@@ -309,52 +282,151 @@
 
 
 
-    <!-- Connect with Community -->
+        <!-- Events -->
 
-    <section id="artisans" class="artisans section-bg">
-        <div class="container my-5">
-            <div class="row showcase gx-10 justify-content-evenly align-items-center">
-                <div class="col-sm-12 col-md-6 col-lg-5 order-sm-1"> <img src="images/community.png"
-                        class="img-fluid mx-auto d-block"></div>
-                <div class="col-sm-12 col-md-6 col-lg-7 order-md-1 d-flex justify-content-center flex-column">
-                    <h2>Connect with Community</h2>
-                    <p>
-                        Showcasing Adamson University's student artisans and craftsmen on a web-based social commerce
-                        site that provides a centralized platform where students can market their handicrafts or
-                        artworks by posting and listing their products on the web portal.
-                    </p>
+        <section id="artisans" class="artisans section-bg  animate__animated animate__slideInUp">
+            <div class="container my-4 mb-lg-5">
+                <div class="row showcase gx-10 justify-content-evenly align-items-center">
+                    <div class="col-sm-12 col-md-6 col-lg-5 order-sm-1"> <img src="images/event.png"
+                            class="img-fluid mx-auto d-block"></div>
+                    <div class="col-sm-12 col-md-6 col-lg-7 order-md-1 d-flex justify-content-center flex-column">
+                        <h2>Join Event</h2>
+                        <p>
+                            Experience our Artisan-hosted events, where you can shop for handmade crafts, attend
+                            tutorials,
+                            and join exciting workshops. Whether it's face-to-face booths or online sessions, enrich
+                            your
+                            journey with us!
+                        </p>
 
-                    <div class="d-flex justify-content-center justify-content-lg-start">
-                        <a href="" class="btn-homepage-buttons scrollto fw-normal">Join Community Forum</a>
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <a href={{ route('events') }} class="btn-homepage-buttons scrollto fw-normal">See Events</a>
+
+                        </div>
 
                     </div>
 
                 </div>
+
             </div>
+        </section>
 
+        <!-- End of Events -->
+
+
+
+
+
+
+
+
+        <!-- About Us -->
+
+        <div class="about  animate__animated animate__slideInUp">
+            <section id="about" class=" section-bg">
+                <div class="container">
+                    <div class="row col-12 text-left">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <h2>About Us</h2>
+                            <p>
+                                We are a third-year IT college at Adamson University in Manila, Philippines. Our website
+                                aims to showcase talented artisans and help them reach a broader audience.
+                            </p>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 ">
+                            <p>Get to know us and our core values. We prioritize transparency, excellence, and
+                                innovation,
+                                striving to exceed expectations and foster meaningful connections</p>
+
+                            <div
+                                class="d-flex justify-content-sm-start justify-content-lg-start justify-content-sm-center ">
+                                <a href={{ route('about') }} class="btn-homepage-buttons scrollto fw-normal">Learn more</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
         </div>
-    </section>
 
 
 
 
 
-    @yield('content')
-
-
-
-    <footer>
-        @include('header_and_footer.footer')
-    </footer>
 
 
 
 
-    <!-- Categories JS Toggle -->
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Connect with Community -->
+
+        <section id="artisans" class="artisans section-bg">
+            <div class="container my-5">
+                <div class="row showcase gx-10 justify-content-evenly align-items-center">
+                    <div class="col-sm-12 col-md-6 col-lg-5 order-sm-1"> <img src="images/community.png"
+                            class="img-fluid mx-auto d-block"></div>
+                    <div class="col-sm-12 col-md-6 col-lg-7 order-md-1 d-flex justify-content-center flex-column">
+                        <h2>Connect with Community</h2>
+                        <p>
+                            Showcasing Adamson University's student artisans and craftsmen on a web-based social
+                            commerce
+                            site that provides a centralized platform where students can market their handicrafts or
+                            artworks by posting and listing their products on the web portal.
+                        </p>
+
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <a href="{{ auth()->check() ? route('community.index') : route('community.visitor') }}" class="btn-homepage-buttons scrollto fw-normal">Join Community Forum</a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: "Already Logged In",
+                    text: "You are already logged in. Do you want to log out?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Logout",
+                    cancelButtonText: "Cancel",
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('logout') }}";
+                    } else {
+                        window.location.href =
+                            "{{ url('/home') }}"; // Redirect to the home page or another appropriate route
+                    }
+                });
+            });
+        </script>
+
+
+
+
+
+        @yield('content')
+
+
+
+        <footer>
+            @include('header_and_footer.footer')
+        </footer>
+
+
+
+
+        <!-- Categories JS Toggle -->
+        <!-- Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    </div>
 
 </body>
 
