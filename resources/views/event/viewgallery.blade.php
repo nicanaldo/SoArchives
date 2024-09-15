@@ -42,25 +42,9 @@
         }
 
         .gallery-title {
-            /* Set the background image */
-            background-image: url("{{ asset('images/gallery.png') }}");
-            /* Path to your background image */
-            background-size: cover;
-            /* Ensure the image covers the entire container */
-            background-position: center;
-            /* Center the image */
-
-            color: white;
-            /* Ensure text is readable */
-            height: 350px;
-            padding: 5% 2%;
-            /* Adjust padding as needed */
-            text-align: center;
-            /* Center the text */
-            position: relative;
-            /* Ensure proper positioning of child elements */
-            overflow: hidden;
-            /* Hide overflow content if any */
+            background: linear-gradient(135deg, #145DA0, #4d93d4);
+            color: #fff;
+            /* Optional: Ensure text is readable against the gradient */
 
         }
 
@@ -76,7 +60,6 @@
             color: white;
             /* Ensure text is readable on gradient */
         }
-
     </style>
 </head>
 
@@ -147,20 +130,23 @@
         <div class="row">
             @foreach ($images as $image)
                 <div class="col-md-3 mb-4">
-                <div class="image-container position-relative">
-                    <a href="{{ asset('storage/' . $image->path) }}" data-fancybox="event-images"
-                        data-caption="Image of {{ $event->EventName }}">
-                        <div class="image-box">
-                            <img src="{{ asset('storage/' . $image->path) }}" alt="Event Image">
-                        </div>
-                    </a>
-                    
-                        @if(Auth::check() && Auth::id() === $event->UserID)
-                            <form action="{{ route('gallery.delete', $image->idgallery) }}" method="POST" class="position-absolute top-0 end-0 p-2">
+                    <div class="image-container position-relative">
+                        <a href="{{ asset('storage/' . $image->path) }}" data-fancybox="event-images"
+                            data-caption="Image of {{ $event->EventName }}">
+                            <div class="image-box">
+                                <img src="{{ asset('storage/' . $image->path) }}" alt="Event Image">
+                            </div>
+                        </a>
+
+                        @if (Auth::check() && Auth::id() === $event->UserID)
+                            <form action="{{ route('gallery.delete', $image->idgallery) }}" method="POST"
+                                class="position-absolute top-0 end-0 p-2">
                                 @csrf
                                 @method('DELETE')
 
-                                <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-2 delete-image" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $image->idgallery }}">
+                                <button type="button"
+                                    class="btn btn-danger position-absolute top-0 end-0 p-2 delete-image"
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $image->idgallery }}">
                                     <i class="fas fa-trash-alt"></i></button>
 
                             </form>
@@ -169,56 +155,59 @@
                 </div>
             @endforeach
         </div>
-        
+
         <!-- Confirmation Modal for Deleting Event -->
         @foreach ($images as $image)
-        <div class="modal fade" id="confirmDeleteModal{{ $image->idgallery }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ $image->idgallery }}" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel{{ $image->idgallery }}">Confirm Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">Are you sure you want to delete this image?</div>
-                    <div class="modal-footer">
-                        <form action="{{ route('gallery.delete', $image->idgallery) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
+            <div class="modal fade" id="confirmDeleteModal{{ $image->idgallery }}" tabindex="-1"
+                aria-labelledby="confirmDeleteModalLabel{{ $image->idgallery }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteModalLabel{{ $image->idgallery }}">Confirm Delete
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">Are you sure you want to delete this image?</div>
+                        <div class="modal-footer">
+                            <form action="{{ route('gallery.delete', $image->idgallery) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
+    </div>
+    @endforeach
+
+    @if (count($images) === 0)
+        <div class="d-flex flex-column align-items-center justify-content-center text-center">
+            <h4 class="mt-3">No Image Available</h4>
+            <p>It looks like there are no images available at the moment.</p>
         </div>
-        @endforeach
-        
-        @if (count($images) === 0)
-            <div class="d-flex flex-column align-items-center justify-content-center text-center">
-                <h4 class="mt-3">No Image Available</h4>
-                <p>It looks like there are no images available at the moment.</p>
-            </div>
-        @endif
+    @endif
     </div>
 
     <!-- Sweet alert -->
     @if (Session::has('message'))
-            @if (Session::get('type') === 'success')
-                <script>
-                    swal("Success", "{{ Session::get('message') }}", 'success', {
-                        button: "OK",
-                        timer: 3000,
-                    });
-                </script>
-                @elseif (Session::get('type') === 'error')
-                <script>
-                    swal("Error", "{{ Session::get('message') }}", 'error', {
-                        button: "OK",
-                    });
-                </script>
-            @endif
+        @if (Session::get('type') === 'success')
+            <script>
+                swal("Success", "{{ Session::get('message') }}", 'success', {
+                    button: "OK",
+                    timer: 3000,
+                });
+            </script>
+        @elseif (Session::get('type') === 'error')
+            <script>
+                swal("Error", "{{ Session::get('message') }}", 'error', {
+                    button: "OK",
+                });
+            </script>
         @endif
+    @endif
 
     <footer>
         @include('header_and_footer.footer')
