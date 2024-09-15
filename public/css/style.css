@@ -519,10 +519,6 @@ h2 {
     padding: 0; /* Remove default padding if needed */
 }
 
-.header__wrapper {
-    padding: 10px; /* Adjust padding for mobile devices */
-}
-
 .custom-shadow-profile {
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); /* Shadow on left, bottom, right only */
 }
