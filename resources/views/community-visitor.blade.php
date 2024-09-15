@@ -682,7 +682,7 @@
 
 
             {{-- UI: Back to top button --}}
-            <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top">
+            <button type="button" class="btn button-primary btn-floating btn-lg" id="btn-back-to-top">
                 <i class="fas fa-arrow-up"></i>
             </button>
 
