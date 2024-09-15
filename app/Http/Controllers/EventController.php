@@ -18,17 +18,30 @@ class EventController extends Controller
     public function index(Request $request){
 
         $userId = Auth::id();
+
+         // Get the currently authenticated user
+         $user = Auth::user();
+
+
+         // Check if the user is authenticated
+         if (!$user) {
+             // Log out the user if the session has expired
+             Auth::logout();
+             Session::flush(); // Clear the session data
+             return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+         }
+
         $events = Event::with('user')->get();
-    
+
         $visibleEvents = $events->filter(function ($event) use ($userId) {
             return in_array($event->Status, ['Approved', 'OnGoing']) ||
                    ($userId == $event->UserID && in_array($event->Status, ['Pending', 'Rejected']));
         });
-    
+
         $hasVisibleEvents = $events->contains(function ($event) {
             return in_array($event->Status, ['Approved', 'OnGoing']);
         });
-    
+
         return view('events', [
             'events' => $visibleEvents,
             'userId' => $userId,
@@ -38,11 +51,11 @@ class EventController extends Controller
 
     public function showBuyerEvents() {
         $events = Event::all();
-        
+
         return view('Event.BuyerEvents', compact('events'));
     }
 
-    
+
 
     public function update(Request $request, $id)
     {
@@ -51,7 +64,7 @@ class EventController extends Controller
 
         $request->validate([
             'EventImage' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            
+
         ]);
 
         // Update event details
@@ -81,10 +94,10 @@ class EventController extends Controller
         }
 
             return back()->with('message', 'Event Updated Successfully')->with('type', 'success');
-        
+
         } catch (\Exception $e) {
             return back()->with('message', 'An error occurred while updating the event')->with('type', 'error');
-        }    
+        }
     }
 
     public function destroy(Event $event)
@@ -113,12 +126,12 @@ class EventController extends Controller
         ]);
     }
 
-    
+
     public function showVisitorEvents() {
         $events = Event::all();
         return view('VisitorEvents', compact('events'));
     }
-    
+
 
     public function showEvents() {
         $events = Event::all();
@@ -145,7 +158,7 @@ class EventController extends Controller
             $file = $request->file('EventImage',);
             $originalImageName = $file->getClientOriginalName();
             $imagePath = $file->storeAs('EventImage', $originalImageName, 'public');
-        } 
+        }
 
         // Assign the user's ID to the event being created
         $createEvent = Event::create([
@@ -166,7 +179,7 @@ class EventController extends Controller
         } catch (\Exception $e) {
             return back()->with('message', 'Error creating the event, your file might not be supported')->with('type', 'error');
         }
-      
+
     }
 
     public function updateEventStatus()
@@ -183,7 +196,7 @@ class EventController extends Controller
                 }
             }
         }
-    
+
     public function showGallery()
     {
         $events = Event::all();
@@ -195,7 +208,7 @@ class EventController extends Controller
     {
         // Retrieve only ended events
         $endedEvents = Event::where('Status', 'Ended')->get();
-        
+
         // Return the view for ended events
         return view('event.ended', compact('endedEvents'));
     }
@@ -215,11 +228,11 @@ class EventController extends Controller
     // Display the events created by the User
     //para sa profile ng seller ito
     public function showSellerEvents() {
-        $userId = Auth::id(); 
-        $events = Event::where('UserID', $userId)->get(); 
+        $userId = Auth::id();
+        $events = Event::where('UserID', $userId)->get();
         dd($events); // Check the output
 
-        return view('profile.profile-seller', compact('events')); 
+        return view('profile.profile-seller', compact('events'));
     }
 
 
