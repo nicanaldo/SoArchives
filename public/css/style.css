@@ -120,7 +120,9 @@ h2 {
 }
 
 .container h1 {
-    font-weight: 700;
+    font-weight: 700 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .services .icon-box {
@@ -136,7 +138,7 @@ h2 {
 }
 
 .services .icon-box .icon i {
-    color: #ffc107;
+    color: #ffc107 !important;
     font-size: 36px;
     transition: 0.3s;
 }
@@ -287,16 +289,7 @@ h2 {
     /* Ensure text is readable on gradient */
 }
 
-.btn-add-buttons {
-    background: linear-gradient(to right, #ffc107, #ff923e);
-    border: none; /* Remove default border */
-    color: white; /* Ensure the text is readable */
-}
 
-.btn-add-buttons:hover {
-    background: linear-gradient(to right, #ff923e, #ffc107);
-    color: white; /* Text color on hover */
-}
 
 .btn-add-buttons {
     width: 200px;
@@ -313,14 +306,6 @@ h2 {
     text-decoration: none;
 }
 
-.btn-add-buttons:hover {
-    /* Lighten the color of text*/
-    color: #343434; /* Adjust the color code as needed */
-    /* Lighten the background color if needed */
-
-    background-color: #ffcf3f; /* button */
-    text-decoration: none;
-}
 
 /* Add item */
 .btn-card-size {
@@ -494,6 +479,49 @@ h2 {
 
 /* ////////////// PROFILE ////////////// */
 
+.cover-photo {
+    width: 100%; /* Full width for mobile devices */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover the container while maintaining aspect ratio */
+}
+
+.profile-picture {
+    width: 100px; /* Default width for larger screens */
+    height: 100px; /* Default height for larger screens */
+    object-fit: cover;
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+    .cover-photo {
+        width: 100%;
+        height: auto; /* Adjust height to maintain aspect ratio */
+    }
+
+    .profile-picture {
+        width: 80px; /* Smaller size for mobile devices */
+        height: 80px; /* Smaller size for mobile devices */
+    }
+
+    .upload-overlay, .profile-upload-overlay {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .upload-overlay button, .profile-upload-overlay button {
+        margin: 5px 0; /* Adjust button spacing for mobile devices */
+    }
+}
+
+/* Ensure container padding and margins are responsive */
+.container-fluid.custom-shadow-profile,
+.container.d-flex {
+    padding: 0; /* Remove default padding if needed */
+}
+
+.header__wrapper {
+    padding: 10px; /* Adjust padding for mobile devices */
+}
 
 .custom-shadow-profile {
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); /* Shadow on left, bottom, right only */
@@ -777,10 +805,66 @@ input[type="number"] {
 
 @media (max-width: 600px) {
     li:hover {
-        background-color: rgb(247, 247, 247);
-        padding-right: 100%;
+        background-color: rgb(247, 247, 247) !important;
+        padding-right: 100% !important;
     }
 }
+
+
+/* VIEW DETAILS HEADER */
+
+/* Responsive text and image for smaller screens */
+@media (max-width: 576px) {
+    .responsive-text {
+        font-size: 10px; /* Smaller font size for mobile */
+    }
+
+    .user-image {
+        width: 24px; /* Smaller image size for mobile */
+        height: 24px;
+    }
+
+    .modal-header {
+        flex-wrap: wrap; /* Ensure content wraps on small screens */
+    }
+}
+
+/* Larger screens styling */
+@media (min-width: 576px) {
+    .responsive-text {
+        font-size: 16px; /* Regular font size for larger screens */
+    }
+
+    .user-image {
+        width: 32px; /* Larger image size for bigger screens */
+        height: 32px;
+    }
+}
+
+/* View details products */
+
+@media (max-width: 576px) {
+    /* Adjust text and image for small screens */
+    .responsive-text {
+        font-size: 11px; /* Smaller text size on small screens */
+
+    }
+
+    .modal-title{
+        font-size: 12px !important;
+        margin-top: 10px;
+    }
+    .user-image {
+        width: 30px;
+        height: 30px;
+    }
+    .user-name {
+        display: block;
+        font-size: 14px; /* Adjust font size */
+    }
+}
+
+
 
 /* Cover Photo */
 .container .cover {
@@ -935,6 +1019,19 @@ input[type="number"] {
 .thick-border {
     border: 10px solid white; /* Adjust the thickness as needed */
     background: linear-gradient(135deg, #ffc107, #ff8325); /* Gradient colors */
+    display: block;
+    width: 250px; /* Original size of the image */
+    height: 250px; /* Original size of the image */
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: white; /* Background color for the inner border */
+    padding: 10px; /* Adjust this if you want an inner border effect */
+    box-sizing: border-box; /* Ensures padding is included in the element's total size */
+}
+
+.thick-border-pro {
+    border: 10px solid white; /* Adjust the thickness as needed */
+    background: linear-gradient(135deg, #474747, #cbcbcb); /* Gradient colors */
     display: block;
     width: 250px; /* Original size of the image */
     height: 250px; /* Original size of the image */
@@ -1134,7 +1231,7 @@ a .pro-badge {
     color: #145DA0;
 }
 
-.truncate-description, .truncate-description-card {
+ .truncate-description, .truncate-description-card {
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -1144,6 +1241,7 @@ a .pro-badge {
 
 .truncate-description-card {
     -webkit-line-clamp: 2;
+    padding-bottom: 5px;
 
 }
 
@@ -1225,4 +1323,133 @@ a .pro-badge {
 .event-side:hover{
     box-shadow: none !important;
     border: 1px;
+}
+
+
+/* Price Drop Badge */
+.price-drop-badge {
+    background: linear-gradient(45deg, #fb6f71, #d62020);
+    color: white;
+    padding: 0.4em 0.8em;
+    border-radius: 0.25rem;
+    font-weight: bold;
+}
+
+.badge-placeholder {
+    display: block;
+    height: 24px;  /* Adjust this to the height of your badge */
+}
+
+.bg-flairs{
+    background-color: #cfe5f9 !important;
+    border: none !important;
+    padding: 8px !important;
+    color: #292929 !important;
+    font-weight: 500 !important;
+}
+
+
+/* home */
+/* Default sizes for larger screens */
+.artisans h1 {
+    font-size: 3.8rem; /* Large size for larger screens */
+}
+
+.artisans p {
+    font-size: 1.25rem; /* Default size for larger screens */
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .artisans h1 {
+        font-size: 2.5rem; /* Smaller size for small screens */
+        text-align: center; /* Center text on small screens */
+    }
+
+    .artisans p {
+        font-size: 1rem; /* Smaller size for small screens */
+        text-align: center; /* Center text on small screens */
+    }
+
+    .btn-homepage-buttons {
+        display: block; /* Ensure the button is centered */
+        margin: 0 auto; /* Center the button */
+    }
+}
+
+/* Alignment adjustments for larger screens */
+@media (min-width: 768px) {
+    .artisans h1 {
+        text-align: start; /* Left align text on larger screens */
+    }
+
+    .artisans p {
+        text-align: start; /* Left align text on larger screens */
+    }
+
+    .btn-homepage-buttons {
+        margin: 0; /* Remove centering on larger screens */
+    }
+}
+
+/* gallery */
+
+.gallery-title {
+    padding: 3rem 1rem; /* Adjust padding for responsiveness */
+    text-align: center;
+}
+
+.gallery-title h1 {
+    font-size: 1.5rem; /* Default heading size */
+}
+
+.gallery-title .gallery-desc {
+    font-size: 1rem; /* Default description size */
+    line-height: 1.4; /* Default line height */
+}
+
+.gallery-title .btn {
+    font-size: 0.875rem; /* Default button size */
+}
+
+/* Adjustments for small screens */
+@media (max-width: 767.98px) {
+    .gallery-title {
+        padding: 2rem 0.5rem; /* Reduced padding for small screens */
+    }
+
+    .gallery-title h1 {
+        font-size: 1rem; /* Smaller font size for headings */
+    }
+
+    .gallery-title .gallery-desc {
+        font-size: 0.875rem; /* Smaller font size for description */
+        line-height: 1.3; /* Adjust line height */
+    }
+
+    .gallery-title .btn {
+        font-size: 0.75rem; /* Smaller font size for button text */
+    }
+}
+
+
+/* responsiveness */
+
+/* Base styles for the about-title */
+.about-title {
+    text-align: center; /* Center text by default */
+    margin-top: 5rem; /* Space from the top */
+}
+
+/* Adjust styles for small screens */
+@media (max-width: 576px) {
+    .about-title h1 {
+        font-size: 2rem; /* Reduce font size for small screens */
+        margin-top: 2rem; /* Reduce margin from the top */
+    }
+
+    .about-title p {
+        font-size: 1rem; /* Reduce font size for small screens */
+        margin-bottom: 2rem; /* Reduce bottom margin */
+    }
 }
