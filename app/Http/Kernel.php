@@ -23,6 +23,11 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
+
+    protected $routeMiddleware = [
+        // Other middleware
+        'auth.redirect' => \App\Http\Middleware\RedirectIfNotAuthenticated::class,
+    ];
     /**
      * The application's route middleware groups.
      *
@@ -35,6 +40,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\PreventBacktracking::class, // Add the middleware here
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
