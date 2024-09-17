@@ -5,7 +5,16 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ $user->fname }} {{ $user->lname }} </title>
+    <title>  
+        @if (Auth::check())
+            @if (Auth::user()->usertypeID == 2)
+                Seller |
+            @elseif (Auth::user()->usertypeID == 3)
+                Buyer |
+            @endif
+        @endif
+        {{ $user->fname }} {{ $user->lname }}
+    </title>
 
     {{-- Tab Logo --}}
     <link rel="shortcut icon" href="{{ asset('images/tab-logo.ico') }}" type="image/x-icon">
