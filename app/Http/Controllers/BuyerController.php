@@ -7,13 +7,78 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+
 
 class BuyerController extends Controller
 {
+    
+    public function editProfile() {
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+        return view('profile.settings', compact('profileData'));
+    }
+
+    public function editPassword()
+    {
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+        return view('admin.password', compact('profileData'));
+    }
+
+    public function editPass(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed'
+        ]);
+
+        if (!Hash::check($request->old_password, auth()->user()->password)) {
+            return redirect()->back()->with('error', 'Old password does not match');
+        }
+
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return redirect()->back()->with('success', 'Password updated successfully');
+    }
+
+    public function editProf(Request $request)
+    {
+        // Validate the input fields
+        $request->validate([
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+        ]);
+
+        // Fetch the currently authenticated user and update their details
+        User::whereId(auth()->user()->id)->update([
+            'fname' => $request->input('fname'),
+            'lname' => $request->input('lname'),
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+
     public function show($slug) //showing of buyer's profile to any user
     {
+
+         // Get the currently authenticated user
+         $user = Auth::user();
+
+         // Check if the user is authenticated
+         if (!$user) {
+             // Log out the user if the session has expired
+             Auth::logout();
+             Session::flush(); // Clear the session data
+             return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+         }
+
         $user = User::where('slug', $slug)->firstOrFail();
-        
+
         return view('profile.profile-buyer', compact('user'));
     }
 
