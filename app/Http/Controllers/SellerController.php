@@ -13,13 +13,94 @@ use Illuminate\Support\Facades\Auth;
 class SellerController extends Controller
 {
 
-    public function __construct()
+    public function editProfile()
     {
-        // Ensure all routes in this controller require the user to be authenticated
-        $this->middleware('auth')->except(['show']);
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+        return view('profile.settings', compact('profileData'));
     }
+
+    public function editPassword()
+    {
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+        return view('admin.password', compact('profileData'));
+    }
+
+    public function editPass(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed'
+        ]);
+
+        if (!Hash::check($request->old_password, auth()->user()->password)) {
+            return redirect()->back()->with('error', 'Old password does not match');
+        }
+
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return redirect()->back()->with('success', 'Password updated successfully');
+    }
+
+    public function editProf(Request $request)
+    {
+        // Validate the input fields
+        $request->validate([
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+        ]);
+
+        // Fetch the currently authenticated user and update their details
+        User::whereId(auth()->user()->id)->update([
+            'fname' => $request->input('fname'),
+            'lname' => $request->input('lname'),
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+
     public function show($slug) //sgowing of seller profile to any user
     {
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
 
         // Fetch the user based on the slug
         $user = User::where('slug', $slug)->firstOrFail();
