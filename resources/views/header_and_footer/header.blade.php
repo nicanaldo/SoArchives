@@ -104,12 +104,12 @@
                 @endif
 
 
+                 <!-- Inside your dropdown for logged-in users -->
                 @if (Auth::check())
-                    <!-- Check if the user is logged in -->
-
+                    <!-- Dropdown for logged-in users -->
                     <div class="dropdown">
                         <button class="btn btn-warning dropdown-toggle mt-4" type="button" id="userDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 10px;">
+                            data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 20px;">
                             {{ Auth::user()->fname }} <!-- Display user's name -->
                         </button>
 
@@ -117,13 +117,16 @@
                             @if (Auth::user()->usertypeID == 2)
                                 <li><a class="dropdown-item" href="{{ route('products-seller.index') }}">Profile</a>
                                 </li>
+                                <li><a class="dropdown-item" href="{{ route('profile.settings') }}">Settings</a>
+                                    {{-- <li><a class="dropdown-item" href="{{ route('profile.edit-profile') }}">Change Password</a> --}}
+                                </li> <!-- Edit Profile Link -->
                             @elseif(Auth::user()->usertypeID == 3)
-                                <li><a class="dropdown-item" href="{{ route('profile-buyer', ['slug' => Auth::user()->slug]) }}">Profile</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('profile-buyer', ['slug' => Auth::user()->slug]) }}">Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('profile.buyer-settings') }}">Settings</a>
+                                </li> <!-- Edit Profile Link -->
                             @endif
-
-                            {{-- <li><a class="dropdown-item" href="{{ route('edit-profile') }}"
-                               onclick="event.preventDefault(); document.getElementById('edit-profile).submit();">Edit
-                            Profile</a></li> --}}
 
                             <li><a class="dropdown-item" href="{{ route('chatify') }}">Inbox</a></li>
                             <li><a class="dropdown-item" href="{{ route('logout') }}"
