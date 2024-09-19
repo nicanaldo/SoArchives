@@ -333,8 +333,9 @@
                                             );
                                         @endphp
                                         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                            <div class="card" data-bs-toggle="modal"
-                                                data-bs-target="#productModal{{ $product->ProductID }}">
+                                            <!-- CHANGE CODES FOR VIEWS - SEPTEMBER 20 -->
+                                            <div class="card" data-bs-toggle="modal" data-bs-target="#productModal{{ $product->ProductID }}" onclick="incrementViews('{{ $product->ProductID }}')">
+                                            <!-- END....  CHANGE CODES FOR VIEWS - SEPTEMBER 20 -->  
                                                 <div id="carouselProduct{{ $product->ProductID }}"
                                                     class="carousel slide" data-bs-ride="false">
                                                     <div class="carousel-inner">
@@ -399,6 +400,9 @@
 
                                                     <!-- Like Count -->
                                                     <div class="text-muted small text-end mt-auto">
+                                                        <!-- ADD CODES FOR VIEWS -->
+                                                        <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> {{ $product->views }}</span>
+                                                        <!-- END... ADD CODES FOR VIEWS -->
                                                         <span class="btn btn-light disabled like-count"><i
                                                                 class="fas fa-heart ml-2" style="color: red;"></i>
                                                             {{ $product->likes()->count() }} </span>
@@ -407,6 +411,26 @@
 
                                             </div>
                                         </div>
+
+                                        <!-- ADD CODES FOR VIEWS -->
+                                        <script>
+                                            function incrementViews(productId) {
+                                                fetch(`/products/${productId}/increment-views`, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                                    },
+                                                }).then(response => {
+                                                    if (response.ok) {
+                                                        console.log('Views incremented successfully');
+                                                    }
+                                                }).catch(error => {
+                                                    console.error('Error incrementing views:', error);
+                                                });
+                                            }
+                                        </script>
+                                        <!-- END... ADD CODES FOR VIEWS -->
 
                                         {{-- View Details Modal --}}
                                         <div class="modal fade" id="productModal{{ $product->ProductID }}"
