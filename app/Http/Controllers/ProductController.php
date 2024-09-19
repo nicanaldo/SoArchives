@@ -311,5 +311,14 @@ class ProductController extends Controller
         return redirect()->back()->with('message', 'Product unarchived succesfully!')->with('type', 'success');
     }
 
+    // ADD CODES FOR VIEWS
+    public function incrementViews($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->increment('views');
+        return response()->json(['success' => true]);
+    }
+    // END... ADD CODES FOR VIEWS
+
 }
 
