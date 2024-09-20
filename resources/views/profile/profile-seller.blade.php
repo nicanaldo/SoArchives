@@ -356,13 +356,13 @@
                     <div class="col-md-4 mb-3">
                         <div class="custom-shadow p-4 d-flex flex-wrap justify-content-center rounded-2">
                             <div class="text-muted small text-center align-self-center m-2">
-                                <h2>427</h2>
+                                <h2> 26 </h2>
                                 <span class=" d-sm-inline-block">
                                     <h5>Commendations</h5>
                                 </span>
                             </div>
                             <div class="text-muted small text-center align-self-center m-2">
-                                <h2>24</h2>
+                                <h2>{{ $feedbackCount }}</h2>
                                 <span class=" d-sm-inline-block">
                                     <h5>Feedbacks</h5>
                                 </span>
@@ -703,8 +703,9 @@
                                             @endphp
 
                                             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                                <div class="card" data-bs-toggle="modal"
-                                                    data-bs-target="#productModal{{ $product->ProductID }}">
+                                                <!-- ADD CODES FOR VIEWS -->
+                                                <div class="card" data-bs-toggle="modal" data-bs-target="#productModal{{ $product->ProductID }}" onclick="incrementViews('{{ $product->ProductID }}')">
+                                                <!--END....  ADD CODES FOR VIEWS -->
                                                     <div id="carouselProduct{{ $product->ProductID }}"
                                                         class="carousel slide" data-bs-ride="false">
                                                         <div class="carousel-inner">
@@ -771,6 +772,9 @@
 
                                                             <!-- Like Count -->
                                                             <div class="text-muted small text-end mt-auto">
+                                                                <!-- ADD CODES FOR VIEWS -->
+                                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> {{ $product->views }}</span>
+                                                                <!--END....  ADD CODES FOR VIEWS -->
                                                                 <span class="btn btn-light disabled like-count"><i
                                                                         class="fas fa-heart ml-2"
                                                                         style="color: red;"></i>
@@ -783,6 +787,26 @@
 
                                                 </div>
                                             </div>
+
+                                            <!-- ADD CODES FOR VIEWS -->
+                                            <script>
+                                                function incrementViews(productId) {
+                                                    fetch(`/products/${productId}/increment-views`, {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                                        },
+                                                    }).then(response => {
+                                                        if (response.ok) {
+                                                            console.log('Views incremented successfully');
+                                                        }
+                                                    }).catch(error => {
+                                                        console.error('Error incrementing views:', error);
+                                                    });
+                                                }
+                                            </script>
+                                            <!--END....  ADD CODES FOR VIEWS -->
 
 
                                             {{-- View Details Modal --}}
@@ -2357,6 +2381,7 @@
                                 </button>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

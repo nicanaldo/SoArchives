@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buyer;
+use App\Models\Commend;
+use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,11 +12,81 @@ use Illuminate\Support\Facades\Session;
 
 class BuyerController extends Controller
 {
-    public function show($slug) //showing of buyer's profile to any user
+    public function show() //showing of buyer's profile to any user
+    {
+        $user = Auth::user();
+
+        // Fetch feedbacks related to the seller
+        $feedbacks_userID = $user->id;
+        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
+
+        // Get the count of feedbacks
+        $feedbackCount = $feedbacks->count();
+        
+        return view('profile.profile-buyer', compact('user', 'feedbacks', 'feedbackCount'));
+    }
+
+    public function profile($slug) //showing of buyer's profile to any user
     {
         $user = User::where('slug', $slug)->firstOrFail();
+
+        // dd($user);
+
+        // Commend
+        $commend_userID = $user->id;
+
+        // Get the count of commend 
+        $commends = Commend::where('commend_userID', $user->id)->get();
+        $commendCount = $commends->count();
+
+        // Fetch feedbacks related to the buyer
+        $feedbacks_userID = $user->id;
+        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
+
+        // Get the count of feedbacks
+        $feedbackCount = $feedbacks->count();
         
-        return view('profile.profile-buyer', compact('user'));
+        return view('profile.buyer', compact('user', 'commend_userID', 'commendCount', 'feedbacks_userID', 'feedbacks', 'feedbackCount'));
+    }
+
+    public function commend(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'userID' => 'required|integer',
+            'commend_userID' => 'required|integer',
+        ]);
+
+        // Create a new commend record
+        $commend = new Commend();
+        $commend->userID = $validatedData['userID'];
+        $commend->commend_userID = $validatedData['commend_userID'];
+        $commend->save();
+
+    }
+
+    public function submitRating(Request $request)
+    {
+        if (!auth()->check()) {
+            return redirect()->back()->with('error', 'You must be logged in to submit feedback.');
+        }
+
+        // Validate the input data
+        $validatedData = $request->validate([
+            'rating' => 'required|integer|between:1,5',
+            'feedback' => 'nullable|string',
+            'feedback_userID' => 'required|exists:users,id'
+        ]);
+
+        // Create a new feedback instance
+        $feedback = new Feedback();
+        $feedback->userID = auth()->id();
+        $feedback->feedback_userID = $request->input('feedback_userID');
+        $feedback->rating = $request->input('rating');
+        $feedback->feedback = $request->input('feedback');
+        $feedback->save();
+
+        return redirect()->back()->with('success', 'Feedback submitted successfully!');
     }
 
     

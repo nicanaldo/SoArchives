@@ -55,6 +55,27 @@ Route::post('/login/admin', function () {
     return view('auth.adminlogin');
 })->name('adminlogin1');
 
+
+// PROFILE SETTINGS
+
+// For Seller
+Route::get('/profile/settings', [SellerController::class, 'editProfile'])->name('profile.settings');
+
+// For Buyer
+Route::get('/profile/buyer-settings', [BuyerController::class, 'editProfile'])->name('profile.buyer-settings');
+
+Route::get('/profile', [App\Http\Controllers\SellerController::class, 'editProfile'])->name('updateProfile');
+
+//updating save changes button
+Route::post('/profile/account', [App\Http\Controllers\SellerController::class, 'editProf'])->name('updateProf');
+
+// Change Password
+Route::get('/password', [App\Http\Controllers\SellerController::class, 'editPassword'])->name('updatePassword');
+
+//updating save changes button
+Route::post('/profile/password', [App\Http\Controllers\SellerController::class, 'editPass'])->name('updateAcc');
+
+
 //Register
 Route::get('/register/terms&conditions', function () {
     return view('auth.terms&conditions');
@@ -149,7 +170,7 @@ Route::get('/community/visitor', [CommunityController::class, 'visitor'])->name(
 
 // Community Forum
 Route::group(['prefix' => 'community'], function () {
-    Route::get('/', [CommunityController::class, 'visitor'])->name('community.index'); // Public route
+    Route::get('/', [CommunityController::class, 'index'])->name('community.index'); // Public route
 
     // Actions requiring authentication
     Route::middleware('auth.redirect')->group(function () {
@@ -189,6 +210,9 @@ Route::get('/seller/{slug}', [SellerController::class, 'show'])->name('seller.pr
 // Feedback Form
 Route::post('/profile/seller/ratings', [SellerController::class,'submitRating'])->name('ratings.store');
 
+// Commend
+Route::post('/profile/seller/commend', [SellerController::class, 'commend'])->name('commend.store');
+
 //Seller Add Product
 // Route::get('/profile/seller', [ProductController::class, 'index'])->name('products.index'); //recheck later baka hindi tama route
 Route::get('/profile/seller', [ProductController::class, 'index'])->name('products-seller.index'); //pinaltan ko dalhin sa admin
@@ -207,20 +231,28 @@ Route::post('/products/{id}/increment-views', [ProductController::class, 'increm
 // END... Product Views
 
 Route::get('/profile/seller/product/create', [ProductController::class, 'create'])->name('products-seller.create');
-Route::post('/profile/seller/store', [ProductController::class, 'store'])->name('products-seller.store'); //add item button
+Route::post('/profile/seller/store', [ProductController::class, 'store'])->name('products-seller.store');
 
-Route::get('/profile/seller/{product}/edit', [ProductController::class, 'edit'])->name('products-seller.edit'); //recheck later for edit  , eto ung edit button
-Route::put('/profile/seller/{product}', [ProductController::class, 'update'])->name('products-seller.update'); //recheck later for edit  , eto ung save button
+Route::get('/profile/seller/{product}/edit', [ProductController::class, 'edit'])->name('products-seller.edit'); 
+Route::put('/profile/seller/{product}', [ProductController::class, 'update'])->name('products-seller.update'); 
 
 //Delete
 // Route::resource('/profile/seller/products', ProductController::class);
-Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products-seller.destroy'); //recheck later for edit  , eto ung save button
-
+Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products-seller.destroy');
 Route::post('/upload', [ProductController::class, 'upload'])->name('upload');
 
 //Buyer
-// Route to show the buyer profile
-Route::get('/buyer/{slug}', [BuyerController::class, 'show'])->name('profile-buyer');
+// Route to show the buyer profile in any other user
+Route::get('/buyer/{slug}', [BuyerController::class, 'profile'])->name('buyer.profile.index');
+
+// Route to show the buyer profile in auth
+Route::get('/profile/buyer', [BuyerController::class, 'show'])->name('profile-buyer');
+
+// Feedback Form
+Route::post('/profile/buyer/ratings', [BuyerController::class,'submitRating'])->name('buyer.ratings');
+
+// Commend
+Route::post('/commend', [BuyerController::class, 'commend'])->name('buyer-commend.store');
 
 
 //Admin Dashboard
