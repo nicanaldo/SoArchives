@@ -226,6 +226,10 @@ Route::post('/products/unarchive/{productId}', [ProductController::class, 'unarc
 // Product Like
 Route::post('/product/{product}/like', [ProductController::class, 'productlike'])->name('product.like');
 
+// Product Views
+Route::post('/products/{id}/increment-views', [ProductController::class, 'incrementViews'])->name('products.incrementViews');
+// END... Product Views
+
 Route::get('/profile/seller/product/create', [ProductController::class, 'create'])->name('products-seller.create');
 Route::post('/profile/seller/store', [ProductController::class, 'store'])->name('products-seller.store');
 
