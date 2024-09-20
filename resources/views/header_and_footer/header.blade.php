@@ -118,7 +118,7 @@
                                 <li><a class="dropdown-item" href="{{ route('products-seller.index') }}">Profile</a>
                                 </li>
                             @elseif(Auth::user()->usertypeID == 3)
-                                <li><a class="dropdown-item" href="{{ route('profile-buyer', ['slug' => Auth::user()->slug]) }}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile-buyer') }}">Profile</a></li>
                             @endif
 
                             {{-- <li><a class="dropdown-item" href="{{ route('edit-profile') }}"
