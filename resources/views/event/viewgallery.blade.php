@@ -60,6 +60,33 @@
             color: white;
             /* Ensure text is readable on gradient */
         }
+
+         /*add this CSS for download and delete button - September 19*/
+        .image-container {
+            position: relative;
+        }
+
+        .dropdown-bar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .dropdown-bar .btn-option {
+            background-color: rgba(0, 0, 0, 0.5); 
+            border: none;
+            color: white;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dropdown-bar .dropdown-menu {
+            z-index: 20; 
+        }
+
+        /*END.. add this CSS for download and delete button - September 19*/
     </style>
 </head>
 
@@ -127,34 +154,47 @@
             </div>
         </div>
 
+        <!-- Improve the delete button UI add download button | September 19 -->
         <div class="row">
             @foreach ($images as $image)
                 <div class="col-md-3 mb-4">
-                    <div class="image-container position-relative">
-                        <a href="{{ asset('storage/' . $image->path) }}" data-fancybox="event-images"
-                            data-caption="Image of {{ $event->EventName }}">
-                            <div class="image-box">
-                                <img src="{{ asset('storage/' . $image->path) }}" alt="Event Image">
-                            </div>
-                        </a>
+                <div class="image-container position-relative">
+                    <a href="{{ asset('storage/' . $image->path) }}" data-fancybox="event-images"
+                        data-caption="Image of {{ $event->EventName }}">
+                        <div class="image-box">
+                            <img src="{{ asset('storage/' . $image->path) }}" alt="Event Image">
+                        </div>
+                    </a>
+                    
+                    @if(Auth::check() && Auth::id() === $event->UserID)
+                    <div class="dropdown-bar">
+                        <button class="btn btn-option dropdown-bar" type="button"
+                            id="dropdownMenuButton{{ $image->idgallery }}" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
 
-                        @if (Auth::check() && Auth::id() === $event->UserID)
-                            <form action="{{ route('gallery.delete', $image->idgallery) }}" method="POST"
-                                class="position-absolute top-0 end-0 p-2">
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="button"
-                                    class="btn btn-danger position-absolute top-0 end-0 p-2 delete-image"
-                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $image->idgallery }}">
-                                    <i class="fas fa-trash-alt"></i></button>
-
-                            </form>
-                        @endif
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ $image->idgallery }}">
+                            <li>
+                                <a class="dropdown-item download-image" 
+                                href="{{ asset('storage/' . $image->path) }}" download="image_{{ $image->idgallery }}.jpg">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            </li>
+                            <li>
+                                <button class="dropdown-item delete-image" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal{{ $image->idgallery }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    @endif
                     </div>
                 </div>
             @endforeach
         </div>
+        <!-- END....Improve the delete button UI add download button | September 19 -->
 
         <!-- Confirmation Modal for Deleting Event -->
         @foreach ($images as $image)

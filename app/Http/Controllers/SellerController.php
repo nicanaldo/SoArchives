@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commend;
 use App\Models\Event;
 use App\Models\Feedback;
 use App\Models\User;
@@ -13,14 +14,105 @@ use Illuminate\Support\Facades\Auth;
 class SellerController extends Controller
 {
 
-    public function __construct()
-    {
-        // Ensure all routes in this controller require the user to be authenticated
-        $this->middleware('auth')->except(['show']);
-    }
-    public function show($slug) //sgowing of seller profile to any user
+    public function editProfile()
     {
 
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+        return view('profile.settings', compact('profileData'));
+    }
+
+    public function editPassword()
+    {
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+        return view('admin.password', compact('profileData'));
+    }
+
+    public function editPass(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed'
+        ]);
+
+        if (!Hash::check($request->old_password, auth()->user()->password)) {
+            return redirect()->back()->with('error', 'Old password does not match');
+        }
+
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return redirect()->back()->with('success', 'Password updated successfully');
+    }
+  
+    public function editProf(Request $request)
+    {
+        // Validate the input fields
+        $request->validate([
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+        ]);
+
+        // Fetch the currently authenticated user and update their details
+        User::whereId(auth()->user()->id)->update([
+            'fname' => $request->input('fname'),
+            'lname' => $request->input('lname'),
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+
+    public function show() //showing of buyer's profile to any user
+    {
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
+        // Fetch feedbacks related to the seller
+        $feedbacks_userID = $user->id;
+        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
+
+        // Get the count of feedbacks
+        $feedbackCount = $feedbacks->count();
+        
+        return view('profile.profile-buyer', compact('user', 'feedbacks', 'feedbackCount'));
+    }
+
+    public function profile($slug) //showing of seller profile to any user
+    {
         // Fetch the user based on the slug
         $user = User::where('slug', $slug)->firstOrFail();
 
@@ -33,8 +125,15 @@ class SellerController extends Controller
         // Check if seller exists before trying to access its SellerID
         $sellerID = $seller ? $seller->SellerID : null;
 
+        // Commend
+        $commend_userID = $user->id;
+
+        $commends = Commend::where('commend_userID', $user->id)->get();
+        $commendCount = $commends->count();
+
         // Fetch feedbacks related to the seller
-        $feedbacks = Feedback::where('sellerID', $seller->SellerID)->get();
+        $feedbacks_userID = $user->id;
+        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
 
         // Fetch the seller's selected tags
         $selectedTags = $seller ? $seller->tags()->pluck('name')->toArray() : [];
@@ -59,7 +158,39 @@ class SellerController extends Controller
             ->where('UserID', $user->id)
             ->get();
 
-        return view('profile.seller', compact('user', 'products', 'selectedTags', 'seller', 'sellerID', 'feedbacks', 'feedbackCount', 'events', 'activeProducts', 'archivedProducts'));
+        return view('profile.seller', compact('user', 'products', 'selectedTags', 'seller', 'sellerID','feedbacks_userID', 'commend_userID', 'commendCount', 'feedbacks', 'feedbackCount', 'events', 'activeProducts', 'archivedProducts'));
+    }
+
+    
+    public function commend(Request $request)
+    {
+        // Validate the request data
+            // Validate the request data
+    $validatedData = $request->validate([
+        'userID' => 'required|integer',
+        'commend_userID' => 'required|integer',
+    ]);
+
+    // Check if the commend already exists
+    $existingCommend = Commend::where('userID', $validatedData['userID'])
+                              ->where('commend_userID', $validatedData['commend_userID'])
+                              ->first();
+
+    if ($existingCommend) {
+        // If the commend already exists, delete it (uncommend)
+        $existingCommend->delete();
+        $message = 'Commend removed successfully!';
+    } else {
+        // If it doesn't exist, create a new commend
+        $commend = new Commend();
+        $commend->userID = $validatedData['userID'];
+        $commend->commend_userID = $validatedData['commend_userID'];
+        $commend->save();
+        $message = 'Commend submitted successfully!';
+    }
+
+    return redirect()->back()->with('message', $message);
+
     }
 
     public function submitRating(Request $request)
@@ -72,13 +203,13 @@ class SellerController extends Controller
         $validatedData = $request->validate([
             'rating' => 'required|integer|between:1,5',
             'feedback' => 'nullable|string',
-            'sellerID' => 'required|exists:sellers,sellerID'
+            'feedback_userID' => 'required|exists:users,id'
         ]);
 
         // Create a new feedback instance
         $feedback = new Feedback();
         $feedback->userID = auth()->id();
-        $feedback->sellerID = $request->input('sellerID');
+        $feedback->feedback_userID = $request->input('feedback_userID');
         $feedback->rating = $request->input('rating');
         $feedback->feedback = $request->input('feedback');
         $feedback->save();
