@@ -72,9 +72,17 @@
                     </span> --}}
                 </h2>
                 <div class="pb-5">
-                    <button type="button" class="btn btn-primary btn-rounded border-0 me-1"
-                        style="background: linear-gradient(45deg, #6a11cb, #2575fc);" data-mdb-ripple-init><i
-                            class="fas fa-hand-sparkles"></i> Commend</button>
+                    {{-- <button type="button" class="btn btn-primary btn-rounded border-0 me-1" style="background: linear-gradient(45deg, #6a11cb, #2575fc);" data-mdb-ripple-init><i class="fas fa-hand-sparkles"></i> Commend</button> --}}
+
+                    <form id="commend-form" method="POST" action="{{ route('commend.store') }}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="userID" value="{{ auth()->id() }}">
+                        <input type="hidden" name="commend_userID" value="{{ $commend_userID }}">
+                        <button type="submit" class="btn btn-primary btn-rounded border-0 me-1" style="background: linear-gradient(45deg, #6a11cb, #2575fc);" data-mdb-ripple-init><i class="fas fa-hand-sparkles"></i> Commend
+                        </button>
+                    </form>
+                    <br>
+                    
                             <a href="{{ route('chatify') }}" class="btn btn-outline-dark btn-rounded me-1" data-mdb-ripple-init>
                                 <i class="fas fa-message"></i> Message
                             </a>
@@ -88,14 +96,12 @@
                     </button>
 
                     <!-- Report Modal -->
-                    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel"
-                        aria-hidden="true">
+                    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="reportModalLabel">Report User</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
 
@@ -176,13 +182,13 @@
                 <div class="col-md-4 mb-3">
                     <div class="custom-shadow p-4 d-flex flex-wrap justify-content-center">
                         <div class="text-muted small text-center align-self-center m-2">
-                            <h2>427</h2>
+                            <h2>{{ $commendCount }}</h2>
                             <span class=" d-sm-inline-block">
                                 <h5>Commendations</h5>
                             </span>
                         </div>
                         <div class="text-muted small text-center align-self-center m-2">
-                            <h2>24</h2>
+                            <h2>{{ $feedbackCount }}</h2>
                             <span class=" d-sm-inline-block">
                                 <h5>Feedbacks</h5>
                             </span>
@@ -959,7 +965,7 @@
 
                             {{-- <input type="hidden" name="userID" value="{{ auth()->id() }}"> <!-- Add this line --> --}}
                             {{-- <input type="hidden" name="sellerID" value="{{$seller->id }}"> <!-- Add this line, assuming $sellerID is defined --> --}}
-                            <input type="hidden" name="sellerID" value="{{ $sellerID }}">
+                            <input type="hidden" name="feedback_userID" value="{{ $feedbacks_userID }}">
 
                             <div class="mb-3">
                                 <label class="form-label">Rating</label>
@@ -1010,6 +1016,19 @@
 
 
         <script>
+            // Star
+            $('.rating-star').on('click', function() {
+                    var rating = $(this).data('rating');
+                    $('#rating').val(rating);
+                    $('.rating-star').each(function() {
+                        if ($(this).data('rating') <= rating) {
+                            $(this).css('color', '#ffc107');
+                        } else {
+                            $(this).css('color', '#ccc');
+                        }
+                    });
+                });
+
             //Back to top button
             let mybutton = document.getElementById("btn-back-to-top");
 
