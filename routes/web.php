@@ -55,6 +55,27 @@ Route::post('/login/admin', function () {
     return view('auth.adminlogin');
 })->name('adminlogin1');
 
+
+// PROFILE SETTINGS
+
+// For Seller
+Route::get('/profile/settings', [SellerController::class, 'editProfile'])->name('profile.settings');
+
+// For Buyer
+Route::get('/profile/buyer-settings', [BuyerController::class, 'editProfile'])->name('profile.buyer-settings');
+
+Route::get('/profile', [App\Http\Controllers\SellerController::class, 'editProfile'])->name('updateProfile');
+
+//updating save changes button
+Route::post('/profile/account', [App\Http\Controllers\SellerController::class, 'editProf'])->name('updateProf');
+
+// Change Password
+Route::get('/password', [App\Http\Controllers\SellerController::class, 'editPassword'])->name('updatePassword');
+
+//updating save changes button
+Route::post('/profile/password', [App\Http\Controllers\SellerController::class, 'editPass'])->name('updateAcc');
+
+
 //Register
 Route::get('/register/terms&conditions', function () {
     return view('auth.terms&conditions');
