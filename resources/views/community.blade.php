@@ -289,23 +289,26 @@
                                         style="width: 35px; height: 35px;">
                                     <div class="d-flex flex-column">
                                         @if ($post->user->usertypeID == '3')
-                                            <a href="{{ route('profile-buyer', ['slug' => $post->user->slug]) }}"
+                                            @if ($post->user->slug)
+                                            <a href="{{ route('buyer.profile.index', ['slug' => $post->user->slug]) }}"
                                                 class="card-title mb-0 d-flex align-items-center text-decoration-none">
                                                 {{ $post->user->fname }} {{ $post->user->lname }}
-                                            </a>
+                                             </a>                                             
+                                            @else
+                                                <span>Profile unavailable</span>
+                                            @endif
                                         @elseif($post->user->usertypeID == '2')
                                             @if ($post->user->slug)
-                                            <a href="{{ route('seller.profile', ['slug' => $post->user->slug]) }}"
-                                                class="card-title mb-0 d-flex align-items-center text-decoration-none user-name">
-                                                <span class="full-name">{{ $post->user->fname }} {{ $post->user->lname }}</span>
-                                                <span class="badge pro-badge ms-2"><i class="fas fa-star"></i> PRO</span>
-                                             </a>
-
-
+                                                <a href="{{ route('seller.profile', ['slug' => $post->user->slug]) }}"
+                                                    class="card-title mb-0 d-flex align-items-center text-decoration-none user-name">
+                                                    <span class="full-name">{{ $post->user->fname }} {{ $post->user->lname }}</span>
+                                                    <span class="badge pro-badge ms-2"><i class="fas fa-star"></i> PRO</span>
+                                                </a>
                                             @else
                                                 <span>Profile unavailable</span>
                                             @endif
                                         @endif
+
 
                                         <span class="text-muted small">{{ $post->created_at->diffForHumans() }}</span>
                                     </div>
