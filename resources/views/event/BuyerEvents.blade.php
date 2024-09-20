@@ -6,462 +6,244 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events</title>
 
-
-   
+    <!-- Bootstrap CSS -->
     <link href="/bootstrap-5.3.3-dist/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href={{ asset('css/events.css')}}>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <!-- Animate CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- to work the toggle in the navbar -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-
-    <!-- soarchive file -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/regular.min.css" integrity="sha512-KYEnM30Gjf5tMbgsrQJsR0FSpufP9S4EiAYi168MvTjK6E83x3r6PTvLPlXYX350/doBXmTFUEnJr/nCsDovuw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Scripts -->
+    <!-- Your custom JS file (if needed) -->
     @vite(['resources/js/app.js'])
-
-
 </head>
-
-
 
 <body>
 
-     <!-- Modal for View Details -->
-     @foreach($events as $event)
-     @if(in_array($event->Status, ['Approved', 'OnGoing']))
-     <div class="modal fade" id="eventModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="eventModalLabel{{ $event->EventID }}" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered">
-             <div class="modal-content">
-                 <div class="modal-body">
-                 <h1 class="modal-title fs-5" style="text-align: center;" id="eventModalLabel{{ $event->EventID }}">Event Details</h1>
-                     <div class="row">
-                         <div class="col-md-12 text-center mb-2">
-                             <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image" style="height: 300px; object-fit: cover;">
-                         </div>
-                         <h5 class="modal-title">{{ $event->EventName }}</h5>
-                         <p class="modal-text">{{ $event->EventDescription }}</p>
-                         <p class="card-text">Created By: {{ $event->user ? $event->user->FName . ' ' . $event->user->LName : 'Unknown' }}</p>
-                         <p class="modal-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
-                        <p class="modal-text">Time:
-                            {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - 
-                            {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
-                        </p>                         <div class="d-flex justify-content-between align-items-center">
-                        <p class="card-text">Location:
-                            <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}" class="btn btn-outline-primary" target="_blank">
-                            <i class="fas fa-map-marker-alt"></i> {{ $event->Location }}
-                            </a>
-                        </p><br>
-                    </div>  
-                     </div>
-                     <div style="margin-right:9px;" class="d-flex justify-content-between align-items-center">
-                     <a href="{{ $event->Link }}" class="btn btn-primary" target="_blank">Link to Join</a>
-                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                 </div>
-                 </div>
-             </div>
-         </div>
-     </div>
-     @endif
-     @endforeach
- </div>
-    <header>
+    <div class="container-fluid custom-shadow rounded-0">
         @include('header_and_footer.header')
-  </header>
-
-
-    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-        @foreach($events as $event)
-            @if(in_array($event->Status, ['Approved', 'OnGoing']))
-                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                    <img src="{{ asset('storage/' . $event->EventImage) }}" class="d-block w-100 carousel-image" alt="Event Image">
-                </div>
-            @endif
-        @endforeach
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
 
-    @include('header_and_footer.eventsBuyerHeader')
+    <div class="container custom-container custom-shadow p-2 mb-4">
+        <!-- Carousel for Events -->
+        <div class="carousel-container">
+            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @php
+                    use Carbon\Carbon;
 
-    <div class="container custom-shadow mt-3 p-3 mb-5 animate__animated animate__slideInUp ">
+                    $now = Carbon::now();
 
-    {{-- Tabs --}}
-    <ul class="nav nav-pills user-profile-tab justify-content-start mt-2 bg-light-info rounded-2" id="pills-tab"
-        role="tablist">
-        <li class="nav-item" role="presentation">
-            <button
-                class="nav-link position-relative rounded-0 active d-flex align-items-center justify-content-center bg-transparent fs-3 py-6"
-                id="pills-approved-tab" data-bs-toggle="pill" data-bs-target="#pills-approved" type="button"
-                role="tab" aria-controls="pills-approved" aria-selected="true">
-                <i class="fa fa-calendar me-2 fs-6"></i>
-                <span class="d-none d-md-block">Events</span>
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button
-                class="nav-link position-relative rounded-0 d-flex align-items-center justify-content-center bg-transparent fs-3 py-6"
-                id="pills-ended-tab" data-bs-toggle="pill" data-bs-target="#pills-ended" type="button" role="tab"
-                aria-controls="pills-ended" aria-selected="false" tabindex="-1">
-                <i class="fa fa-calendar-check me-2 fs-6"></i>
-                <span class="d-none d-md-block">Ended Events</span>
-            </button>
-        </li>
-    </ul>
+                    $filteredEvents = $events->filter(function ($event) use ($now) {
+                        $eventDate = Carbon::parse($event->Date);
+                        $eventEndTime = Carbon::parse($event->EndTime);
 
-    {{-- Events --}}
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab"
-            tabindex="0">
-<!-- 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-left p-3">
-            @foreach($events as $event)
-            @if(in_array($event->Status, ['Approved', 'OnGoing']))
-            <div class="col mb-4">
-                <div class="card">
-                    <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image" style="height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $event->EventName }}</h5>
-                        <p class="card-description" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $event->EventDescription }}</p>
-                        <p class="card-text">Created By: {{ $event->user ? $event->user->FName . ' ' . $event->user->LName : 'Unknown' }}</p>
-                        <p class="modal-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
-                        <p class="modal-text">Time:
-                            {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - 
-                            {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
-                        </p>
-                        <p class="card-EndTime" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Location: {{ $event->Location }}</p>
-                        {{-- <a href="{{ route('home') }}" class="btn btn-primary" target="_blank">Link to Join</a>  --}}
+                        $statusCheck = in_array($event->Status, ['Approved', 'OnGoing']);
+                        $dateCheck = $eventDate->gt($now->toDateString()) ||
+                                     ($eventDate->isSameDay($now->toDateString()) && $eventEndTime->gt($now->toTimeString()));
 
-                        <!-- Modal Button -->
-                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal{{ $event->EventID }}">View Details</button>
-                    </div>
-                </div>
-            </div>
-            @endif
-            @endforeach
-        </div>  -->
 
-        @php
-                $ongoingEvents = [];
-                $endedEvents = [];
-            @endphp
-            @foreach($events as $event)
-                @php
-                    $eventEndDate = \Carbon\Carbon::parse($event->Date . ' ' . $event->EndTime);
-                    $now = \Carbon\Carbon::now();
-                    if($now->gt($eventEndDate)) {
-                        $event->Status = 'Ended';
-                        $endedEvents[] = $event;
-                    } else {
-                        $ongoingEvents[] = $event;
-                    }
+                        return $statusCheck && $dateCheck;
+                    });
                 @endphp
-            @endforeach
-            <h1 class="text-center mb-4">Events</h1>
 
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
 
-        <!-- Ongoing or Accepted Events -->
-        @foreach($ongoingEvents as $event)
+                    @if ($filteredEvents->isNotEmpty())
+                        @foreach ($filteredEvents as $event)
+                            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $event->EventImage) }}"
+                                    class="d-block w-100 carousel-image" alt="Event Image">
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="carousel-item active">
+                            <img src="{{ asset('images/No_Events.png') }}" class="d-block w-100 carousel-image"
+                                alt="No Events Available">
+                        </div>
+                    @endif
+                </div>
+
+                @if ($filteredEvents->isNotEmpty())
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                @endif
+            </div>
+        </div>
+
+    </div>
+
+    <!-- New Container Below Carousel -->
+    <div class="overlay-container p-4 mt-n4 text-center">
+        <h1>Join and Explore Exciting Events!</h1>
+        <p class="text-muted">Be inspired by our Klasmeyts who had their successful events by viewing their event
+            gallery!</p>
+        <ul class="navbar-nav d-inline-flex justify-content-center">
+            <li class="nav-item">
+                <a class="btn btn-primary" href="{{ route('gallery') }}">
+                    See Events Gallery <i class="fa fa-arrow-right ms-1"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <!-- Events Section -->
+    <div class="container event-section mt-1 p-3 mb-5">
+        {{-- @include('header_and_footer.eventsHeader') --}}
+
+        {{-- @if ($filteredEvents->isEmpty())
+            <div class="d-flex flex-column align-items-center justify-content-center min-vh-100 text-center">
+                <img src="{{ asset('images/Calendar.png') }}" class="mb-3">
+                <h4 class="mt-3">No Events Available</h4>
+                <p>It looks like there are no events available at the moment. Be the first to create an event!</p>
+                <a href="{{ route('events.create') }}" class="btn btn-primary mt-3">
+                    <i class="fa fa-plus-circle me-2"></i> Create an Event
+                </a>
+            </div>
+        @else
+            <div class="row-cols-12" style="padding-left: 1rem; margin-bottom: 1rem;">
+                <a href="{{ route('events.create') }}" class="btn btn-primary mt-3">
+                    <i class="fa fa-plus-circle me-2"></i> Create an Event
+                </a>
+                <a href="{{ route('events.ended') }}" class="text-link">Ended Events</a>
+            </div>
+        @endif --}}
+
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-left p-3">
+            @foreach ($filteredEvents as $event)
                 <div class="col mb-4">
-                    <div class="card">
-                        <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image">
-                        @if($event->Link)
-                            @php
-                                $statusColor = '';
-                                switch($event->Status) {
-                                    case 'Approved':
-                                        $statusColor = 'btn-success';
-                                        break;
-                                    case 'Pending':
-                                        $statusColor = 'btn-warning';
-                                        break;
-                                    case 'OnGoing':
-                                        $statusColor = 'btn-info';
-                                        break;
-                                    case 'Rejected':
-                                        $statusColor = 'btn-danger';
-                                        break;
-                                    case 'Ended':
-                                        $statusColor = 'btn-secondary';
-                                        break;
-                                }
-                            @endphp
-                            <button type="button" style="border-radius: 0;" class="btn {{ $statusColor }}" disabled>{{ $event->Status }}</button>
-                        @endif
-                        <div class="card-body">
-                            <h5 class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $event->EventName }}</h5>
-                            <p class="card-text">{{ $event->EventDescription }}</p>
-                            <p class="card-text">Created By: {{ $event->user ? $event->user->FName . ' ' . $event->user->LName : 'Unknown' }}</p>
-                            <p class="modal-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
-                            <p class="modal-text">Time:
-                                {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - 
-                                {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
-                            </p>
-                            <p class="card-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Location: {{ $event->Location }}</p>
-                            <a href="{{ $event->Link }}" class="btn btn-primary" target="_blank">Link to Join</a>
-                            <!-- Modal Button -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal{{ $event->EventID }}">View Details</button>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+                    <!-- Wrap the entire card with anchor to make it clickable -->
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#eventModal{{ $event->EventID }}"
+                        class="text-decoration-none">
+                        <div class="card custom-shadow rounded-4">
+                            <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top"
+                                alt="Event Image">
 
-
-            <!-- Modal for View Details -->
-            @foreach($events as $event)
-            <div class="modal fade" id="eventModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="eventModalLabel{{ $event->EventID }}" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">{{ $event->EventName }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6 text-center mb-2">
-                                    <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image" style="height: 400px; object-fit: relative;">
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <p class="modal-text">Description: <br> {{ $event->EventDescription }}</p>
-                                    <p class="modal-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
-                                    <p class="modal-text">Time:
-                                        {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - 
-                                        {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <p class="card-text">Location:
-                                        <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}" class="btn btn-outline-primary" target="_blank">
-                                            <i class="fas fa-map-marker-alt"></i> {{ $event->Location }}
-                                        </a></p><br>
-                                    </div>                                         
-                                    @if($event->Link)
-                                    <div class="col-md-12">
-                                        @php
-                                            $statusColor = '';
-                                            switch($event->Status) {
-                                                case 'Approved':
-                                                    $statusColor = 'btn-success';
-                                                    break;
-                                                case 'Pending':
-                                                    $statusColor = 'btn-warning';
-                                                    break;
-                                                case 'OnGoing':
-                                                    $statusColor = 'btn-info';
-                                                    break;
-                                                case 'Rejected':
-                                                    $statusColor = 'btn-danger';
-                                                    break;
-                                                case 'Ended':
-                                                    $statusColor = 'btn-secondary';
-                                                    break;
-                                            }
-                                        @endphp
-
-                                        <!-- Event Status -->
-                                        <button type="button" class="btn {{ $statusColor }} mr-2 text-left" disabled>{{ $event->Status }}</button>
-
-                                        <!-- Link of Form or Meeting -->
-                                        <a href="{{ $event->Link }}" class="btn btn-primary" target="_blank">Link to Join</a>
+                            <div class="card-body">
+                                <!-- Date and Time Section -->
+                                <div class="d-flex justify-content-left align-items-center mb-2">
+                                    <div class="date-time me-3">
+                                        <span
+                                            class="date-day">{{ \Carbon\Carbon::parse($event->Date)->format('d') }}</span>
+                                        <span
+                                            class="date-month">{{ \Carbon\Carbon::parse($event->Date)->format('M Y') }}</span>
                                     </div>
-                                    @endif
+
+                                    <div class="d-block">
+                                        <h5 class="card-title fw-bold">{{ $event->EventName }}</h5>
+                                        <p class="card-tex text-muted truncate-description-card pt-2">
+                                            {{ $event->EventDescription }}</p>
+                                        {{-- <p class="card-text mb-0">Created By:
+                                            {{ $event->user ? $event->user->fname . ' ' . $event->user->lname : 'Unknown' }}
+                                        </p> --}}
+                                    </div>
+
+                                </div>
+
+                                @if (Auth::id() == $event->UserID)
+                                    <span class="badge">Created by You</span>
+                                @endif
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+
+                <!-- Modal -->
+                <div class="modal fade dynamic-modal" id="eventModal{{ $event->EventID }}" tabindex="-1"
+                    aria-labelledby="eventModalLabel{{ $event->EventID }}" aria-hidden="true" data-bs-backdrop="static"
+                    data-bs-keyboard="false">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <!-- Full Image on Top with Overlay for Edit/Delete Menu -->
+                            <div class="modal-body p-0 position-relative">
+                                <img src="{{ asset('storage/' . $event->EventImage) }}" class="img-fluid w-100"
+                                    alt="Event Image" style="object-fit: cover; height: 250px;">
+                            </div>
+                            <!-- Event Details Below -->
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- Event Date and Time and Link Button Container -->
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <!-- Event Date and Time -->
+                                            <p class="event-date-time text-muted mb-0">
+                                                {{ \Carbon\Carbon::parse($event->Date)->format('l F j, Y') }}
+                                                |
+                                                {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }}
+                                                -
+                                                {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
+                                            </p>
+
+                                            <!-- Link Button -->
+                                            @if ($event->Link)
+                                                <a href="{{ $event->Link }}" class="btn btn-primary-link" target="_blank">
+                                                    <i class="fas fa-link me-2"></i> Link to Join
+                                                </a>
+                                            @endif
+                                        </div>
+
+                                        <!-- Event Name -->
+                                        <h5 class="modal-title fw-bold mt-3">
+                                            {{ $event->EventName }}
+                                        </h5>
+
+                                        <!-- Event Description -->
+                                        <p class="modal-text mb-3 text-muted">
+                                            {{ $event->EventDescription }}
+                                        </p>
+
+                                        <!-- Location with Icon -->
+                                        <p class="modal-text mb-3">
+                                            <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}"
+                                                class="btn btn-primary" target="_blank">
+                                                <i class="fas fa-map-marker-alt me-2"></i>
+                                                {{ $event->Location }}
+                                            </a>
+                                        </p>
+                                    </div>
+
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="modal-footer">
-                        @if(Auth::id() == $event->UserID)
-                            <!-- Edit button -->
-                            <button type="button" class="btn btn-primary edit-event" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editEventModal{{ $event->EventID }}">Edit</button>
-                            <!-- Delete button -->
-                            <button type="button" class="btn btn-danger delete-event" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $event->EventID }}">Delete</button>
-                            @endif
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <!-- Modal Footer (Optional, can be removed if not needed) -->
+                            <div class="modal-footer">
+                                <!-- Close button aligned to the right -->
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
-        </div>
-        </div>
-
-    {{-- Ended Events --}}
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show" id="pills-ended" role="tabpanel" aria-labelledby="pills-ended-tab"
-            tabindex="0">
-
-            <h1 class="text-center mb-4">Ended Events</h1>
-
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
-        @foreach($endedEvents as $event)
-            <div class="col mb-4">
-                <div class="card">
-                    <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $event->EventName }}</h5>
-                        <p class="card-text">{{ $event->EventDescription }}</p>
-                        <p class="card-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
-                        <p class="card-text">Time: {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}</p>
-                        <p class="card-text">Location: {{ $event->Location }}</p>
-                        <!-- Modal Button -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal{{ $event->EventID }}">View Details</button>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-       
-
-    <!-- Modal for View Details -->
-    @foreach($endedEvents as $event)
-    <div class="modal fade" id="eventModal{{ $event->EventID }}" tabindex="-1" aria-labelledby="eventModalLabel{{ $event->EventID }}" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ $event->EventName }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 text-center mb-2">
-                            <img src="{{ asset('storage/' . $event->EventImage) }}" class="card-img-top" alt="Event Image" style="height: 400px; object-fit: relative;">
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <p class="modal-text">Description: <br> {{ $event->EventDescription }}</p>
-                            <p class="modal-text">Date: {{ \Carbon\Carbon::parse($event->Date)->format('F j, Y') }}</p>
-                            <p class="modal-text">Time:
-                                {{ \Carbon\Carbon::parse($event->StartTime)->format('g:i A') }} - 
-                                {{ \Carbon\Carbon::parse($event->EndTime)->format('g:i A') }}
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="card-text">Location:
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->Location) }}" class="btn btn-outline-primary" target="_blank">
-                                    <i class="fas fa-map-marker-alt"></i> {{ $event->Location }}
-                                </a></p><br>
-                            </div>     
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                </div>
-                </div>
-            </div>
-        </div>
     </div>
-    @endforeach
 
-    </div>
-</div>
-</div>
-</div>
-
-    @yield('content')
-
-
-<footer>
     @include('header_and_footer.footer')
-</footer>
 
-    
+    <!-- Bootstrap JS (ensure this is at the bottom for proper functionality) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
 
-<style>
-      *{
-        font-family: 'Helvetica', sans-serif; 
-    }
 
-    .text-center {
-        /* margin-top: 1rem; */
-        color: #145DA0;
-        /* font-weight: bold; */
-        /* margin-bottom: 50px; */
-    }
-
-    .custom-shadow {
-        box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
-    }
-
-    .card-img-top {
-        height: 300px;
-        object-fit: cover;
-    }
-
-    .carousel-image {
-        height: 470px;
-        width: auto;
-        object-fit: cover;
-    }
-
-    .card-title{
-        color: black;
-        font-weight: 600;
-    }
-
-    .card {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    .card-body {
-        flex: 1 1 auto;
-    }
-
-    .card-img-top {
-        height: 180px; /* Adjust based on your image size */
-        object-fit: cover;
-    }
-
-    .card-title, .card-text {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .row-cols-12 {
-        display: flex;
-        justify-content: space-between; 
-        align-items: center;
-    }
-    .text-link {
-        color: #4a4a4a; 
-        font-size: 1rem;
-        transition: color 0.3s ease;
-        text-decoration: none;
-        padding-right: 1rem
-    }
-
-
-
-        
-    .user-profile-tab .nav-item .nav-link.active {
-        color: #FFC107;
-        border-bottom: 2px solid #FFC107;
-    }
-
-    .user-profile-tab .nav-item .nav-link {
-        color: #343434;
-    }
-
-    .overflow-hidden {
-        overflow: hidden !important;
-    }
-</style>

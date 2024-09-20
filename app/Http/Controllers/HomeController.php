@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\VerifyToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session; // Import Session for managing session
+
 
 class HomeController extends Controller
 {
@@ -28,7 +31,7 @@ class HomeController extends Controller
 
         if (auth()->check()) {
             $user = auth()->user();
-    
+
             // Check if user exists and is activated
             if ($user && $user->is_activated == 1) {
                 return view('home');
@@ -40,7 +43,15 @@ class HomeController extends Controller
             // Redirect to login page or any other appropriate action
             return redirect('/login');
         }
-        
+
+        // Check if the user is authenticated
+        if (!$user) {
+            // Log out the user if the session has expired
+            Auth::logout();
+            Session::flush(); // Clear the session data
+            return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
+        }
+
     }
 
     public function verifyaccount(){
@@ -71,7 +82,7 @@ class HomeController extends Controller
                     return redirect('/verify-account')->with('incorrect', 'Your OTP is invalid, please check your email.');
                 }
 
-            
+
 
 
         // $otp = $request->token; // Assuming the OTP is submitted via form input named 'otp'
@@ -80,7 +91,7 @@ class HomeController extends Controller
 
         // if ($token) {
         //     $user = User::where('email', $token->email)->first();
-            
+
         //     if ($user) {
         //         $user->is_activated = 1;
         //         //$user->remember_token = Str::random(100);
@@ -101,6 +112,6 @@ class HomeController extends Controller
 
         // return redirect('/verify-account')->with('incorrect', 'Your OTP is invalid, please check your email.');
 
-    
+
     }
 }

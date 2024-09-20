@@ -15,12 +15,14 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {{-- CSS file under Public Folder --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/artisan.css') }}" />
 
     {{-- To make the toggle in the navbar work --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 
 </head>
 
@@ -41,42 +43,54 @@
 
         <div class="container">
 
-            <h1 style="margin-bottom: -3rem; color: #FEFEFE; font-weight: 500;">Artisans are crafting wonders for you!
+            <h1 style="color: #FEFEFE; font-weight: 500;">Artisans are crafting wonders for
+                you!
             </h1>
-            <div class="search-container" style=" display: flex; justify-content: center;">
 
-                {{-- sa action gumana --}}
-                <form class="d-flex mb-10" style="width: 60%;" method="post" action="/artisan">
-                    @csrf
-                    <input class="form-control me-1 search-input" type="search" name="search"
-                        placeholder="Search for artisans..." aria-label="Search"
-                        value="{{ isset($search) ? $search : '' }}">
+            <div class="search-container container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8">
+                        {{-- sa action gumana --}}
+                        <form class="d-flex mb-3" method="post" action="/artisan">
+                            @csrf
+                            <input class="form-control me-1 search-input" type="search" name="search"
+                                placeholder="Search for artisans..." aria-label="Search"
+                                value="{{ isset($search) ? $search : '' }}">
 
-                    <!-- Categories -->
-                    <div class="dropdown">
-                        <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categories
-                        </a>
 
-                        <ul class="dropdown-menu">
-                            @foreach ($tags as $tag)
-                                <li><a class="dropdown-item" href="#">{{ $tag->name }}</a></li>
-                            @endforeach
-                        </ul>
+                            <!-- Categories -->
+                            <div class="dropdown ms-1 z-1">
+                                <a class="btn btn-warning dropdown-toggle" href="#"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Categories
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    @foreach ($tags as $tag)
+                                        <li>
+                                            <a class="dropdown-item {{ $selectedTags == $tag->name ? 'active' : '' }}"
+                                                href="{{ route('artisan', ['tag' => $selectedTags == $tag->name ? null : $tag->name]) }}">
+                                                {{ $tag->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+
+                        </form>
                     </div>
-
-
-                </form>
+                </div>
             </div>
+
         </div>
-    </div>
 
 
-    <div class="container p-4 custom-shadow mt-5 mb-5  animate__animated animate__slideInUp ">
+
+    <div class="container artisan-con p-4 custom-shadow mb-5  animate__animated animate__slideInUp ">
 
         {{-- Artisan Card --}}
-        <div class="row justify-content-left" style="margin-top: 2rem;">
+        <div class="row justify-content-left ">
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -87,173 +101,105 @@
                 </div>
             @endif
 
-            <div class="row">
-                @foreach ($profiles as $seller)
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <a href="{{ route('seller.profile', ['user' => $seller->id]) }}" class="card-link"
-                            style="text-decoration: none;">
-                            <div class="card">
-                                <!-- Cover photo -->
-                                <img src="{{ asset('images/finalCover.png') }}" class="card-img-top"
-                                    style="height:200px; object-fit: cover;" alt="Cover Photo">
+            <!-- Check if profiles are empty and display a message if true -->
+            @if (isset($search) && $profiles->isEmpty())
+                <div class="text-center w-100 pb-2">
+                    <h2> No artisans found matching your search criteria.</h2>
+                </div>
+            @else
+                <div class="row">
+                    @foreach ($profiles as $seller)
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <a href="{{ route('seller.profile', ['slug' => $seller->slug]) }}" class="card-link"
+                                style="text-decoration: none;">
+                                <div class="card">
+                                    <!-- Cover photo -->
+                                    <img src="{{ asset($seller->cover_photo ? 'storage/cover_photos/' . $seller->id . '/' . basename($seller->cover_photo) : 'images/finalcover.png') }}"
+                                        class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
 
-                                <!-- Profile pic -->
-                                <div class="container d-flex justify-content-center align-items-center">
-                                    <div class="img__container">
-                                        <img src="{{ asset('images/defuser.png') }}" alt="..."
-                                            class="border-white thick-border"/>
-                                        <span></span>
+                                    <!-- Profile pic -->
+                                    <div class="container d-flex justify-content-center align-items-center">
+                                        <div class="img__container">
+                                            <img src="{{ asset($seller->profile_photo ? 'storage/profile_photos/' . $seller->id . '/' . basename($seller->profile_photo) : 'images/defuser.png') }}"
+                                                alt="Profile Picture" class="border-white thick-border" />
+                                            <span class="badge pro-badge fs-10 text-center"><i class="fas fa-star"></i>
+                                                PRO</span>
+                                        </div>
                                     </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center fw-bold"
+                                            style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            {{ $seller->fname }} {{ $seller->lname }}
+                                        </h5>
+
+                                        <!-- Display tags associated with the seller -->
+                                        <p class="card-text text-muted text-center"
+                                            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            @if (isset($sellersWithTags[$seller->id]))
+                                                @foreach ($sellersWithTags[$seller->id] as $tag)
+                                                    <a href="#" class="btn bg-flairs btn-lg disabled"
+                                                        style="font-size: small;" role="button"
+                                                        aria-disabled="true">{{ $tag }}</a>
+                                                @endforeach
+                                            @endif
+                                        </p>
+                                    </div>
+
                                 </div>
+                            </a>
 
-                                <div class="card-body">
-                                    <h5 class="card-title text-center"
-                                        style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                        {{ $seller->fname }} {{ $seller->lname }}
-                                    </h5>
-                                    <p class="card-text text-muted text-center"
-                                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">
-                                        <a href="#" class="btn btn-danger btn-lg p-1 disabled"
-                                            style="font-size: small;" role="button" aria-disabled="true">Fiber Arts</a>
-                                        <a href="#" class="btn btn-primary btn-lg p-1 disabled"
-                                            style="font-size: small;" role="button" aria-disabled="true">Home Decor</a>
-                                        <a href="#" class="btn btn-success btn-lg p-1 disabled"
-                                            style="font-size: small;" role="button" aria-disabled="true">Yarn
-                                            Crafts</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                        <!-- Input field for user_id -->
-                        <input type="hidden" name="user_id"
-                            value="{{ auth()->check() ? auth()->user()->UserID : '' }}">
-                    </div>
-                @endforeach
-            </div>
-
-
-
-            {{-- <div class="col-lg-3 col-md-6 mb-4">
-                <a href="{{ route('products.index')}}" class="card-link" style="text-decoration: none;">
-                    @php
-                        $sellers = \App\Models\User::where('UserTypeID', '=', '2')->get(); // Assuming '2' is the user type for sellers
-                    @endphp
-
-                    @foreach ($sellers as $seller)
-                        <div class="card">
-                            <!-- Cover photo -->
-                            <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                            <!-- Profile pic -->
-                            <div class="container d-flex justify-content-center align-items-center">
-                                <div class="img__container">
-                                    <img src="{{ asset('images/nica.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                                    <span></span>
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">{{ $seller->FName }} {{ $seller->LName }}</h5>
-                                <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                            </div>
+                            <!-- Input field for user_id -->
+                            <input type="hidden" name="user_id"
+                                value="{{ auth()->check() ? auth()->user()->UserID : '' }}">
                         </div>
                     @endforeach
-
-                </a>
-        </div> --}}
-
-            {{-- <div class="col-lg-3 col-md-6 mb-4">
-                <a href="{{ route('products.index')}}" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/nica.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
+                </div>
+            @endif
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-                <a href="#" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
 
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/kylie.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
+        {{-- UI: Pagination --}}
+        <nav aria-label="Page navigation" class="mt-3">
+            <ul class="pagination justify-content-end">
+                <!-- Previous Page Link -->
+                @if ($profiles->onFirstPage())
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $profiles->previousPageUrl() }}">Previous</a>
+                    </li>
+                @endif
 
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
-        </div>
+                <!-- Page Number Links -->
+                @foreach ($profiles->links()->elements[0] as $page => $url)
+                    @if ($page == $profiles->currentPage())
+                        <li class="page-item active">
+                            <span class="page-link">{{ $page }}</span>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endif
+                @endforeach
 
-        <div class="col-lg-3 col-md-6 mb-4">
-                <a href="#" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/3.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/kylie.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-                <a href="#" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <!-- Cover photo -->
-                        <img src="images/2.png" class="card-img-top" style="height:200px; object-fit: cover;" alt="Cover Photo">
-
-                        <!-- Profile pic -->
-                        <div class="container d-flex justify-content-center align-items-center">
-                        <div class="img__container">
-                            <img src="{{ asset('images/kylie.jpg') }}" alt="..." class="border-white thick-border" style="width:120px; height: 120px; margin-top: -50px; border-radius: 100%; object-fit: cover; margin-left:15px" />
-                            <span></span>
-                        </div>
-                        </div>
-
-                        <div class="card-body">
-                        <h5 class="card-title text-center" style="color: #343434; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Artisan Name</h5>
-                        <p class="card-text text-muted text-center" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none;">Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                </a>
-        </div> --}}
-
-
-
-        </div>
+                <!-- Next Page Link -->
+                @if ($profiles->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $profiles->nextPageUrl() }}">Next</a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                @endif
+            </ul>
+        </nav>
     </div>
+
 
 
 
@@ -267,8 +213,6 @@
     <!-- Categories JS Toggle -->
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-
 
 </body>
 

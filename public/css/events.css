@@ -1,0 +1,226 @@
+* {
+    font-family: 'Helvetica', sans-serif;
+}
+
+
+.event-section {
+    width: 100%;
+    max-width: 80rem;
+}
+
+.btn-primary-link {
+    background: linear-gradient(to right, #FFC107, #ff923e) !important;
+    border: 0 !important;
+    color: white;
+    /* Ensure text is readable on gradient */
+}
+
+.btn-primary-link:hover {
+    background: linear-gradient(to right, #ff923e, #FFC107) !important;
+    border: 0 !important;
+    color: white;
+    /* Ensure text is readable on gradient */
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #145DA0, #1a76cc) !important;
+    border:none!important;
+    color: white;
+    /* Ensure text is readable on gradient */
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1a76cc, #145DA0) !important;
+    border: none !important;
+    color: white;
+    /* Ensure text is readable on gradient */
+}
+
+.text-center {
+    /* margin-top: 1rem; */
+    color: #145DA0;
+    /* font-weight: bold; */
+    /* margin-bottom: 50px; */
+}
+
+.custom-shadow {
+    box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.custom-container {
+    border-radius: 0 !important;
+}
+
+.carousel-image {
+    height: 400px;
+    width: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.carousel-container {
+    position: relative;
+    z-index: 1;
+    /* Ensures the carousel is below the overlay */
+}
+
+.overlay-container {
+    position: relative;
+    z-index: 2;
+    /* Ensures the overlay is above the carousel */
+    background-color: #ffffff;
+    /* Background color */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Shadow effect */
+    margin-top: -110px;
+    /* Adjust this value to control the overlap */
+    padding: 20px;
+    max-width: 76rem;
+    /* Set the maximum width of the overlay */
+    width: 100%;
+    /* Make the overlay responsive */
+    margin-left: auto;
+    /* Center the overlay horizontally */
+    margin-right: auto;
+    /* Center the overlay horizontally */
+    text-align: center;
+    /* Optional: center text inside the overlay */
+    margin-bottom: 4rem;
+}
+
+.card-title,
+.card-text {
+    margin-bottom: 0 !important;
+}
+
+.card {
+    position: relative;
+    border: none !important;
+    height: 100%;
+    /* Ensure card takes full height of its container */
+    /* Ensure proper positioning for badges */
+}
+
+.card-img-top {
+    height: 250px;
+    /* Adjust this value as needed */
+    object-fit: cover;
+    /* Ensure the image covers the container */
+}
+
+.card-body {
+    padding: 1.25rem;
+    /* Adjust padding as needed */
+    flex: 1;
+    /* Allow the body to expand and fill available space */
+}
+
+.date-time {
+    text-align: center;
+    /* background-color: #f8f9fa; */
+    /* Light background for the date section */
+    border-radius: 5px;
+    padding: 10px;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    /* Subtle shadow */
+}
+
+.date-day {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #145DA0;
+}
+
+.date-month {
+    display: block;
+    font-size: 0.875rem;
+    color: #6c757d;
+    /* Subtle color for month and year */
+}
+
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 0.75rem;
+    background: linear-gradient(135deg, rgba(255, 202, 134, 0.8), rgba(255, 145, 0, 0.8));
+    /* Semi-transparent blue background */
+    color: white;
+    /* Text color for contrast */
+    padding: 6px;
+    /* Padding for better appearance */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    font-weight: 600;
+    /* Slightly bolder text */
+}
+
+
+
+.modal-img {
+    width: 100%;
+    height: 300px;
+    /* Adjust this value as needed */
+    object-fit: cover;
+    /* Ensures the image covers the area without distortion */
+}
+
+.row-cols-12 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-link {
+    color: #4a4a4a;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    text-decoration: none;
+    padding-right: 1rem
+}
+
+.text-link:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.truncate-description-card {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: auto;
+    /* Push description down to ensure card height consistency */
+}
+
+
+
+/* Hide text and show only icon on small screens */
+@media (max-width: 576px) {
+    .text-only {
+        display: none;
+    }
+
+    .icon-only {
+        display: inline-block; /* Ensure the icon is visible */
+    }
+}
+
+/* Show text and hide icon on larger screens */
+@media (min-width: 577px) {
+    .text-only {
+        display: inline;
+    }
+
+    .icon-only {
+        display: inline; /* Ensure the icon is visible */
+    }
+}
+

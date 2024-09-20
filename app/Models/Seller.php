@@ -14,4 +14,10 @@ class Seller extends Model
     protected $fillable = ['Course', 'Year', 'Birthdate', 'StudentNo', 'UserID_Fk', 'Consent']; 
 
     protected $foreignKey = 'UserID_Fk';
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'seller_tag', 'SellerID', 'TagsID');
+    }
+
 }

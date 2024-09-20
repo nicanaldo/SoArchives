@@ -1,37 +1,65 @@
-/* Seller Forms */
-
 * {
-    font-family: 'Helvetica';
-    font-size: 14px;
+    font-family: "Helvetica", sans-serif;
+    font-size: 14px !important;
 }
 
 body,
 html {
     height: 100%;
     margin: 0;
+    background-color: #fbfbfe !important;
+}
+
+::placeholder,
+#selectYearLevel,
+#selectCourse,
+#CourseID,
+#dateOfBirth {
+    color: #c2c2c2 !important;
+    font-weight: 200 !important;
 }
 
 /* Background Color */
 .bg-bg {
-    background: linear-gradient(to right, #145DA0, #40a3ff);
+    /* background-color: #fbfbfe; */
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
 .col-12 .col-xl-9 {
-    background-color: #145DA0;
+    background-color: #145da0;
 }
 
+/* Button Styles */
 .button-color {
-    background-color: #145DA0;
+    background-color: #145da0 !important;
+    color: #fbfbfe;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.button-color:hover {
+    background-color: #145da0;
+    box-shadow: 0 8px 20px rgba(20, 93, 160, 0.2); /* Shadow with the same button color */
+    transform: translateY(-2px); /* Move button slightly upward */
+}
+
+.button-color:active {
+    transform: translateY(0); /* Reset button position when clicked */
+    box-shadow: none; /* Remove shadow on click */
 }
 
 .text-color,
-a, h2 {
-    color: #145DA0;
+h2,
+.login-a, .reg-a,
+.text-primary {
+    color: #145da0 !important;
+}
+
+h3 {
+    font-size: 22px !important;
 }
 
 .btn:hover {
@@ -41,51 +69,34 @@ a, h2 {
 .form-control:focus,
 .form-control:active {
     outline: none;
-    border-color: #145DA0;
+    border-color: #145da0;
     box-shadow: none !important;
 }
 
-
 .form-check-input:checked {
-    background-color: #145DA0;
-    border-color: #145DA0;
+    background-color: #145da0;
+    border-color: #145da0;
 }
 
-label, label a{
-    color: #212427;
-    font-size: small;
+label,
+.label a {
+    color: #797979 !important;
+    font-size: 14px !important;
 }
-
-label a{
-    color: #145DA0;
-}
-
 
 /* login card */
-.card{
+.card {
     border-radius: 1rem;
 }
 
-
-/* End of Seller Forms */
-
-/* Seller Terms and Conditions */
-
-.bg-terms-nav{
-    background-color: #145DA0;
-}
-
-/* End of Seller Terms and Conditions */
-
-
-/* Seller Forgot Password */
+/* Forgot Password */
 
 .forgot-password-section {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #145DA0;
+    background-color: #145da0;
 }
 
 .forgot-password-card {
@@ -97,8 +108,7 @@ label a{
     padding: 2rem;
 }
 
-/* End of Seller Forgot Password */
-
+/* End of Forgot Password */
 
 /* Reset Password */
 
@@ -107,7 +117,7 @@ label a{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #145DA0; /* Change this to your desired background color */
+    background-color: #145da0; /* Change this to your desired background color */
 }
 
 .reset-success-card {
@@ -126,7 +136,7 @@ label a{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #145DA0; /* Change this to your desired background color */
+    background-color: #145da0; /* Change this to your desired background color */
 }
 
 .reset-password-card {
@@ -150,3 +160,187 @@ label a{
 
 /* End */
 
+/* Hide the spinner for number input */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+/* password strength meter*/
+.password-meter {
+    display: flex;
+    height: 5px;
+    margin-top: 10px;
+}
+
+.meter-section {
+    flex: 1;
+    background-color: #ddd;
+}
+
+.weak {
+    background-color: #ff4d4d;
+}
+
+.medium {
+    background-color: #ffd633;
+}
+
+.strong {
+    background-color: #00b300;
+}
+
+.very-strong {
+    background-color: #009900;
+}
+
+.password-meter {
+    display: none;
+    /* Hide by default */
+}
+
+#passwordHelp {
+    display: none;
+    /* Hide by default */
+}
+
+/* Confirm Password */
+
+#passwordMatchMessage {
+    color: green;
+    /* Green color for matching passwords */
+}
+
+#passwordNoMatchMessage {
+    color: red;
+    /* Red color for non-matching passwords */
+}
+
+.form-control.is-valid,
+.was-validated .form-control:valid {
+    border: 1px solid #ced4da;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: none;
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Button for eye */
+.btn-outline-secondary {
+    border-width: 1px 1px 1px 0;
+    border-color: #ced4da;
+    box-shadow: none;
+    background-color: none !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: none !important;
+}
+
+/* Add more padding-right to the input field to make space for the eye icon */
+#validationPassword,
+#validationEmail,
+#confirm-password-input,
+#password-input {
+    padding-right: 3rem; /* Increased padding to avoid overlap */
+    z-index: 1 !important;
+    border-radius: 5px !important;
+}
+
+/* Eye button positioning */
+.btn-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+    z-index: 2 !important; /* Ensure it's on top of the input */
+}
+
+/* Icon hover effect */
+.btn-eye i {
+    font-size: 1rem;
+    color: #6c757d; /* Default icon color */
+}
+
+.btn-eye i:hover {
+    color: #28282b; /* Change icon color on hover */
+}
+
+/* Circle Styles */
+.bg-bg {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Base Circle Styling */
+.bg-bg::before,
+.bg-bg::after,
+.bg-bg .circle-1,
+.bg-bg .circle-2,
+.bg-bg .circle-3 {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+/* First Set of Circles (Larger, Darker) */
+.bg-bg::before {
+    width: 250px;
+    height: 250px;
+    top: 5%;
+    left: -125px;
+    background-color: #d3e1f0;
+}
+
+.bg-bg::after {
+    width: 350px;
+    height: 350px;
+    bottom: 10%;
+    right: -175px;
+    background-color: #d3e1f0;
+}
+
+/* Second Set of Circles (Larger, Lighter) */
+.bg-bg .circle-1 {
+    width: 1000px;
+    height: 1000px;
+    top: 20%;
+    left: -100px;
+    background-color: #e9f1fb;
+}
+
+.bg-bg .circle-2 {
+    width: 1000px;
+    height: 1000px;
+    bottom: 5%;
+    right: -250px;
+    background-color: #e9f1fb;
+}
+
+/* A third subtle circle for extra effect */
+.bg-bg .circle-3 {
+    width: 600px;
+    height: 600px;
+    top: 50%;
+    left: -300px;
+    background-color: #f4f8fe;
+    z-index: -1;
+}
+
+/* Ensure content stays above the circles */
+.bg-bg .container {
+    position: relative;
+    z-index: 1;
+}

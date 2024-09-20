@@ -7,12 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-9/assets/css/login-9.css">
     <title>Register as Seller | SOARchives</title>
-    <link rel="shortcut icon" href="images/tab-logo.ico" type="image/x-icon">
+
+    {{-- Tab Logo --}}
+    <link rel="shortcut icon" href="{{ asset('images/tab-logo.ico') }}" type="image/x-icon">
 
     <!-- eye -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -26,127 +29,49 @@
     <!--Style CSS -->
     <link rel="stylesheet" href="{{ asset('css/logReg.css') }}">
 
-    <style>
-        /* Hide the spinner for number input */
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type=number] {
-            -moz-appearance: textfield;
-            /* Firefox */
-        }
-
-        /* password strength meter*/
-
-        .password-meter {
-            display: flex;
-            height: 5px;
-            margin-top: 10px;
-        }
-
-        .meter-section {
-            flex: 1;
-            background-color: #ddd;
-        }
-
-        .weak {
-            background-color: #ff4d4d;
-        }
-
-        .medium {
-            background-color: #ffd633;
-        }
-
-        .strong {
-            background-color: #00b300;
-        }
-
-        .very-strong {
-            background-color: #009900;
-        }
-
-        .password-meter {
-            display: none;
-            /* Hide by default */
-        }
-
-        #passwordHelp {
-            display: none;
-            /* Hide by default */
-        }
-
-        /* Confirm Password */
-
-        #passwordMatchMessage {
-            color: green;
-            /* Green color for matching passwords */
-        }
-
-        #passwordNoMatchMessage {
-            color: red;
-            /* Red color for non-matching passwords */
-        }
-
-        .form-control.is-valid,
-        .was-validated .form-control:valid {
-            border: 1px solid #ced4da;
-            padding-right: calc(1.5em + .75rem);
-            background-image: none;
-            background-repeat: no-repeat;
-            background-position: right calc(.375em + .1875rem) center;
-            background-size: calc(.75em + .375rem) calc(.75em + .375rem);
-        }
-
-
-        /* Button for eye */
-        .btn-outline-secondary {
-            border-width: 1px 1px 1px 0;
-            border-color: #ced4da;
-            box-shadow: none;
-            background-color: none;
-        }
-
-        .btn-eye:hover {
-            background-color: none;
-        }
-    </style>
 </head>
 
 <body>
+
+    <div class="container-fluid rounded-0 z-0">
+        @include('header_and_footer.header')
+    </div>
+
     <section class="bg-bg py-3 py-md-5 py-xl-8 ">
         <div class="container">
             <div class="row gy-4 align-items-center">
                 <div class="col-12 col-md-6 col-xl-6">
                     <div class="d-flex justify-content-center text-light">
                         <div class="col-12 col-xl-9 bg-transparent">
-                            <img class="img-fluid rounded" loading="lazy" src="{{asset('images/sellerLogo.png')}}" width="300" height="100" alt="BootstrapBrain Logo">
+                            <img class="img-fluid rounded" loading="lazy" src="{{ asset('images/finallogo.png') }}"
+                                width="300" height="100" alt="BootstrapBrain Logo">
                             <hr class="border-primary-subtle mb-4">
-                            <p class="lead mb-5">Soarchives is the premier platform dedicated to spotlighting the exceptional talent of artisans and craftsmen from Adamson University.</p>
+                            <p class="lead mb-5 text-dark">Soarchives is the premier platform dedicated to spotlighting the
+                                exceptional talent of artisans and craftsmen from Adamson University.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-xl-6">
-                    <div class="card border-0 rounded-4">
+                    <div class="card shadow border-0 rounded-4">
                         <div class="card-body p-5 p-md-4 p-xl-5">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <h3 class="fw-bold text-color">Register na, Klasmeyt!</h3>
-                                        <p class="text-muted mb-5">Create an account</p>
+                                        <h3 class="fw-bold text-color">Register as Seller</h3>
+                                        <p class="text-muted mb-5">Let's setup your account!</p>
                                     </div>
                                 </div>
                             </div>
-                            <form method="POST" action="{{ route('register.seller') }}" class="needs-validation" novalidate enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('register.seller') }}" class="needs-validation"
+                                novalidate enctype="multipart/form-data">
                                 @csrf
                                 <div class="row gy-3 overflow-hidden">
 
                                     <!-- First Name -->
                                     <div class="col-lg-6 col-sm-12">
                                         <label for="firstName" class="form-label">First Name</label>
-                                        <input type="text" name="FName" class="form-control p-2" id="firstName" placeholder="Juan" required>
+                                        <input type="text" name="FName" class="form-control p-2" id="firstName"
+                                            placeholder="Enter First Name" required>
                                         <div class="invalid-feedback">
                                             Please provide your first name.
                                         </div>
@@ -155,7 +80,8 @@
                                     <!-- Last Name -->
                                     <div class="col-lg-6 col-sm-12">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input type="text" name="LName" class="form-control p-2" id="lastName" placeholder="Dela Cruz" required>
+                                        <input type="text" name="LName" class="form-control p-2" id="lastName"
+                                            placeholder="Enter Last Name" required>
                                         <div class="invalid-feedback">
                                             Please provide your last name.
                                         </div>
@@ -164,7 +90,8 @@
                                     <!-- Email Address -->
                                     <div class="col-12">
                                         <label for="validationEmail" class="form-label">Email address</label>
-                                        <input type="email" name="email" class="form-control p-2" id="validationEmail" placeholder="example@adamson.edu.ph" required>
+                                        <input type="email" name="email" class="form-control p-2"
+                                            id="validationEmail" placeholder="example@adamson.edu.ph" required>
                                         <div class="invalid-feedback">
                                             Please provide a valid adamson email address.
                                         </div>
@@ -172,12 +99,18 @@
 
                                     <!-- Create Password -->
                                     <div class="col-lg-6 col-sm-12">
-                                        <label for="password-input" class="form-label">Create Password</label>
+                                        <label for="validationPassword" class="form-label">Create Password</label>
                                         <div class="input-group">
-                                            <input type="password" name="password" style="border-width: 1px 0 1px 1px;" class="form-control" id="password-input" autocomplete="off" aria-autocomplete="list" aria-label="Password" aria-describedby="passwordHelp" placeholder="Create Password" required>
-                                            <button class="btn btn-outline-secondary btn-eye" type="button" id="togglePasswordCreate">
+                                            <input type="password" name="password"
+                                                class="form-control" id="password-input" autocomplete="off"
+                                                aria-autocomplete="list" aria-label="Password"
+                                                aria-describedby="passwordHelp" placeholder="Create Password" required>
+                                            <button class="btn-eye" type="button" id="togglePasswordCreate">
                                                 <i class="fa fa-eye-slash"></i>
                                             </button>
+                                            <div class="invalid-feedback">
+                                                Please create a password.
+                                            </div>
                                         </div>
                                         <div class="password-meter" id="password-meter">
                                             <div class="meter-section rounded me-2"></div>
@@ -185,35 +118,42 @@
                                             <div class="meter-section rounded me-2"></div>
                                             <div class="meter-section rounded"></div>
                                         </div>
-                                        <div class="invalid-feedback">
-                                            Please create a password.
-                                        </div>
-                                        <div id="passwordHelp" class="form-text text-muted">Use 8 or more characters with a mix of letters, numbers & symbols.</div>
-                                        <div id="passwordEmptyFeedback" class="invalid-feedback" style="display: none;">Please enter a password.</div>
+                                        <div id="passwordHelp" class="form-text text-muted">Use 8 or more characters
+                                            with a mix of letters, numbers & symbols.</div>
+                                        <div id="passwordEmptyFeedback" class="invalid-feedback"
+                                            style="display: none;">Please enter a password.</div>
                                     </div>
 
                                     <!-- Confirm Password -->
                                     <div class="col-lg-6 col-sm-12">
-                                        <label for="confirm-password-input" class="form-label">Confirm Password</label>
+                                        <label for="confirm-password-input" class="form-label">Confirm
+                                            Password</label>
                                         <div class="input-group">
-                                            <input type="password" name="password_confirmation" style="border-width: 1px 0 1px 1px ;" class="form-control" id="confirm-password-input" autocomplete="off" aria-autocomplete="list" aria-label="Confirm Password" required>
-                                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirm">
-                                                <i class="fa fa-eye-slash"></i>
-                                            </button>
+                                            <input type="password" name="password_confirmation" class="form-control"
+                                                id="confirm-password-input" autocomplete="off"
+                                                aria-autocomplete="list" aria-label="Confirm Password"
+                                                placeholder="Confirm Password" required>
+                                                <button class="btn-eye" type="button" id="togglePasswordConfirm">
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </button>
+                                            <div class="invalid-feedback">
+                                                Please confirm your password.
+                                            </div>
                                         </div>
-                                        <div class="invalid-feedback">
-                                            Please confirm your password.
-                                        </div>
-                                        <div id="passwordMatchMessage" class="form-text text-success" style="display: none;">Passwords match.</div>
-                                        <div id="passwordNoMatchMessage" class="form-text text-danger" style="display: none;">Passwords do not match.</div>
-                                        <div id="confirmPasswordEmptyFeedback" class="invalid-feedback" style="display: none;">Please confirm your password.</div>
+                                        <div id="passwordMatchMessage" class="form-text text-success"
+                                            style="display: none;">Passwords match.</div>
+                                        <div id="passwordNoMatchMessage" class="form-text text-danger"
+                                            style="display: none;">Passwords do not match.</div>
+                                        <div id="confirmPasswordEmptyFeedback" class="invalid-feedback"
+                                            style="display: none;">Please confirm your password.</div>
                                     </div>
 
 
                                     <!-- Student Number -->
                                     <div class="col-lg-6 col-sm-12">
                                         <label for="studentNumber" class="form-label">Student Number</label>
-                                        <input type="number" name="StudentNo" class="form-control p-2" id="studentNumber" placeholder="123456789" required>
+                                        <input type="number" name="StudentNo" class="form-control p-2"
+                                            id="studentNumber" placeholder="123456789" required>
                                         <div class="invalid-feedback">
                                             Please provide your student number.
                                         </div>
@@ -222,7 +162,8 @@
                                     <!-- Date of Birth -->
                                     <div class="col-lg-6 col-sm-12">
                                         <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                        <input type="date" name="Birthdate" class="form-control p-2" id="dateOfBirth" placeholder="Date of Birth" max="" required>
+                                        <input type="date" name="Birthdate" class="form-control p-2"
+                                            id="dateOfBirth" placeholder="Date of Birth" max="" required>
                                         <div class="invalid-feedback">
                                             Please select your date of birth.
                                         </div>
@@ -231,8 +172,9 @@
                                     <!-- Select Year Level -->
                                     <div class="col-12">
                                         <label for="selectYearLevel" class="form-label">Select Year Level</label>
-                                        <select class="form-select form-control-lg p-2" name="Year" id="selectYearLevel" aria-label="Select Year Level" required>
-                                            <option class="" value="" selected>Select Year Level</option>
+                                        <select class="form-select form-control-lg p-2" name="Year"
+                                            id="selectYearLevel" aria-label="Select Year Level" required>
+                                            <option selected>Select Year Level</option>
                                             <option value="4th">4th</option>
                                             <option value="3rd">3rd</option>
                                             <option value="2nd">2nd</option>
@@ -249,23 +191,27 @@
 
                                     <!-- Select Course -->
                                     <div class="col-12">
-                                        <label for="selectCourse" class="form-label">Select Course</label>
-                                        <select name="CourseID" id="CourseID" class="course-select" required style="width: 180px;">
-                                            <option value="">Select Course</option>
-                                            @foreach($courses as $courseID => $courseName)
+                                        <label for="CourseID" class="form-label">Select Course</label>
+                                        <select name="CourseID" id="CourseID" class="form-select"required>
+                                            <option value="" disabled selected>Select Course</option>
+                                            @foreach ($courses as $courseID => $courseName)
                                                 <option value="{{ $courseID }}">{{ $courseName }}</option>
                                             @endforeach
-                                        </select>  
+                                        </select>
                                         <div class="invalid-feedback">
                                             Please select your course.
                                         </div>
                                     </div>
 
+
                                     <!-- Terms and Conditions -->
                                     <div class="col-12 d-flex justify-content-between align-items-center">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="termsCheckbox" name="termsCheckbox" required>
-                                            <label class="form-check-label text-muted" for="termsCheckbox">I agree to the <a href="{{ route('terms.conditions') }}">Terms and Conditions</a></label>
+                                            <input type="checkbox" class="form-check-input" id="termsCheckbox"
+                                                name="termsCheckbox" required>
+                                            <label class="form-check-label" for="termsCheckbox">I agree to
+                                                the <a href="{{ route('terms.conditions') }}" class="reg-a" target="_blank">Terms
+                                                    and Conditions</a></label>
                                             <div class="invalid-feedback">
                                                 You must agree to the terms and conditions.
                                             </div>
@@ -276,10 +222,14 @@
                                     <div class="col-12">
                                         <div class="d-grid">
                                             {{-- <input type="submit" value="{{ __('Register') }}"> --}}
-                                            <button class="btn button-color btn-lg text-light mt-3" type="submit" name="btnSubmit" value="{{ __('Register') }}">Sign Up</button>
+                                            <button class="btn button-color btn-lg text-light mt-3" type="submit"
+                                                name="btnSubmit" value="{{ __('Register') }}">Sign Up</button>
                                         </div>
-                                        <p class="mt-3 text-muted text-center">Already have an account? <a href="{{ route('login') }}" class="text-decoration-none">Login</a></p>
-                                        <p class="mt-3 text-muted text-center">Signup as<a href="{{ route('register.buyer') }}" class="text-decoration-none"> Buyer</a></p>
+                                        <p class="mt-3 text-muted text-center">Already a member? <a
+                                                href="{{ route('login') }}" class="text-decoration-none reg-a">Login</a></p>
+                                        <p class="mt-3 text-muted text-center">Sign up as<a
+                                                href="{{ route('register.buyer') }}" class="text-decoration-none reg-a">
+                                                Buyer</a></p>
                                     </div>
 
                                 </div>
@@ -291,7 +241,9 @@
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
@@ -509,8 +461,7 @@
             });
         });
 
-        // Page Refresh 
-
+        // Page Refresh
         let isDirty = false;
 
         // Function to mark the form as dirty when input changes
@@ -533,10 +484,21 @@
             inputs.forEach(input => {
                 input.addEventListener('input', markDirty);
             });
+
+            // Add event listener to the form
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity()) {
+                        isDirty = false; // Reset the flag when form is valid and submitted
+                    } else {
+                        isDirty = true; // Keep the flag true if form has validation errors
+                    }
+                });
+            }
         };
 
-        // eye
-
+        // Eye icon for hiding password
         document.addEventListener('DOMContentLoaded', function() {
             const togglePasswordCreate = document.getElementById('togglePasswordCreate');
             const passwordInputCreate = document.getElementById('password-input');

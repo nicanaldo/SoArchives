@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Feedback;
 use App\Models\Product;
+use App\Models\ProductLike;
+use App\Models\Seller;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -13,11 +20,53 @@ class ProductController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // Fetch only the products posted by the authenticated seller
-        $products = Product::where('UserID', $user->id)->get();  //eto nadagdag
+         if (!$user) {
+             return redirect()->route('login')->with('message', 'Please log in first.')->with('type', 'error');
+         }
+
+         // Get the authenticated user
+         $user = Auth::user();
+
+         // Check if a user is authenticated
+         if ($user) {
+             // Fetch only the products posted by the authenticated seller
+             $products = Product::where('UserID', $user->id)->get();
+         } else {
+             // Handle the case where no user is authenticated
+             // For example, redirect to a login page or show an error message
+             return redirect()->route('login')->with('error', 'You must be logged in to view this page.');
+         }
+
+        $tags = Tag::all();
+
+        $seller = Seller::where('UserID_Fk', auth()->user()->id)->first();
+
+        // Option 1: If using a pivot table
+        $selectedTags = $seller->tags()->pluck('name')->toArray();
+
+        // Option 2: If using a comma-separated string in the Tags column
+        // $selectedTags = explode(',', $seller->Tags);
+
+        // Fetch feedbacks related to the seller
+        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
+
+        // Get the count of feedbacks
+        $feedbackCount = $feedbacks->count();
+
+         // Fetch paginated products posted by the authenticated seller
+         $activeProducts = Product::where('UserID', $user->id)
+         ->where('status', 'active')
+         ->paginate(12); // Adjust the number per page as needed
+
+        $archivedProducts = Product::where('UserID', $user->id)
+         ->where('status', 'archived')
+         ->paginate(12); // Adjust items per page as needed
+
+        //Events
+        $events = Event::where('UserID', $user->id)->get();
 
         // Pass the products data to the view
-        return view('profile.profile-seller', compact('products', 'user'));
+        return view('profile.profile-seller', compact('products', 'user', 'tags', 'selectedTags', 'feedbacks', 'feedbackCount', 'events', 'activeProducts', 'archivedProducts'));
     }
 
     public function create() {
@@ -42,10 +91,15 @@ class ProductController extends Controller
 
             // Initialize an empty array to store the paths of uploaded images
             $imagePaths = [];
-
+            
             // Store each uploaded image in a folder specific to the user
             foreach ($request->file('prodimg') as $file) {
-                $imagePath = $file->store("public/products/{$user->id}");
+                // Get the original file name
+                $originalName = $file->getClientOriginalName();
+
+                // Store the file with the original name in a specific folder
+                $imagePath = $file->storeAs("public/products/{$user->id}", $originalName);
+
                 $imagePaths[] = $imagePath;
             }
 
@@ -76,57 +130,62 @@ class ProductController extends Controller
     }
 
     public function update(Product $product, Request $request)
-{
-    try {
-        // Get the authenticated user
-        $user = Auth::user();
+    {
+        try {
+            // Get the authenticated user
+            $user = Auth::user();
 
-        // Retrieve the existing product from the database
-        $product = Product::findOrFail($product->ProductID);
+            // Retrieve the existing product from the database
+            $product = Product::findOrFail($product->ProductID);
 
 
-         // Compare the existing price with the new price
-         $newPrice = $request->input('Pprice');
-         if ($product->Price != $newPrice) {
-             // If the price has changed, record the old price before updating
-             $product->old_price = $product->Price;
-             $product->Price = $newPrice;
-             $product->price_updated_at = now();
-         }
-
-        // Update the product attributes with the new data
-        $product->ProductName = $request->input('Pname');
-        $product->ProductDescription = $request->input('Pdescription');
-        $product->Price = $newPrice;
-        $product->Quantity = $request->input('Pqty');
-
-        // Initialize an empty array to store the paths of uploaded images
-        $imagePaths = [];
-
-        // Check if new images are uploaded
-        if ($request->hasFile('PImage')) {
-            // Store each uploaded image in a folder specific to the user
-            foreach ($request->file('PImage') as $file) {
-                $imagePath = $file->store("public/products/{$user->id}");
-                $imagePaths[] = $imagePath;
+            // Compare the existing price with the new price
+            $newPrice = $request->input('Pprice');
+            if ($product->Price != $newPrice) {
+                // If the price has changed, record the old price before updating
+                $product->old_price = $product->Price;
+                $product->Price = $newPrice;
+                $product->price_updated_at = now();
             }
 
-            // Update the product's image paths
-            $product->ProductImage = implode(',', $imagePaths); // Store paths as comma-separated values
-        }
+            // Update the product attributes with the new data
+            $product->ProductName = $request->input('Pname');
+            $product->ProductDescription = $request->input('Pdescription');
+            $product->Price = $newPrice;
+            $product->Quantity = $request->input('Pqty');
 
-        // Save the updated product
-        if ($product->save()) {
-            return back()->with('message', 'Product Updated Successfully')->with('type', 'success');
-        } else {
-            return back()->with('message', 'Error updating the product')->with('type', 'error');
+            // Initialize an empty array to store the paths of uploaded images
+            $imagePaths = [];
+
+            // Check if new images are uploaded
+            if ($request->hasFile('PImage')) {
+                // Store each uploaded image in a folder specific to the user
+                foreach ($request->file('PImage') as $file) {
+                    // Get the original file name
+                    $originalName = $file->getClientOriginalName();
+
+                    // Store the file with the original name in a specific folder
+                    $imagePath = $file->storeAs("public/products/{$user->id}", $originalName);
+                    
+                    $imagePaths[] = $imagePath;
+                }
+
+                // Update the product's image paths
+                $product->ProductImage = implode(',', $imagePaths); // Store paths as comma-separated values
+            }
+
+            // Save the updated product
+            if ($product->save()) {
+                return back()->with('message', 'Product Updated Successfully')->with('type', 'success');
+            } else {
+                return back()->with('message', 'Error updating the product')->with('type', 'error');
+            }
+        } catch (\Exception $e) {
+            // Log the exception or handle it in a more appropriate way
+            error_log('Error updating product: ' . $e->getMessage());
+            return back()->with('message', 'An error occurred while updating the product')->with('type', 'error');
         }
-    } catch (\Exception $e) {
-        // Log the exception or handle it in a more appropriate way
-        error_log('Error updating product: ' . $e->getMessage());
-        return back()->with('message', 'An error occurred while updating the product')->with('type', 'error');
     }
-}
 
 
     public function destroy(Product $product){
@@ -176,4 +235,100 @@ class ProductController extends Controller
 
         return view('profile.profile-seller', compact('products', 'search', 'user'));
     }
+
+    public function storeTags(Request $request)
+    {
+        // Validate the input (if necessary)
+        $request->validate([
+            'tags' => 'required|array',
+        ]);
+
+        // Assuming you have the seller's ID stored in the session or passed as a hidden input
+        $seller = Seller::where('UserID_Fk', auth()->user()->id)->first();
+
+        // Clear existing tags
+        DB::table('seller_tag')->where('SellerID', $seller->SellerID)->delete();
+
+        // Insert new tags
+        foreach ($request->input('tags') as $tagName) {
+            $tag = Tag::where('name', $tagName)->first();
+            DB::table('seller_tag')->insert([
+                'SellerID' => $seller->SellerID,
+                'TagsID' => $tag->TagsID,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Tags updated successfully!');
+    }
+
+    public function productlike(Request $request, $productId)
+    {
+
+        $user = Auth::user();
+        $product = Product::findOrFail($productId);
+
+        // Check if the user has already liked the post
+        $existingLike = ProductLike::where('product_id', $productId)
+                                ->where('user_id', $user->id)
+                                ->first();
+
+        if ($existingLike) {
+            // Unlike it if the user already liked the post
+            $existingLike->delete();
+            $message = 'Like removed successfully.';
+        } else {
+            // Like the post
+            $like = new ProductLike();
+            $like->product_id = $productId;
+            $like->user_id = $user->id;
+            $like->save();
+            $message = 'Like recorded successfully.';
+        }
+
+        return redirect()->back()->with('message', $message);
+    }
+
+    public function productlikesindex()
+    {
+        $products = Product::withCount('likes')->get();
+        return view('profile.seller', compact('products'));
+    }
+
+    public function archiveProduct($productId)
+    {
+        $product = Product::find($productId);
+
+        if ($product && $product->UserID == Auth::id()) {
+            $product->status = 'archived';
+            $product->save();
+
+            return redirect()->back()->with('message', 'Product archived successfully.')->with('type', 'success');
+        }
+
+        return redirect()->back()->with('message', 'Error archiving the product.')->with('type', 'error');
+    }
+
+    public function unarchive($productId)
+    {
+        // Find the product by its ID
+        $product = Product::findOrFail($productId);
+
+        // Set the product status to active
+        $product->status = 'active'; // Adjust the status value if needed
+        $product->save();
+
+        // Redirect back to the previous page
+        return redirect()->back()->with('message', 'Product unarchived succesfully!')->with('type', 'success');
+    }
+
+    // ADD CODES FOR VIEWS
+    public function incrementViews($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->increment('views');
+        return response()->json(['success' => true]);
+    }
+    // END... ADD CODES FOR VIEWS
+
 }
+

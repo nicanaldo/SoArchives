@@ -36,7 +36,10 @@
     </header>
 
 
-    <div class="banner" style="background-image: url('images/forr.png'); height:400px"></div>
+    <div class="banner">
+        <img src="{{ asset('images/forr.png') }}" alt="Community Forum Banner" class="img-fluid w-100 banner-img">
+    </div>
+
 
     <div class="mt-1">
         <div class="row">
@@ -49,18 +52,37 @@
             {{-- Posting --}}
             <div class="actions d-flex justify-content-between mb-2">
                 <button id="postButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal">
-                    + New Post
+                    <i class="fas fa-add"></i> New Post
                 </button>
                 <div class="d-flex align-items-center ms-auto">
 
                     {{-- Search bar --}}
-                    <input type="text" class="form-control me-2 input-group rounded-pill overflow-hidden"
-                        id="searchBar" placeholder="Search..." style="width: 200px;">
+                    <form action="{{ route('community.index') }}" method="GET">
+                        @csrf
+                        <input type="search" class="form-control me-2 input-group rounded-pill overflow-hidden"
+                            name="search" id="searchBar" placeholder="Search..." style="width: 200px;"
+                            value="{{ isset($search) ? $search : '' }}">
+                    </form>
 
                     {{-- Filter topics --}}
-                    <button class="btn btn-outline-secondary">
-                        <i class="fas fa-filter"></i> Filter Topics
-                    </button>
+                    <div class="dropdown">
+                        <a class="btn btn-warning dropdown-toggle" style="margin-left: 3px;" href="#"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filter Topics
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            @foreach ($flairs as $flair)
+                                <li>
+                                    <a class="dropdown-item {{ $selectedFlair == $flair->name ? 'active' : '' }}"
+                                        href="{{ route('community.index', ['flair' => $selectedFlair == $flair->name ? null : $flair->name]) }}">
+                                        {{ $flair->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
                 </div>
             </div>
 
@@ -90,13 +112,13 @@
 
                                 {{-- FLAIR --}}
                                 <div class="mb-3">
-                                    <label for="tags" class="form-label">Post Topic</label>
-                                    <select class="form-select" id="tags" name="tags"
+                                    <label for="flairs" class="form-label">Post Topic</label>
+                                    <select class="form-select" id="tags" name="flairs"
                                         aria-label="Default select example" required>
                                         <option value="" selected disabled>Select a topic</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        @foreach ($flairsopt as $FlairsID => $name)
+                                            <option value="{{ $name }}">{{ $name }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select at least one tag.
@@ -106,9 +128,12 @@
                                 <div class="col-12">
                                     <div class="alert-message alert-message-warning">
                                         <h5>
-                                            &#x1F9D0;  Friendly Reminder</h4>
-                                        <p>
-                                            Please follow our community guidelines when posting. Be respectful, stay on topic, and avoid spam. <strong>Violations</strong> may result in content removal or account suspension. Ensure your content aligns with our rules to maintain a positive environment.</p>
+                                            &#x1F9D0; Friendly Reminder</h4>
+                                            <p>
+                                                Please follow our community guidelines when posting. Be respectful, stay
+                                                on topic, and avoid spam. <strong>Violations</strong> may result in
+                                                content removal or account suspension. Ensure your content aligns with
+                                                our rules to maintain a positive environment.</p>
                                     </div>
                                 </div>
 
@@ -259,22 +284,31 @@
                             <div class="card-body">
                                 <!-- Profile Image and Name -->
                                 <div class="d-flex align-items-center mb-3">
-                                    <img src="{{ asset('images/defuser.png') }}" alt="Profile Image"
-                                        class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                    <img src="{{ asset($post->user->profile_photo ? 'storage/profile_photos/' . $post->user->id . '/' . basename($post->user->profile_photo) : 'images/defuser.png') }}"
+                                        alt="Profile Image" class="rounded-circle me-2"
+                                        style="width: 35px; height: 35px;">
                                     <div class="d-flex flex-column">
                                         @if ($post->user->usertypeID == '3')
-                                            <a href="{{ route('profile-buyer') }}"
+                                            @if ($post->user->slug)
+                                            <a href="{{ route('buyer.profile.index', ['slug' => $post->user->slug]) }}"
                                                 class="card-title mb-0 d-flex align-items-center text-decoration-none">
                                                 {{ $post->user->fname }} {{ $post->user->lname }}
-                                            </a>
+                                             </a>                                             
+                                            @else
+                                                <span>Profile unavailable</span>
+                                            @endif
                                         @elseif($post->user->usertypeID == '2')
-                                            <a href="{{ route('seller.profile', $post->user->id) }}"
-                                                class="card-title mb-0 d-flex align-items-center text-decoration-none">
-                                                {{ $post->user->fname }} {{ $post->user->lname }}
-                                                <span class="badge pro-badge ms-2"><i class="fas fa-crown"></i>
-                                                    PRO</span>
-                                            </a>
+                                            @if ($post->user->slug)
+                                                <a href="{{ route('seller.profile', ['slug' => $post->user->slug]) }}"
+                                                    class="card-title mb-0 d-flex align-items-center text-decoration-none user-name">
+                                                    <span class="full-name">{{ $post->user->fname }} {{ $post->user->lname }}</span>
+                                                    <span class="badge pro-badge ms-2"><i class="fas fa-star"></i> PRO</span>
+                                                </a>
+                                            @else
+                                                <span>Profile unavailable</span>
+                                            @endif
                                         @endif
+
 
                                         <span class="text-muted small">{{ $post->created_at->diffForHumans() }}</span>
                                     </div>
@@ -284,12 +318,14 @@
 
                                 <!-- Post Title -->
                                 {{-- <h4 class="card-title"
-                                    style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                    {!! $post->title !!}
-                                </h4> --}}
+                                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {!! $post->title !!}
+                                    </h4> --}}
 
                                 <!-- Post Display-->
-                                <p>{!! $post->content !!}</p>
+                                <div class="ms-5">
+                                    <p>{!! $post->content !!}</p>
+                                </div>
 
                                 <!-- Like and Comment Buttons Row -->
                                 <div class="d-flex align-items-center">
@@ -301,26 +337,24 @@
                                             $isLiked = $post->likes->contains('user_id', auth()->id());
                                         @endphp
                                         <button
-                                            class="btn btn-sm me-2 border-0 {{ $isLiked ? 'btn-outline-success' : 'btn-outline-secondary' }}"
+                                            class="btn btn-sm btn-custom me-2 border-0 {{ $isLiked ? 'btn-outline-secondary liked' : 'btn-outline-secondary' }}"
                                             type="submit">
-                                            <i class="fas fa-thumbs-up"></i> {{ $post->likes_count }}
+                                            <i class="fas fa-thumbs-up custom-icon"></i> {{ $post->likes_count }}
                                         </button>
                                     </form>
 
 
                                     {{-- Comment Button --}}
-                                    <button class="btn btn-sm btn-outline-secondary border-0"
+                                    <button class="btn btn-sm btn-custom btn-outline-secondary border-0"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#commentsSection{{ $post->id }}">
-                                        <i class="fas fa-comment"></i>
+                                        <i class="fas fa-comment custom-icon"></i>
                                         <span class="comment-count">{{ $post->comments->count() }}</span>
                                     </button>
                                 </div>
 
                                 <!-- Comment Section (collapsible) -->
                                 <div class="collapse mt-4" id="commentsSection{{ $post->id }}">
-
-
 
                                     {{-- Comment Form --}}
                                     <div class="comment-form">
@@ -334,6 +368,62 @@
                                             </div>
                                         </form>
                                     </div>
+
+                                    <script>
+                                        $(document).ready(function() {
+                                            // Handle like button click via AJAX
+                                            $('.like-form').on('click', 'button', function(e) {
+                                                e.preventDefault();
+                                                var form = $(this).closest('form');
+                                                var postId = form.data('post-id');
+                                                $.ajax({
+                                                    url: form.attr('action'),
+                                                    method: 'POST',
+                                                    data: form.serialize(),
+                                                    success: function(response) {
+                                                        // Update the likes count and button appearance
+                                                        form.find('.likes-count').text(response.likes_count);
+                                                        if (response.isLiked) {
+                                                            form.find('button').removeClass('btn-outline-secondary').addClass(
+                                                                'btn-outline-success');
+                                                        } else {
+                                                            form.find('button').removeClass('btn-outline-success').addClass(
+                                                                'btn-outline-secondary');
+                                                        }
+                                                    },
+                                                    error: function(xhr) {
+                                                        alert('An error occurred. Please try again.');
+                                                    }
+                                                });
+                                            });
+
+                                            // Handle comment form submission via AJAX
+                                            $('.submit-comment').on('click', function(e) {
+                                                e.preventDefault();
+                                                var form = $(this).closest('form');
+                                                var postId = form.data('post-id');
+                                                $.ajax({
+                                                    url: form.attr('action'),
+                                                    method: 'POST',
+                                                    data: form.serialize(),
+                                                    success: function(response) {
+                                                        // Append the new comment to the comments section
+                                                        var commentsSection = $('#commentsSection' + postId);
+                                                        commentsSection.append(response.comment_html);
+                                                        // Update the comment count
+                                                        form.closest('.d-flex').find('.comment-count').text(response
+                                                            .comments_count);
+                                                        // Clear the textarea
+                                                        form.find('textarea').val('');
+                                                    },
+                                                    error: function(xhr) {
+                                                        alert('An error occurred. Please try again.');
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
+
 
 
                                     <!-- Display Comments -->
@@ -351,9 +441,9 @@
                                                     </div>
 
                                                     <!-- Profile Image -->
-                                                    <img src="{{ asset('images/defuser.png') }}" alt="Profile Image"
-                                                        class="rounded-circle me-2"
-                                                        style="width: 40px; height: 40px;">
+                                                    <img src="{{ asset($comment->user->profile_photo ? 'storage/profile_photos/' . $comment->user->id . '/' . basename($comment->user->profile_photo) : 'images/defuser.png') }}"
+                                                        alt="Profile Image" class="rounded-circle me-2"
+                                                        style="width: 35px; height: 35px;">
 
                                                     <!-- User Info -->
                                                     <div class="d-flex flex-column">
@@ -387,7 +477,9 @@
 
 
                                                 </div>
-                                                <p class="mt-3 ms-5 mb-2">{{ $comment->content }}</p>
+                                                <div class="ms-5">
+                                                    <p class="mt-3 ms-5 mb-2">{{ $comment->content }}</p>
+                                                </div>
                                             </div>
 
 
@@ -429,9 +521,12 @@
 
                                     {{-- Show more: Hindi pa to nagana, UI lang --}}
                                     <a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span
-                                            class="glyphicon glyphicon-refresh"></span>Show More</a>
+                                            class="glyphicon glyphicon-refresh"></span>Show
+                                        More</a>
+
 
                                 </div>
+
 
 
                                 {{-- Edit Post Modal --}}
@@ -481,16 +576,12 @@
                                 </script>
 
 
-
-                                {{-- Wala pang topics, ui lang to --}}
                                 <!-- Topic Tags and Edit/Delete Post Buttons -->
                                 <div
                                     class="d-flex justify-content-end align-items-start position-absolute top-0 end-0 p-3">
                                     <div>
-                                        @if ($post->tags && $post->tags->count() > 0)
-                                            @foreach ($post->tags as $tag)
-                                                <span class="badge bg-secondary">{{ $tag->name }}</span>
-                                            @endforeach
+                                        @if ($post->flairs)
+                                            <span class="badge bg-flairs">{{ $post->flairs }}</span>
                                         @else
                                             <span class="badge bg-light text-dark p-2 fw-normal">Topic Tag</span>
                                         @endif
@@ -545,28 +636,52 @@
             </script>
 
 
-            {{-- UI: Pagination --}}
+            {{-- Pagination --}}
             <div class="card border-0 pe-4">
-                <nav aria-label="..." class="mt-3">
+                <nav aria-label="Page navigation" class="mt-3">
                     <ul class="pagination justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item" aria-current="page">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
+                        <!-- Previous Page Link -->
+                        @if ($posts->onFirstPage())
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $posts->previousPageUrl() }}">Previous</a>
+                            </li>
+                        @endif
+
+                        <!-- Page Number Links -->
+                        @foreach ($posts->links()->elements[0] as $page => $url)
+                            @if ($page == $posts->currentPage())
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">{{ $page }}</a>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                </li>
+                            @endif
+                        @endforeach
+
+                        <!-- Next Page Link -->
+                        @if ($posts->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $posts->nextPageUrl() }}">Next</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
 
 
+
             {{-- UI: Back to top button --}}
-            <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top">
+            <button type="button" class="btn button-primary btn-floating btn-lg" id="btn-back-to-top">
                 <i class="fas fa-arrow-up"></i>
             </button>
 
@@ -603,16 +718,16 @@
 
         </div>
 
+    </div>
 
+    <footer>
+        @include('header_and_footer.footer')
+    </footer>
 
-        <footer>
-            @include('header_and_footer.footer')
-        </footer>
-
-        <!-- Bootstrap Bundle with Popper -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Font Awesome -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 
 </body>
 

@@ -14,6 +14,8 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 @csrf
+
+
 <nav class="navbar navbar-expand-lg py-4 py-lg-0 bg-transparent">
     <div class="container px-4">
 
@@ -28,10 +30,9 @@
             <i class="lni lni-grid-alt"></i>
         </button>
 
-
-
-
         <div class="offcanvas offcanvas-end" tabindex="-1" id="top-navbar" aria-labelledby="top-navbarLabel">
+
+
             <!-- Navigation Bar Content -->
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#top-navbar" aria-controls="top-navbar">
@@ -103,8 +104,9 @@
                 @endif
 
 
+                 <!-- Inside your dropdown for logged-in users -->
                 @if (Auth::check())
-                    <!-- Check if the user is logged in -->
+                    <!-- Dropdown for logged-in users -->
                     <div class="dropdown">
                         <button class="btn btn-warning dropdown-toggle mt-4" type="button" id="userDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 20px;">
@@ -115,13 +117,17 @@
                             @if (Auth::user()->usertypeID == 2)
                                 <li><a class="dropdown-item" href="{{ route('products-seller.index') }}">Profile</a>
                                 </li>
+                                <li><a class="dropdown-item" href="{{ route('profile.settings') }}">Settings</a>
+                                    {{-- <li><a class="dropdown-item" href="{{ route('profile.edit-profile') }}">Change Password</a> --}}
+                                </li> <!-- Edit Profile Link -->
                             @elseif(Auth::user()->usertypeID == 3)
+                                <li><a class="dropdown-item"
+                                        href="{{ route('profile-buyer', ['slug' => Auth::user()->slug]) }}">Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('profile.buyer-settings') }}">Settings</a>
+                                </li> <!-- Edit Profile Link -->
                                 <li><a class="dropdown-item" href="{{ route('profile-buyer') }}">Profile</a></li>
                             @endif
-{{-- 
-                            <li><a class="dropdown-item" href="{{ route('edit-profile') }}"
-                                    onclick="event.preventDefault(); document.getElementById('edit-profile).submit();">Edit
-                                    Profile</a></li> --}}
 
                             <li><a class="dropdown-item" href="{{ route('chatify') }}">Inbox</a></li>
                             <li><a class="dropdown-item" href="{{ route('logout') }}"
@@ -135,7 +141,7 @@
                     <form class="d-flex">
                         @if (Route::has('login'))
                             <button id="loginButton" class="btn btn-warning mt-4" style="margin-left: 20px;"
-                                type="button">Join / Sign Up</button>
+                                type="button">Join / Login</button>
                         @endif
                     </form>
                 @endif
@@ -144,8 +150,9 @@
 
             </ul>
         </div>
+
+
         </ul>
-    </div>
     </div>
 </nav>
 

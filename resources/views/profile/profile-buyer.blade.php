@@ -30,23 +30,33 @@
         @include('header_and_footer.header')
 
 
-        {{-- Cover Photo --}}
+       {{-- Cover Photo --}}
         <div class="container-fluid custom-shadow-profile">
             <div class="container cover">
                 <div class="header__wrapper d-flex justify-content-center position-relative">
-                    <img id="coverImage" src="{{ asset('images/finalcover.png') }}" alt="Cover Photo"
-                        class="cover-photo" />
+                    <img id="coverImage"
+                        src="{{ asset($user->cover_photo ? 'storage/cover_photos/' . $user->id . '/' . basename($user->cover_photo) : 'images/finalcover.png') }}"
+                        alt="Cover Photo" class="cover-photo" />
                     <div class="upload-overlay d-flex flex-column align-items-center">
                         <input type="file" id="coverUpload" accept="image/*" style="display: none;" />
-                        <button type="button" class="btn btn-primary mt-2" id="uploadButton">Change Cover
-                            Photo</button>
+                        <button type="button" class="btn btn-light mt-2" id="uploadButton">
+                            <i class="fas fa-upload"></i> Change Cover Photo
+                        </button>
                         <button type="button" class="btn btn-primary mt-2" id="saveButton"
                             style="display: none;">Save</button>
+                        <button type="button" class="btn btn-danger mt-2" id="deleteButton">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </div>
                 </div>
             </div>
 
+
+
             <script>
+                // Uploading of photo preview and action confirmation
+                let originalCoverImageSrc = document.getElementById('coverImage').src;
+
                 document.getElementById('uploadButton').addEventListener('click', function() {
                     document.getElementById('coverUpload').click();
                 });
@@ -63,10 +73,57 @@
                     }
                 });
 
-                // Example save button functionality (you'll need to implement actual saving logic)
                 document.getElementById('saveButton').addEventListener('click', function() {
-                    alert('Cover photo saved!');
-                    // Implement your save logic here
+                    if (confirm('Are you sure you want to save this cover photo?')) {
+                        const fileInput = document.getElementById('coverUpload');
+                        const formData = new FormData();
+                        formData.append('cover_photo', fileInput.files[0]);
+
+                        fetch('{{ route('seller.cover-photo') }}', {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    originalCoverImageSrc = data.image_path; // Update original image source
+                                    document.getElementById('saveButton').style.display =
+                                        'none'; // Hide save button after saving
+                                    alert('Cover photo saved successfully!');
+                                } else {
+                                    alert('Failed to save cover photo.');
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    } else {
+                        // Revert to original image if user cancels saving
+                        document.getElementById('coverImage').src = originalCoverImageSrc;
+                        document.getElementById('saveButton').style.display = 'none'; // Hide save button
+                    }
+                });
+
+                document.getElementById('deleteButton').addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete your cover photo?')) {
+                        fetch('{{ route('seller.cover-photo.delete') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.location.reload(); // Refresh the page to show default picture
+                                } else {
+                                    alert('Failed to delete cover photo.');
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    }
                 });
             </script>
 
@@ -74,22 +131,27 @@
             {{-- Profile Picture --}}
             <div class="container d-flex justify-content-center align-items-center">
                 <div class="img__container position-relative thick-border-container">
-                    <img id="profileImage" src="{{ asset('images/defuser.png') }}" alt="Profile Picture"
-                        class=" thick-border-buyer profile-picture" />
+                    <img id="profileImage"
+                        src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
+                        alt="Profile Picture" class="thick-border-buyer profile-picture" />
 
                     <!-- Hover Overlay for Uploading a New Profile Picture -->
                     <div class="profile-upload-overlay d-flex flex-column align-items-center justify-content-center">
                         <input type="file" id="profileUpload" accept="image/*" style="display: none;" />
-                        <button type="button" class="btn btn-primary" id="profileUploadButton">Change</button>
+                        <button type="button" class="btn btn-light" id="profileUploadButton"><i
+                                class="fas fa-upload"></i> Change</button>
                         <button type="button" class="btn btn-success mt-2" id="profileSaveButton"
                             style="display: none;">Save</button>
+                        <button type="button" class="btn btn-danger mt-2" id="profileDeleteButton"> <i
+                                class="fas fa-trash"></i> Delete</button>
                     </div>
-
                 </div>
             </div>
 
             <script>
-                // Profile Picture Upload
+                // Uploading photo preview
+                let originalProfileImageSrc = document.getElementById('profileImage').src;
+
                 document.getElementById('profileUploadButton').addEventListener('click', function() {
                     document.getElementById('profileUpload').click();
                 });
@@ -100,20 +162,70 @@
                         const reader = new FileReader();
                         reader.onload = function(e) {
                             document.getElementById('profileImage').src = e.target.result;
-                            document.getElementById('profileSaveButton').style.display = 'block';
-                        }
+                            document.getElementById('profileSaveButton').style.display = 'block'; // Show save button
+                        };
                         reader.readAsDataURL(file);
+                    }
+                });
+
+                document.getElementById('profileSaveButton').addEventListener('click', function() {
+                    if (confirm('Are you sure you want to save this profile picture?')) {
+                        const fileInput = document.getElementById('profileUpload');
+                        const formData = new FormData();
+                        formData.append('profile_photo', fileInput.files[0]);
+
+                        fetch('{{ route('seller.profile-photo') }}', {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    originalProfileImageSrc = data.image_path; // Update original image source
+                                    document.getElementById('profileSaveButton').style.display =
+                                        'none'; // Hide save button after saving
+                                } else {
+                                    alert('Failed to save profile photo.');
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    } else {
+                        // Revert to original image if user cancels saving
+                        document.getElementById('profileImage').src = originalProfileImageSrc;
+                        document.getElementById('profileSaveButton').style.display = 'none'; // Hide save button
+                    }
+                });
+
+                document.getElementById('profileDeleteButton').addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete your profile picture?')) {
+                        fetch('{{ route('seller.profile-photo.delete') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.location.reload(); // Refresh the page to show default picture
+                                } else {
+                                    alert('Failed to delete profile photo.');
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
                     }
                 });
             </script>
 
 
-
             {{-- Tags --}}
             <div class="name text-center">
-                <h2 class="card-title text-center mb-3 p-4" style="color:#343434;"> {{ auth()->user()->fname }}
-                    {{ auth()->user()->lname }} </h2>
-
+                <h2 class="card-title text-center mb-3 p-4" style="color:#343434;"> {{ $user->fname }} {{ $user->lname }}
+                </h2>
                 <div class="pb-5">
 
                     <button type="button" class="btn btn-outline-success btn-rounded me-1" data-mdb-ripple-init><i
@@ -150,7 +262,7 @@
                             </span>
                         </div>
                         <div class="text-muted small text-center align-self-center m-2">
-                            <h2>24</h2>
+                            <h2> {{ $feedbackCount}} </h2>
                             <span class=" d-sm-inline-block">
                                 <h5>Feedbacks</h5>
                             </span>
@@ -169,37 +281,67 @@
                     </div>
 
 
-                    <div class="container custom-shadow mt-5 p-3">
-                        <div class="row">
-                            <div class="col-12">
-                                <br>
-                                <p>"Thank you for being such a fantastic buyer! Your appreciation for our handicrafts
-                                    truly shines
-                                    through in your thoughtful selection and support. We're thrilled to have connected
-                                    with someone who
-                                    values craftsmanship and creativity as much as we do. Looking forward to serving you
-                                    again soon!"
-                                </p>
-                                <p class="text-muted">- Abbey Santos </p>
+                        {{-- Feedback --}}
+                        <div class="container">
+                            <div class="feedbacks mt-5">
+                                <h2 style="color: #145DA0;">Feedbacks</h2>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="container custom-shadow mt-5 p-3 mb-5">
-                        <div class="row">
-                            <div class="col-12">
-                                <br>
-                                <p>"Working with you has been an absolute pleasure. Your enthusiasm for our handicrafts
-                                    is infectious,
-                                    and it's truly gratifying to see them find a home with someone who appreciates their
-                                    beauty and
-                                    craftsmanship. Thank you for being such a wonderful supporter of our work. We're
-                                    already looking
-                                    forward to our next opportunity to create something special for you!"</p>
-                                <p class="text-muted">- Sooyoung Ha </p>
+                        <div class="container custom-shadow">
+                            <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @if ($feedbacks->isEmpty())
+                                        <div class="carousel-item active">
+                                            <div class="container custom-shadow p-3">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <p class="mb-1">No feedbacks available yet.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        @foreach ($feedbacks as $key => $feedback)
+                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                                <div class="container custom-shadow p-3">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <!-- Star Rating -->
+                                                            <div class="mb-2">
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}"
+                                                                        style="color: #ffc107; font-size: 20px;"></i>
+                                                                @endfor
+                                                            </div>
+                                                            <!-- Feedback Content -->
+                                                            <p class="mb-1">{{ $feedback->feedback }}</p>
+                                                            <!-- User and Timestamp -->
+                                                            <p class="text-muted mb-0">-
+                                                                {{ $feedback->user->name ?? 'Anonymous' }}</p>
+                                                            <p class="text-muted small">Posted on:
+                                                                {{ $feedback->created_at->format('F d, Y') }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+
+                                <!-- Carousel Controls -->
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#feedbackCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#feedbackCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
