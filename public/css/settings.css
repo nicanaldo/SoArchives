@@ -1,0 +1,43 @@
+*{
+    font-family: 'Helvetica', sans-serif;
+}
+
+h2{
+    color: #145DA0 !important;
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: #145DA0 !important;
+    font-weight: 700;
+    background-color: #4677a500 !important;
+    border-color: #145ca000 !important;
+  }
+
+  .list-group-item-action{
+    background-color: #ffffff00 !important;
+  }
+
+  .list-group-item{
+    border: none !important;
+  }
+
+
+/* Buttons */
+
+.button-primary{
+    background-color: #145DA0 !important;
+    color: #fbfbfe !important;
+}
+
+
+.button-primary:hover{
+    background-color: #145DA0 !important;
+    color: #fbfbfe !important;
+    transform: translateY(-2px); /* Move button slightly upward */
+    box-shadow: 0 8px 20px rgba(20, 93, 160, 0.2); /* Shadow with the same button color */
+}
+
+
+
+

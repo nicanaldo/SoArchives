@@ -48,7 +48,7 @@ class ProductController extends Controller
         // $selectedTags = explode(',', $seller->Tags);
 
         // Fetch feedbacks related to the seller
-        $feedbacks = Feedback::where('sellerID', $seller->SellerID)->get();
+        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
 
         // Get the count of feedbacks
         $feedbackCount = $feedbacks->count();
@@ -58,7 +58,7 @@ class ProductController extends Controller
          ->where('status', 'active')
          ->paginate(12); // Adjust the number per page as needed
 
-     $archivedProducts = Product::where('UserID', $user->id)
+        $archivedProducts = Product::where('UserID', $user->id)
          ->where('status', 'archived')
          ->paginate(12); // Adjust items per page as needed
 
@@ -91,10 +91,15 @@ class ProductController extends Controller
 
             // Initialize an empty array to store the paths of uploaded images
             $imagePaths = [];
-
+            
             // Store each uploaded image in a folder specific to the user
             foreach ($request->file('prodimg') as $file) {
-                $imagePath = $file->store("public/products/{$user->id}");
+                // Get the original file name
+                $originalName = $file->getClientOriginalName();
+
+                // Store the file with the original name in a specific folder
+                $imagePath = $file->storeAs("public/products/{$user->id}", $originalName);
+
                 $imagePaths[] = $imagePath;
             }
 
@@ -125,57 +130,62 @@ class ProductController extends Controller
     }
 
     public function update(Product $product, Request $request)
-{
-    try {
-        // Get the authenticated user
-        $user = Auth::user();
+    {
+        try {
+            // Get the authenticated user
+            $user = Auth::user();
 
-        // Retrieve the existing product from the database
-        $product = Product::findOrFail($product->ProductID);
+            // Retrieve the existing product from the database
+            $product = Product::findOrFail($product->ProductID);
 
 
-         // Compare the existing price with the new price
-         $newPrice = $request->input('Pprice');
-         if ($product->Price != $newPrice) {
-             // If the price has changed, record the old price before updating
-             $product->old_price = $product->Price;
-             $product->Price = $newPrice;
-             $product->price_updated_at = now();
-         }
-
-        // Update the product attributes with the new data
-        $product->ProductName = $request->input('Pname');
-        $product->ProductDescription = $request->input('Pdescription');
-        $product->Price = $newPrice;
-        $product->Quantity = $request->input('Pqty');
-
-        // Initialize an empty array to store the paths of uploaded images
-        $imagePaths = [];
-
-        // Check if new images are uploaded
-        if ($request->hasFile('PImage')) {
-            // Store each uploaded image in a folder specific to the user
-            foreach ($request->file('PImage') as $file) {
-                $imagePath = $file->store("public/products/{$user->id}");
-                $imagePaths[] = $imagePath;
+            // Compare the existing price with the new price
+            $newPrice = $request->input('Pprice');
+            if ($product->Price != $newPrice) {
+                // If the price has changed, record the old price before updating
+                $product->old_price = $product->Price;
+                $product->Price = $newPrice;
+                $product->price_updated_at = now();
             }
 
-            // Update the product's image paths
-            $product->ProductImage = implode(',', $imagePaths); // Store paths as comma-separated values
-        }
+            // Update the product attributes with the new data
+            $product->ProductName = $request->input('Pname');
+            $product->ProductDescription = $request->input('Pdescription');
+            $product->Price = $newPrice;
+            $product->Quantity = $request->input('Pqty');
 
-        // Save the updated product
-        if ($product->save()) {
-            return back()->with('message', 'Product Updated Successfully')->with('type', 'success');
-        } else {
-            return back()->with('message', 'Error updating the product')->with('type', 'error');
+            // Initialize an empty array to store the paths of uploaded images
+            $imagePaths = [];
+
+            // Check if new images are uploaded
+            if ($request->hasFile('PImage')) {
+                // Store each uploaded image in a folder specific to the user
+                foreach ($request->file('PImage') as $file) {
+                    // Get the original file name
+                    $originalName = $file->getClientOriginalName();
+
+                    // Store the file with the original name in a specific folder
+                    $imagePath = $file->storeAs("public/products/{$user->id}", $originalName);
+                    
+                    $imagePaths[] = $imagePath;
+                }
+
+                // Update the product's image paths
+                $product->ProductImage = implode(',', $imagePaths); // Store paths as comma-separated values
+            }
+
+            // Save the updated product
+            if ($product->save()) {
+                return back()->with('message', 'Product Updated Successfully')->with('type', 'success');
+            } else {
+                return back()->with('message', 'Error updating the product')->with('type', 'error');
+            }
+        } catch (\Exception $e) {
+            // Log the exception or handle it in a more appropriate way
+            error_log('Error updating product: ' . $e->getMessage());
+            return back()->with('message', 'An error occurred while updating the product')->with('type', 'error');
         }
-    } catch (\Exception $e) {
-        // Log the exception or handle it in a more appropriate way
-        error_log('Error updating product: ' . $e->getMessage());
-        return back()->with('message', 'An error occurred while updating the product')->with('type', 'error');
     }
-}
 
 
     public function destroy(Product $product){

@@ -126,6 +126,7 @@
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('profile.buyer-settings') }}">Settings</a>
                                 </li> <!-- Edit Profile Link -->
+                                <li><a class="dropdown-item" href="{{ route('profile-buyer') }}">Profile</a></li>
                             @endif
 
                             <li><a class="dropdown-item" href="{{ route('chatify') }}">Inbox</a></li>
