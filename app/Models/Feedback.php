@@ -15,6 +15,6 @@ class Feedback extends Model
         'rating',
         'feedback',
         'userID',
-        'sellerID',
+        'feedback_userID',
     ];
 }
