@@ -356,13 +356,13 @@
                     <div class="col-md-4 mb-3">
                         <div class="custom-shadow p-4 d-flex flex-wrap justify-content-center rounded-2">
                             <div class="text-muted small text-center align-self-center m-2">
-                                <h2>427</h2>
+                                <h2> 26 </h2>
                                 <span class=" d-sm-inline-block">
                                     <h5>Commendations</h5>
                                 </span>
                             </div>
                             <div class="text-muted small text-center align-self-center m-2">
-                                <h2>24</h2>
+                                <h2>{{ $feedbackCount }}</h2>
                                 <span class=" d-sm-inline-block">
                                     <h5>Feedbacks</h5>
                                 </span>
@@ -2357,6 +2357,7 @@
                                 </button>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
