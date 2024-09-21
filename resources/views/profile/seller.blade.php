@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>  
-        @if (Auth::check())
-            @if (Auth::user()->usertypeID == 2)
+        @if (isset($user))
+            @if ($user->usertypeID == 2)
                 Seller |
-            @elseif (Auth::user()->usertypeID == 3)
+            @elseif ($user->usertypeID == 3)
                 Buyer |
             @endif
         @endif
