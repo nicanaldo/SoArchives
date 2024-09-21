@@ -30,6 +30,11 @@ h2 {
     font-weight: 500;
 }
 
+.text.blue {
+    color: #145da0 !important;
+}
+
+
 #about h2 {
     color: #145da0;
 }
@@ -1448,4 +1453,14 @@ a .pro-badge {
         font-size: 1rem; /* Reduce font size for small screens */
         margin-bottom: 2rem; /* Reduce bottom margin */
     }
+}
+
+
+/* star rating */
+.star-icon {
+    cursor: pointer !important; /* Change the cursor to a pointer */
+}
+
+.star-icon:hover {
+    color: #ffdd57; /* Optional: Change color on hover */
 }
