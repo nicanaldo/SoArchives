@@ -5,8 +5,16 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile</title>
-
+    <title>
+        @if (isset($user))
+            @if ($user->usertypeID == 2)
+                Seller |
+            @elseif ($user->usertypeID == 3)
+                Buyer |
+            @endif
+        @endif
+        {{ $user->fname }} {{ $user->lname }}
+    </title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
@@ -43,7 +51,7 @@
             <div class="container d-flex justify-content-center align-items-center">
                 <div class="img__container">
                     <img src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
-                        alt="Profile Picture" class="border-white thick-border-pro" />
+                        alt="Profile Picture" class="border-white thick-border-buyer" />
                     <span></span>
                 </div>
             </div>
@@ -53,14 +61,7 @@
             <div class="name text-center">
                 <h2 class="card-title text-center d-inline-block mb-3" style="color:#343434;">
                     {{ $user->fname }} {{ $user->lname }}
-                    <span class="badge pro-badge ms-2 fs-6 align-middle">
-                        <i class="fas fa-star"></i> PRO
-                    </span>
-
-                    {{-- VIP
-                    <span class="badge vip-badge ms-2 fs-6 align-middle">
-                        <i class="fas fa-crown"></i> VIP
-                    </span> --}}
+                
                 </h2>
                 <div class="pb-5">
                     {{-- <button type="button" class="btn btn-primary btn-rounded border-0 me-1" style="background: linear-gradient(45deg, #6a11cb, #2575fc);" data-mdb-ripple-init><i class="fas fa-hand-sparkles"></i> Commend</button> --}}
@@ -188,24 +189,16 @@
 
 
                 <div class="col-md-8 mb-3">
-                    <div class="custom-shadow p-4">
-
-                        <!-- Feedbacks -->
-                        <div class="feedbacks">
-                            <h2 style="color: #145DA0;">Feedbacks</h2>
-                        </div>
-                    </div>
+                 
 
 
-                      {{-- Feedback --}}
-                      <div class="container">
-                        <div class="feedbacks mt-5">
-                            <h2 style="color: #145DA0;">Feedbacks</h2>
-                        </div>
-                    </div>
+                
 
                     <div class="container custom-shadow">
-                        <div id="feedbackCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+                        <div class="feedbacks">
+                            <h2 style="color: #145DA0;" class="p-3 pt-4">Feedbacks</h2>
+                        </div>
+                        <div id="feedbackCarousel" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 @if($feedbacks->isEmpty())
                                     <div class="carousel-item active">
@@ -226,7 +219,7 @@
                                                         <!-- Star Rating -->
                                                         <div class="mb-2">
                                                             @for($i = 1; $i <= 5; $i++)
-                                                                <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}" style="color: #ffc107; font-size: 20px;"></i>
+                                                                <i class="fa fa-star{{ $i <= $feedback->rating ? '' : '-o' }}" style="color: #ffc107; font-size: 20px; cursor: pointer;"></i>
                                                             @endfor
                                                         </div>
                                                         <!-- Feedback Content -->
