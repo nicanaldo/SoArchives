@@ -50,6 +50,7 @@
 
         <div id="profile-seller-content">
 
+            
             {{-- Cover Photo --}}
             <div class="container-fluid custom-shadow-profile">
                 <div class="container cover">
@@ -60,8 +61,7 @@
                         <div class="upload-overlay d-flex flex-column align-items-center">
                             <input type="file" id="coverUpload" accept="image/*" style="display: none;" />
                             <button type="button" class="btn btn-light mt-2" id="uploadButton"><i
-                                    class="fas fa-upload"></i> Change Cover
-                                Photo</button>
+                                    class="fas fa-upload"></i> Change Cover Photo</button>
                             <button type="button" class="btn btn-primary mt-2" id="saveButton"
                                 style="display: none;">Save</button>
                             <button type="button" class="btn btn-danger mt-2" id="deleteButton"><i
@@ -70,32 +70,8 @@
                     </div>
                 </div>
 
-
-
-
-                {{-- Profile Picture --}}
-                <div class="container d-flex justify-content-center align-items-center">
-                    <div class="img__container position-relative thick-border-container">
-                        <img id="profileImage"
-                            src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
-                            alt="Profile Picture" class="thick-border profile-picture" />
-
-                        <!-- Hover Overlay for Uploading a New Profile Picture -->
-                        <div
-                            class="profile-upload-overlay d-flex flex-column align-items-center justify-content-center">
-                            <input type="file" id="profileUpload" accept="image/*" style="display: none;" />
-                            <button type="button" class="btn btn-light" id="profileUploadButton"><i
-                                    class="fas fa-upload"></i> Change</button>
-                            <button type="button" class="btn btn-success mt-2" id="profileSaveButton"
-                                style="display: none;">Save</button>
-                            <button type="button" class="btn btn-danger mt-2" id="profileDeleteButton"> <i
-                                    class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </div>
-                </div>
-
                 <script>
-                    // Cover Photo Upload and Actions
+                    // Uploading of photo preview and action confirmation
                     let originalCoverImageSrc = document.getElementById('coverImage').src;
 
                     document.getElementById('uploadButton').addEventListener('click', function() {
@@ -115,16 +91,14 @@
                     });
 
                     document.getElementById('saveButton').addEventListener('click', function() {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'Do you want to save this cover photo?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, save it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to save this cover photo?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        }).then((willSave) => {
+                            if (willSave) {
                                 const fileInput = document.getElementById('coverUpload');
                                 const formData = new FormData();
                                 formData.append('cover_photo', fileInput.files[0]);
@@ -135,63 +109,95 @@
                                         headers: {
                                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                         },
-                                    })
-                                    .then(response => response.json())
+                                    }).then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
-                                            originalCoverImageSrc = data.image_path;
-                                            document.getElementById('saveButton').style.display =
-                                            'none'; // Hide save button
-                                            Swal.fire('Success!', 'Cover photo saved successfully!', 'success');
+                                            originalCoverImageSrc = data.image_path; // Update original image source
+                                            document.getElementById('saveButton').style.display = 'none';
+                                            swal({
+                                                title: "Success!",
+                                                text: "Cover photo saved successfully!",
+                                                icon: "success",
+                                                buttons: "OK", // Ensures user confirms the alert
+                                            });
                                         } else {
-                                            Swal.fire('Error!', 'Failed to save cover photo.', 'error');
+                                            swal("Error!", "Failed to save cover photo.", "error");
                                         }
-                                    })
-                                    .catch(error => console.error('Error:', error));
+                                    }).catch(error => {
+                                        console.error('Error:', error);
+                                        swal("Error!", "Something went wrong.", "error");
+                                    });
                             } else {
                                 // Revert to original image if user cancels saving
                                 document.getElementById('coverImage').src = originalCoverImageSrc;
-                                document.getElementById('saveButton').style.display = 'none'; // Hide save button
+                                document.getElementById('saveButton').style.display = 'none';
                             }
                         });
                     });
 
                     document.getElementById('deleteButton').addEventListener('click', function() {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "You won't be able to revert this!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to delete your cover photo?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        }).then((willDelete) => {
+                            if (willDelete) {
                                 fetch('{{ route('seller.cover-photo.delete') }}', {
                                         method: 'POST',
                                         headers: {
                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                             'Content-Type': 'application/json',
                                         },
-                                    })
-                                    .then(response => response.json())
+                                    }).then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
-                                            Swal.fire('Deleted!', 'Your cover photo has been deleted.', 'success')
-                                                .then(() => {
-                                                    window.location
-                                                .reload(); // Reload the page to show default picture
-                                                });
+                                            swal({
+                                                title: "Deleted!",
+                                                text: "Cover photo deleted successfully!",
+                                                icon: "success",
+                                                buttons: "OK"
+                                            }).then(() => {
+                                                window.location
+                                            .reload(); // Refresh the page after success alert
+                                            });
                                         } else {
-                                            Swal.fire('Error!', 'Failed to delete cover photo.', 'error');
+                                            swal("Error!", "Failed to delete cover photo.", "error");
                                         }
-                                    })
-                                    .catch(error => console.error('Error:', error));
+                                    }).catch(error => {
+                                        console.error('Error:', error);
+                                        swal("Error!", "Something went wrong.", "error");
+                                    });
                             }
                         });
                     });
+                </script>
 
-                    // Profile Photo Upload and Actions (similar to above)
+
+                {{-- Profile Picture --}}
+                <div class="container d-flex justify-content-center align-items-center">
+                    <div class="img__container position-relative thick-border-container">
+                        <img id="profileImage"
+                            src="{{ asset($user->profile_photo ? 'storage/profile_photos/' . $user->id . '/' . basename($user->profile_photo) : 'images/defuser.png') }}"
+                            alt="Profile Picture" class="thick-border profile-picture" />
+
+                        <!-- Hover Overlay for Uploading a New Profile Picture -->
+                        <div
+                            class="profile-upload-overlay d-flex flex-column align-items-center justify-content-center">
+                            <input type="file" id="profileUpload" accept="image/*" style="display: none;" />
+                            <button type="button" class="btn btn-light" id="profileUploadButton"><i
+                                    class="fas fa-upload"></i> Change</button>
+                            <button type="button" class="btn btn-success mt-2" id="profileSaveButton"
+                                style="display: none;">Save</button>
+                            <button type="button" class="btn btn-danger mt-2" id="profileDeleteButton"><i
+                                    class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Uploading photo preview
                     let originalProfileImageSrc = document.getElementById('profileImage').src;
 
                     document.getElementById('profileUploadButton').addEventListener('click', function() {
@@ -211,16 +217,14 @@
                     });
 
                     document.getElementById('profileSaveButton').addEventListener('click', function() {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'Do you want to save this profile picture?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, save it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to save this profile picture?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        }).then((willSave) => {
+                            if (willSave) {
                                 const fileInput = document.getElementById('profileUpload');
                                 const formData = new FormData();
                                 formData.append('profile_photo', fileInput.files[0]);
@@ -231,65 +235,73 @@
                                         headers: {
                                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                         },
-                                    })
-                                    .then(response => response.json())
+                                    }).then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
-                                            originalProfileImageSrc = data.image_path;
-                                            document.getElementById('profileSaveButton').style.display =
-                                            'none'; // Hide save button
-                                            Swal.fire('Success!', 'Profile picture saved successfully!', 'success');
+                                            originalProfileImageSrc = data
+                                            .image_path; // Update original image source
+                                            document.getElementById('profileSaveButton').style.display = 'none';
+                                            swal({
+                                                title: "Success!",
+                                                text: "Profile photo saved successfully!",
+                                                icon: "success",
+                                                buttons: "OK", // Ensures user confirms the alert
+                                            });
                                         } else {
-                                            Swal.fire('Error!', 'Failed to save profile picture.', 'error');
+                                            swal("Error!", "Failed to save profile photo.", "error");
                                         }
-                                    })
-                                    .catch(error => console.error('Error:', error));
+                                    }).catch(error => {
+                                        console.error('Error:', error);
+                                        swal("Error!", "Something went wrong.", "error");
+                                    });
                             } else {
                                 // Revert to original image if user cancels saving
                                 document.getElementById('profileImage').src = originalProfileImageSrc;
-                                document.getElementById('profileSaveButton').style.display = 'none'; // Hide save button
+                                document.getElementById('profileSaveButton').style.display = 'none';
                             }
                         });
                     });
 
                     document.getElementById('profileDeleteButton').addEventListener('click', function() {
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "You won't be able to revert this!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to delete your profile photo?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        }).then((willDelete) => {
+                            if (willDelete) {
                                 fetch('{{ route('seller.profile-photo.delete') }}', {
                                         method: 'POST',
                                         headers: {
                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                             'Content-Type': 'application/json',
                                         },
-                                    })
-                                    .then(response => response.json())
+                                    }).then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
-                                            Swal.fire('Deleted!', 'Your profile picture has been deleted.',
-                                                    'success')
-                                                .then(() => {
-                                                    window.location
-                                                .reload(); // Reload the page to show default picture
-                                                });
+                                            swal({
+                                                title: "Deleted!",
+                                                text: "Profile photo deleted successfully!",
+                                                icon: "success",
+                                                buttons: "OK"
+                                            }).then(() => {
+                                                window.location
+                                            .reload(); // Refresh the page after success alert
+                                            });
                                         } else {
-                                            Swal.fire('Error!', 'Failed to delete profile picture.', 'error');
+                                            swal("Error!", "Failed to delete profile photo.", "error");
                                         }
-                                    })
-                                    .catch(error => console.error('Error:', error));
+                                    }).catch(error => {
+                                        console.error('Error:', error);
+                                        swal("Error!", "Something went wrong.", "error");
+                                    });
                             }
                         });
                     });
                 </script>
 
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 
@@ -749,7 +761,7 @@
                                                                 <div class="badge-placeholder">
                                                                     @if ($product->Price < $product->old_price)
                                                                         <span class="badge price-drop-badge me-2">Price
-                                                                            Drop!</span>
+                                                                            Dropped!</span>
                                                                     @endif
                                                                 </div>
 
@@ -773,7 +785,7 @@
                                                             <!-- Like Count -->
                                                             <div class="text-muted small text-end mt-auto">
                                                                 <!-- ADD CODES FOR VIEWS -->
-                                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> {{ $product->views }}</span>
+                                                                <span class="d-none d-sm-inline-block text-success mt-3"><i class="fas fa-eye"></i> {{ $product->views }}</span>
                                                                 <!--END....  ADD CODES FOR VIEWS -->
                                                                 <span class="btn btn-light disabled like-count"><i
                                                                         class="fas fa-heart ml-2"
