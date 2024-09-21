@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class SellerController extends Controller
 {
@@ -88,9 +89,8 @@ class SellerController extends Controller
         return redirect()->back()->with('success', 'Profile updated successfully');
     }
 
-
-    public function show() //showing of buyer's profile to any user
-    {
+    public function show($slug) //showing of seller profile to any user
+    {   
         $user = Auth::user();
 
         // Check if the user is authenticated
@@ -100,19 +100,7 @@ class SellerController extends Controller
             Session::flush(); // Clear the session data
             return redirect()->route('login')->with('message', 'Session expired. Please log in again.');
         }
-
-        // Fetch feedbacks related to the seller
-        $feedbacks_userID = $user->id;
-        $feedbacks = Feedback::where('feedback_userID', $user->id)->get();
-
-        // Get the count of feedbacks
-        $feedbackCount = $feedbacks->count();
         
-        return view('profile.profile-buyer', compact('user', 'feedbacks', 'feedbackCount'));
-    }
-
-    public function profile($slug) //showing of seller profile to any user
-    {
         // Fetch the user based on the slug
         $user = User::where('slug', $slug)->firstOrFail();
 
