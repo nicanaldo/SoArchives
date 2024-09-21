@@ -115,23 +115,20 @@
 
                         <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userDropdown">
                             @if (Auth::user()->usertypeID == 2)
-                                <li><a class="dropdown-item" href="{{ route('products-seller.index') }}">Profile</a>
+                                <li><a class="dropdown-item" href="{{ route('products-seller.index') }}"><i class="fas fa-user me-2"></i>Profile</a>
                                 </li>
-                                <li><a class="dropdown-item" href="{{ route('profile.settings') }}">Settings</a>
+                                <li><a class="dropdown-item" href="{{ route('profile.settings') }}"><i class="fas fa-gear me-2"></i>Settings</a>
                                     {{-- <li><a class="dropdown-item" href="{{ route('profile.edit-profile') }}">Change Password</a> --}}
                                 </li> <!-- Edit Profile Link -->
                             @elseif(Auth::user()->usertypeID == 3)
-                                <li><a class="dropdown-item"
-                                        href="{{ route('profile-buyer', ['slug' => Auth::user()->slug]) }}">Profile</a>
-                                </li>
-                                <li><a class="dropdown-item" href="{{ route('profile.buyer-settings') }}">Settings</a>
+                            <li><a class="dropdown-item" href="{{ route('profile-buyer') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.buyer-settings') }}"><i class="fas fa-gear me-2"></i>Settings</a>
                                 </li> <!-- Edit Profile Link -->
-                                <li><a class="dropdown-item" href="{{ route('profile-buyer') }}">Profile</a></li>
                             @endif
 
-                            <li><a class="dropdown-item" href="{{ route('chatify') }}">Inbox</a></li>
+                            <li><a class="dropdown-item" href="{{ route('chatify') }}"><i class="fas fa-comment me-2"></i>Inbox</a></li>
                             <li><a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); logoutConfirmation(event);">Logout</a></li>
+                                    onclick="event.preventDefault(); logoutConfirmation(event);"><i class="fas fa-right-from-bracket me-2"></i>Logout</a></li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
                             </form>
