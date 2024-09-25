@@ -254,6 +254,10 @@ Route::post('/profile/buyer/ratings', [BuyerController::class,'submitRating'])->
 // Commend
 Route::post('/commend', [BuyerController::class, 'commend'])->name('buyer-commend.store');
 
+// Violations
+Route::post('/seller/Violation', [SellerController::class, 'reportUser'])->name('seller.violation');
+Route::post('/buyer/violation', [BuyerController::class, 'reportUser'])->name('buyer.violation');
+
 
 //Admin Dashboard
 Route::group(['prefix' => 'admin'], function () {
