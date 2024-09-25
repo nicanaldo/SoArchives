@@ -1345,19 +1345,25 @@
                                                             action="{{ route('create.event.submit') }}"
                                                             enctype="multipart/form-data" novalidate>
                                                             @csrf
+                                                            <!-- Adding Preview Image -->
                                                             <div class="mb-3">
-                                                                <label for="image" class="form-label">Upload Event
-                                                                    Banner</label>
-                                                                <input type="file" class="form-control"
-                                                                    id="EventImage" name="EventImage"
-                                                                    accept="image/*" required>
-                                                                <div class="invalid-feedback">Please upload a banner
-                                                                    for the event.</div>
-                                                                <p class="text-muted">Accepted image formats: .jpeg,
-                                                                    .jpg, .png, with a maximum size of 2MB per image.
-                                                                    <br>Recommended image size: 1905px x 600px
-                                                                </p>
+                                                                <label for="image" class="form-label">Upload Event Banner</label>
+                                                                <input type="file" class="form-control" id="EventImage" name="EventImage" accept="image/*" required onchange="previewImage(event)">
+                                                                <div class="invalid-feedback">Please upload a banner for the event.</div>
+                                                                <p class="text-muted">Accepted image formats: .jpeg, .jpg, .png, with a maximum size of 2MB per image.<br>Recommended image size: 1905px x 600px</p>
+                                                                <img id="imagePreview" src="#" alt="Image preview" style="display:none; margin-top:10px; max-width:100%;">
                                                             </div>
+
+                                                            <script>
+                                                            function previewImage(event) {
+                                                                const image = document.getElementById('imagePreview');
+                                                                image.src = URL.createObjectURL(event.target.files[0]);
+                                                                image.style.display = 'block';
+                                                            }
+                                                            </script>
+
+                                                            <!-- END... Adding Preview Image -->
+                                                             
                                                             <div class="mb-3">
                                                                 <label for="EventName" class="form-label">Event
                                                                     Name</label>
